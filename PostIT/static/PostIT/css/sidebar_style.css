@@ -22,7 +22,9 @@
     padding: 10px;
 
 }
-
+.custom_margin_top{
+    margin-top: 130px;
+}
 .bottom-sidebar {
     position: absolute;
     bottom: 0px;

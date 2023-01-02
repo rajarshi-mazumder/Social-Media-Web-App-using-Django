@@ -1,20 +1,19 @@
 <div class="sidebar">
-
+    <div class="profile_user" style="display: none;">
+        {{ user.username }}
+    </div>
     {%for logo, url in game_logos.items%}
     {%endfor%}
 
-
+    {%if page == 'user_profile' %}
+    <div class="page" style="display:none ;">{{page}}</div>
+    {%endif%}
     <div class="sidebar-section">
         <div class="sidebar-section-title">
             Profile
         </div>
-
-
-
-        {% if user.is_authenticated %}
+       
         {%if gamer_profiles%}
-
-
 
         {%include 'gamerProfile/gamer_profile_section_sidebar.html' %}
 
@@ -25,7 +24,7 @@
         </div>
 
         {%include 'navigation/sidebar_page_links.html' %}
-        {%endif%}
+
     </div>
 
     <div class="sidebar-section">
@@ -53,6 +52,8 @@
 
     $(document).ready(function () {
         document.getElementById("gamer_profiles-btn").addEventListener("click", Toggle_Dropdown_Display);
+        if($('.page').text().trim()=="user_profile")
+        $('.sidebar').addClass("custom_margin_top");
     });
 
     $('.gamer_profiles_dropdown-btn').click(function () {
@@ -71,7 +72,6 @@
 
                 $('.gamer_profile_stats_section').html(response['gamer_profile_stats']);
                 Toggle_Dropdown_Display();
-                console.log(response['game_logo'])
                 $('.gamer_profiles_btn_text').text($('.game_name').text());
                 $('.gamer_profiles-btn-img').attr("src", response['game_logo']);
 

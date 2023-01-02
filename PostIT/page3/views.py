@@ -927,12 +927,16 @@ def user_profile_stats(request, user):
         posts = Post.objects.filter(author=user)
         profile = Profile.objects.filter(user=user)[0]
         image_list = ImageFiles.objects.all()
-        gamer_profiles = GameProfile.objects.filter(user=user)
+        desired_gamer_profiles = GameProfile.objects.filter(user=user)
+        gamer_profiles = GameProfile.objects.filter(user=request.user)
         try:
-            main_gamer_profile = Main_Profile.objects.get(
+            desired_main_gamer_profile = Main_Profile.objects.get(
                 user=User.objects.get(username=user))
+            main_gamer_profile = Main_Profile.objects.get(
+                user=User.objects.get(username=request.user))
         except:
             main_gamer_profile = None
+            desired_main_gamer_profile= None
 
         additional_info = []
         for g in gamer_profiles:
@@ -950,7 +954,9 @@ def user_profile_stats(request, user):
 
         context = {'posts': posts, 'profile_owner': user,
                    'profile': profile, 'image_list': image_list,
+                   'desired_gamer_profiles': desired_gamer_profiles,
                    'gamer_profiles': gamer_profiles,
+                   'desired_main_gamer_profile': desired_main_gamer_profile,
                    'main_game_profile': main_gamer_profile,
                    'additional_info': additional_info,
                    'game_logos': GameProfile.games_logo_list,
@@ -958,6 +964,7 @@ def user_profile_stats(request, user):
                    'user_to_view': user.username,
                    'vouch_count': user.profile.vouched_by.count(),
                    'vouched_for_user': vouched_for_user,
+                   'page':'user_profile'
                    }
 
         return render(request, 'user/user_profile_stats.html', context=context)
@@ -971,12 +978,16 @@ def user_posts_page(request, user):
             posts = Post.objects.filter(author=user)
             profile = Profile.objects.filter(user=user)[0]
             image_list = ImageFiles.objects.all()
-            gamer_profiles = GameProfile.objects.filter(user=user)
+            desired_gamer_profiles = GameProfile.objects.filter(user=user)
+            gamer_profiles = GameProfile.objects.filter(user=request.user)
             try:
+                desired_main_gamer_profile = Main_Profile.objects.get(
+                user=User.objects.get(username=user))
                 main_gamer_profile = Main_Profile.objects.get(
-                    user=User.objects.get(username=user))
+                    user=User.objects.get(username=request.user))
             except:
                 main_gamer_profile = None
+                desired_main_gamer_profile = None
 
             additional_info = []
             for g in gamer_profiles:
@@ -995,12 +1006,15 @@ def user_posts_page(request, user):
 
             context = {'posts': posts, 'profile_owner': user,
                        'profile': profile, 'image_list': image_list,
+                       'desired_gamer_profiles': desired_gamer_profiles,
                        'gamer_profiles': gamer_profiles,
+                       'desired_main_gamer_profile': desired_main_gamer_profile,
                        'main_game_profile': main_gamer_profile,
                        'additional_info': additional_info,
                        'game_logos': GameProfile.games_logo_list,
                        'vouch_count': user.profile.vouched_by.count(),
                        'vouched_for_user': vouched_for_user,
+                       'page': 'user_profile',
                        }
 
             return render(request, 'user/user_posts_page.html', context)
@@ -1302,7 +1316,7 @@ def Gamer_Profile_Data(request, user):
 
     gamer_profiles = GameProfile.objects.filter(
         user=User.objects.get(username=user), game=request.POST['game'])
-
+    
     main_gamer_profile = Main_Profile.objects.get(
         user=User.objects.get(username=user))
     additional_info = []
@@ -1324,7 +1338,7 @@ def Gamer_Profile_Data(request, user):
 
     html = render_to_string(
         'gamerProfile/gamer_profile_stats.html', context, request=request)
-    print(context)
+    print("Montiel: ", context)
     return JsonResponse({"gamer_profile_stats": html,
                          'game_logo': GameProfile.games_logo_list[gamer_profiles[0].game],
                          })
