@@ -23,7 +23,6 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .utility_functions import Get_Gamer_Profiles_For_User_profiles_Page
 
-
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
@@ -1294,7 +1293,7 @@ def Gamer_Profile_Data(request, user):
 
     gamer_profiles = GameProfile.objects.filter(
         user=User.objects.get(username=user), game=request.POST['game'])
-    
+
     main_gamer_profile = Main_Profile.objects.get(
         user=User.objects.get(username=user))
     additional_info = []
@@ -1316,7 +1315,7 @@ def Gamer_Profile_Data(request, user):
 
     html = render_to_string(
         'gamerProfile/gamer_profile_stats.html', context, request=request)
-    print("Montiel: ", context)
+    print(context)
     return JsonResponse({"gamer_profile_stats": html,
                          'game_logo': GameProfile.games_logo_list[gamer_profiles[0].game],
                          })
@@ -1605,7 +1604,7 @@ def get_community_details(request, id):
 
 def community_page(request, community_id):
     community = Community.objects.get(id=community_id)
-    print(community)
+    print("Current Community", community)
     context = {
         'community': community
     }
@@ -1628,8 +1627,9 @@ def community_page(request, community_id):
     image_list = ""
     profiles = Profile.objects.all()
     has_images_to_show = False
-    user_joined_community = request.user.profile.communities.all()
-    print("user_joined_community: ", user_joined_community)
+    user_joined_communities = request.user.profile.communities.all()
+
+    print("user_joined_community: ", user_joined_communities)
     context = {
         'community': community,
         'object_list': object_list,
@@ -1639,9 +1639,44 @@ def community_page(request, community_id):
         'profiles': profiles,
         'game_profiles': game_profiles,
         'communities': communities,
+        'user_joined_communities': user_joined_communities,
+        'page': 'community_posts_page'
     }
 
     return render(request, 'community/community_page.html', context)
+
+
+def community_members(request, community_id):
+    community = Community.objects.get(id=community_id)
+    user_joined_communities = request.user.profile.communities.all()
+    context = {
+        'community': community,
+        'page': 'community_members_page',
+        'user_joined_communities': user_joined_communities,
+    }
+    return render(request, 'community/community_members.html', context)
+
+
+@login_required
+@csrf_exempt
+def show_communities(request):
+    communities = Community.objects.all()
+    user_joined_communities = request.user.profile.communities.all()
+    print("user_joined_communities: ", user_joined_communities)
+    # gamer_profiles = GameProfile.objects.filter(user=request.user)
+    # try:
+    #     main_gamer_profile = Main_Profile.objects.get(
+    #         user=User.objects.get(username=request.user))
+    # except:
+    #     main_gamer_profile = None
+    context = {
+        'communities': communities,
+        'user_joined_communities': user_joined_communities,
+        # 'gamer_profiles': gamer_profiles,
+        # 'main_game_profile': main_gamer_profile,
+        # 'game_logos': GameProfile.games_logo_list,
+    }
+    return render(request, 'community/communities_list_all.html', context)
 
 
 @login_required

@@ -12,7 +12,7 @@
         <div class="sidebar-section-title">
             Profile
         </div>
-       
+
         {%if gamer_profiles%}
 
         {%include 'gamerProfile/gamer_profile_section_sidebar.html' %}
@@ -22,7 +22,8 @@
         <div class="gamer_profile_stats_section">
             {%include 'gamerProfile/gamer_profile_stats.html' %}
         </div>
-        {%if user.is_authenticated%}
+
+        {% if user.is_authenticated%}
         {%include 'navigation/sidebar_page_links.html' %}
         {%endif%}
 
@@ -53,8 +54,8 @@
 
     $(document).ready(function () {
         document.getElementById("gamer_profiles-btn").addEventListener("click", Toggle_Dropdown_Display);
-        if($('.page').text().trim()=="user_profile")
-        $('.sidebar').addClass("custom_margin_top");
+        if ($('.page').text().trim() == "user_profile")
+            $('.sidebar').addClass("custom_margin_top");
     });
 
     $('.gamer_profiles_dropdown-btn').click(function () {

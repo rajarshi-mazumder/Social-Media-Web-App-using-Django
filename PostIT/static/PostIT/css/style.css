@@ -25,6 +25,9 @@ a {
     color: inherit;
 }
 
+a:hover {
+    color: inherit;
+}
 
 
 /* html {
@@ -1226,6 +1229,10 @@ h2::-webkit-scrollbar {
     color: var(--text-secondary-color);
 
 
+}
+
+.profile-info-tabs>a {
+    padding: 5px 15px;
 }
 
 .profile-info-tabs a:hover {

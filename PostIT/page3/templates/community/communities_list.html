@@ -42,7 +42,9 @@
             {% endfor %}
         </table>
         <br />
-        <div class="button-2"><b>View All</b></div>
+        <a href="{% url 'show-communities'%}">
+            <button class="button-2"><b>View All</b></button>
+        </a>
         {% endif %}
         <!-- {%for joined_community in joined_communities %}
 

@@ -22,9 +22,11 @@
     padding: 10px;
 
 }
-.custom_margin_top{
+
+.custom_margin_top {
     margin-top: 130px;
 }
+
 .bottom-sidebar {
     position: absolute;
     bottom: 0px;
@@ -394,14 +396,6 @@
     padding: 5px;
 }
 
-.button-2 {
-    background-color: var(--primary_color);
-    width: 300px;
-    border-radius: 50px;
-    padding: 7px;
-    font-size: small;
-    margin-bottom: 10px;
-}
 
 
 
