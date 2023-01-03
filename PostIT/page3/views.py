@@ -966,7 +966,7 @@ def user_profile_stats(request, user):
                    'vouched_for_user': vouched_for_user,
                    'page':'user_profile'
                    }
-
+        print("Scholes ", user)
         return render(request, 'user/user_profile_stats.html', context=context)
     return render(request, 'user/user_profile_stats.html', context={})
 
