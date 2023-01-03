@@ -26,14 +26,25 @@ from rest_framework.decorators import api_view
 def Get_Gamer_Profiles_For_User_profiles_Page(request, user):
     desired_gamer_profiles = GameProfile.objects.filter(user=user)
     gamer_profiles = GameProfile.objects.filter(user=request.user)
+
     try:
             desired_main_gamer_profile = Main_Profile.objects.get(
                 user=User.objects.get(username=user))
             main_gamer_profile = Main_Profile.objects.get(
                 user=User.objects.get(username=request.user))
     except:
-            main_gamer_profile = None
-            desired_main_gamer_profile= None
+            if Main_Profile.objects.filter(
+                user=User.objects.get(username=user)).exists() :
+                desired_main_gamer_profile= None
+                main_gamer_profile = None
+            
+            else:
+                desired_main_gamer_profile= None
+                main_gamer_profile = Main_Profile.objects.get(
+                user=User.objects.get(username=request.user))
+
+            print("Roy", Main_Profile.objects.get(
+                user=User.objects.get(username=request.user)), " Keane ", main_gamer_profile)
     
     context={ 'desired_gamer_profiles': desired_gamer_profiles,
               'gamer_profiles': gamer_profiles,
