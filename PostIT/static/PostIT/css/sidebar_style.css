@@ -13,7 +13,7 @@
     background-color: var(--post_bg_color);
     border-radius: 10px;
     height: 100%;
-    z-index: 100;
+    z-index: 80;
     /* size: 100%; */
 
 }
