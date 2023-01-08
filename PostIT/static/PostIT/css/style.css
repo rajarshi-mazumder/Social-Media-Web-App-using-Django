@@ -225,7 +225,7 @@ i:hover {
     color: #fff;
     background-color: var(--post_bg_color);
     pointer-events: all;
-    z-index: 100;
+    z-index: 1000;
     box-shadow: 0 2px 2px 0 rgba(212, 110, 212, 0.2), 0 1.5px 5px 0 rgba(212, 110, 212, 0.2);
 
     /* padding-top: 30px;
@@ -251,9 +251,11 @@ i:hover {
     display: flex;
     margin: auto 0;
 }
-#main-nav .nav-right-mobile-ul{
+
+#main-nav .nav-right-mobile-ul {
     display: none;
 }
+
 #main-nav li {
     text-align: center;
     position: relative;
@@ -724,7 +726,7 @@ p::-webkit-scrollbar {
 
 .post-options-list-items {
     position: absolute;
-    left: -280px;
+    left: -250px;
     background: var(--secondary_bg_color);
     width: 300px;
     display: flex;
@@ -788,6 +790,16 @@ p::-webkit-scrollbar {
     text-align: left;
     margin-left: 20px;
     font-weight: bold;
+}
+
+.search-results-page-contents {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 50px;
+    position: relative;
+
+
 }
 
 .community-page-contents {
@@ -1252,7 +1264,8 @@ h2::-webkit-scrollbar {
 .selected-tab {
     /* display: none; */
     color: #fff !important;
-    border-bottom: 5px solid var(--primary_color);
+    border: none;
+    border-bottom: 5px solid var(--primary_color) !important;
 }
 
 .profile-info-tabs>div {
@@ -1597,6 +1610,7 @@ h2::-webkit-scrollbar {
     #main-nav .nav-right-ul {
         display: none;
     }
+
     #main-nav .nav-right-mobile-ul {
         display: flex;
         justify-self: flex-end;
@@ -1605,7 +1619,8 @@ h2::-webkit-scrollbar {
         justify-content: flex-end;
 
     }
-    #main-nav .nav-right-mobile-ul img{
+
+    #main-nav .nav-right-mobile-ul img {
         width: 40px;
         height: 40px;
         object-fit: cover;

@@ -39,10 +39,10 @@
             </div>
             <div class="profile-info-menu-right">
 
-                <div class="info">
+                <a href="{% url 'community-members' community.id %}" class="info">
                     <div class="number">{{community.members.count}}</div>
                     <div class="label">Members</div>
-                </div>
+                </a>
                 <div class="info">
                     <div class="number">3.2k</div>
                     <div class="label">Online</div>

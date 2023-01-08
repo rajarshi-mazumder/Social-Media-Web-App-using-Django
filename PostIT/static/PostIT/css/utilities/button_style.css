@@ -132,7 +132,7 @@
 
 button {
     background: none;
-    border: none !important;
+    border: none;
     color: white;
 }
 
@@ -161,10 +161,7 @@ button {
 .button-section button {
     margin: 0 20px;
     padding: 10px 20px;
-    width: 140px;
-    background-color: var(--post_bg_color);
-    border: #444 solid 1px;
-    border-radius: 5px;
+    width: 80px;
 }
 
 .profile-interct-button,

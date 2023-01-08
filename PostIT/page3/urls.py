@@ -27,8 +27,11 @@ urlpatterns = [
     path('setLikes/', views.set_likes, name='set_likes'),
     path('liked-by/<int:post_id>', views.liked_by, name='liked-by'),
     path('vouched-by/<int:profile_id>', views.vouched_by, name='vouched-by'),
+    path('followers/<int:profile_id>', views.followers, name='followers'),
+    path('following/<int:profile_id>', views.following, name='following'),
     path('vouch/', views.vouch, name='vouch'),
     path('vouch-user/', views.vouch_user, name='vouch-user'),
+    path('follow-user/', views.follow_user, name='follow-user'),
     path('updateSession/', views.update_session, name='update_session'),
     path('getSessionData/', views.get_session_data, name='get_session_data'),
 
@@ -67,6 +70,8 @@ urlpatterns = [
     path('user/<str:user>', views.user_posts_page, name="user-posts-page"),
     path('user/profile/<str:user>', views.user_profile_stats,
          name="user-profile-stats"),
+    path('user/joined-communities/<int:user_id>', views.show_user_joined_communities,
+         name="user-communities"),
 
     path('create_gamer_profile/<str:user>',
          views.create_game_profile, name="create-gamer-profile"),
@@ -99,5 +104,4 @@ urlpatterns = [
     path('get_mobile_sidebar_gamer_profile_stats/<str:user>',
          views.Mobile_Sidebar_Gamer_Profile_Data, name="get-mobile-sidebar-gamer-profile-data"),
     # Get mobile sidebar data end
-    
 ]

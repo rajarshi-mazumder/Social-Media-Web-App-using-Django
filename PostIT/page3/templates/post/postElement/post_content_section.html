@@ -10,8 +10,8 @@
 
 <section class="post-header-section">
     <div class="profile-pic">
-        {%if post.user_profile.profile_pic.name %}
-        <a href="{%url 'user-posts-page' post.author%}"><img src="{{ post.user_profile.profile_pic.url }}"
+        {%if post.author.profile.profile_pic.name %}
+        <a href="{%url 'user-posts-page' post.author%}"><img src="{{ post.author.profile.profile_pic.url }}"
                 width="500"></a>
         {% endif %}
         <!-- <img src="{{ post.user_profile.profile_pic.url }}" width="500"> -->

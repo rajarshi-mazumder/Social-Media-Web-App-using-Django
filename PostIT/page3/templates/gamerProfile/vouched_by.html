@@ -18,38 +18,15 @@ Page3 - Vouched By
         <div class="posts-timeline">
             <div class="page-title">Vouches</div>
             <br />
-            {% for user in vouched_by %}
-            <div class="account-list-item">
-
-                <div class="profile-pic">
-                    <a href="{%url 'user-posts-page' user %}">
-                        {% if user.profile.profile_pic.name %}
-                        <img src="{{ user.profile.profile_pic.url}}">
-                        {% else %}
-
-                        <img src="{% static 'PostIT/images/profilepic.jpg' %}">
-                        {% endif %}
-                    </a>
-                </div>
-                <div class="info">
-                    <div class="username">
-                        <a href="{%url 'user-posts-page' user %}">@{{user.username}}</a>
-                    </div>
-                    <div class="bio">
-                        {{user.profile.bio}}
-                    </div>
-                </div>
-                <div class="interact-button button-1" value="{{user.id}}">
-                    Follow
-                </div>
-
-            </div>
-            {% endfor %}
-
+            {% include 'user/account_items_list.html'%}
 
         </div>
         {% include 'navigation/sidebar.html' %}
     </div>
 </div>
+
+
+
+
 {% endblock content %}
 <!-- JS Scripts Here -->

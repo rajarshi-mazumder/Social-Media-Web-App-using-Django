@@ -30,6 +30,7 @@
                     </button> -->
 
                     {% if vouched_for_user %}
+
                     <button class="vouch-user-button button-4" value="{{profile.user.id}}">Vouched <i
                             class='fa-solid fa-check'></i></button>
 
@@ -40,37 +41,73 @@
             </div>
             <div class="profile-info-menu-right">
 
-                <div class="info">
+                {% if profile.id %}
+                <a href="{% url 'followers' profile.id %}" class="info">
                     <div class="number followers_count">{{profile.followers.count}}</div>
                     <div class="label">Followers</div>
-                </div>
-                <div class="info">
+                </a>
+                {% endif %}
+
+                {% if profile.id %}
+                <a href="{% url 'following' profile.id %}" class="info">
                     <div class="number">{{profile.following.count}}</div>
                     <div class="label">Following</div>
-                </div>
-                <div class="info">
-                    <div class="number vouch-count">{{vouch_count}}</div>
-                    <div class="label">Vouched</div>
-                </div>
+                </a>
+                {% endif %}
 
+                {% if profile.id %}
+                <a href="{% url 'vouched-by' profile.id %}" class="info">
+                    <div class="number vouch-count">{{vouch_count}}</div>
+                    <div class="label">Vouches</div>
+                </a>
+                {% endif %}
             </div>
         </div>
 
     </div>
     <div class="profile-info-tabs">
         {%if profile.user.username%}
-        <div class="item profile-info-posts"
-            onclick="location.href=`{% url 'user-posts-page' profile.user.username %}`">
+        {% if profile.id %}
+        {% if page == 'user_posts_page' %}
+        <div class="item selected-tab" onclick="location.href=`{% url 'user-posts-page' profile.user.username %}`">
+            Posts
+        </div>
+        {% else %}
+        <div class="item" onclick="location.href=`{% url 'user-posts-page' profile.user.username %}`">
             Posts
         </div>
         {% endif %}
+        {% endif %}
+        {% endif %}
+
+
+
+
         {%if profile.user.username%}
-        <div class="item profile-info-stats"
-            onclick="location.href=`{% url 'user-profile-stats' profile.user.username %}`">Profile
+        {% if profile.id %}
+        {% if page == 'user_profile_page' %}
+        <div class="item selected-tab" onclick="location.href=`{% url 'user-profile-stats' profile.user.username %}`">
+            Profile
+        </div>
+        {% else %}
+        <div class="item" onclick="location.href=`{% url 'user-profile-stats' profile.user.username %}`">
+            Profile
         </div>
         {% endif %}
-        <div class="item profile-info-following">Following</div>
-        <div class="item profile-info-followers">Followers</div>
+        {% endif %}
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        {% if profile.id %}
+        {% if page == 'user_communities_page' %}
+        <a class="item selected-tab" href="{% url 'user-communities' profile.user.id %}" class="item">Communities
+            ({{profile.communities.all.count}})</a>
+        {% else %}
+        <a class="item" href="{% url 'user-communities' profile.user.id %}" class="item">Communities
+            ({{profile.communities.all.count}})</a>
+        {% endif %}
+        {% endif %}
+        {% endif %}
 
     </div>
 </div>

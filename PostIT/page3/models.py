@@ -75,6 +75,7 @@ class Profile(models.Model):
         Community, default=None, blank=True, related_name='communities')
     featured_communities = models.ManyToManyField(
         Community, default=None, blank=True, related_name='featuredCommunities')
+    is_private = models.BooleanField(null=True, blank=True, default=False)
 
     def __str__(self):
         return str(self.user)

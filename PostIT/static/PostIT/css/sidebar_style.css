@@ -13,7 +13,7 @@
     background-color: var(--post_bg_color);
     border-radius: 10px;
     height: 100%;
-    z-index: 80;
+    z-index: 100;
     /* size: 100%; */
 
 }
@@ -275,13 +275,14 @@
 
 }
 
-.gamer_profile_stats_section, .mobile_sidebar_gamer_profile_stats_section,
+.gamer_profile_stats_section,
+.mobile_sidebar_gamer_profile_stats_section,
 .sidebar_gamer_profile_stats_section .gamer_profle_info {
     display: flex;
     flex-direction: column;
 }
 
-.gamer_profile_stats_section .game_stat, 
+.gamer_profile_stats_section .game_stat,
 .mobile_sidebar_gamer_profile_stats_section .game_stat,
 .sidebar_gamer_profile_stats_section .gamer_profle_info .game_stat {
     padding: 10px 20px;
@@ -291,13 +292,15 @@
     font-weight: bold;
 }
 
-.gamer_profile_stats_section, .mobile_sidebar_gamer_profile_stats_section,
+.gamer_profile_stats_section,
+.mobile_sidebar_gamer_profile_stats_section,
 .sidebar_gamer_profile_stats_section .label {
     color: var(--text-secondary-color);
 
 }
 
-.gamer_profile_stats_section, .mobile_sidebar_gamer_profile_stats_section,
+.gamer_profile_stats_section,
+.mobile_sidebar_gamer_profile_stats_section,
 .sidebar_gamer_profile_stats_section .value {
     color: var(--text-secondary2-color);
 }
@@ -444,7 +447,7 @@
 
 /* Mobile right  sidebar start */
 
-.blocker{
+.blocker {
     height: 100%;
     width: 100%;
     position: fixed;
@@ -453,7 +456,7 @@
     z-index: 140;
 }
 
-.sidebar-right-mobile{
+.sidebar-right-mobile {
 
     flex-direction: column;
     width: 400px;
@@ -464,23 +467,16 @@
     margin-left: auto;
     z-index: 150;
     background-color: var(--tertiary1_bg_color);
+    padding: 0 5px;
 }
+
 /* Mobile right  sidebar end */
-
-
-
 @media (max-width:500px) {
-
-    
     .sidebar {
         display: none;
     }
 
     .sidebar-left {
         display: none;
-    }
-    .sidebar-right-mobile{
-        display: flex;
-        padding: 0 5px ;
     }
 }

@@ -109,14 +109,15 @@
         </li>
 
     </ul>
-    <ul class="nav-right-mobile-ul">
-       
-            {% if user.profile.profile_pic.name %}
-            <img class="profile-img-navbar" src="{{ user.profile.profile_pic.url}}" width="200">
-            {% else %}
 
-            <img src="{% static 'PostIT/images/profilepic.jpg' %}" width="200">
-            {% endif %}
+    <ul class="nav-right-mobile-ul">
+
+        {% if user.profile.profile_pic.name %}
+        <img class="profile-img-navbar" src="{{ user.profile.profile_pic.url}}" width="200">
+        {% else %}
+
+        <img src="{% static 'PostIT/images/profilepic.jpg' %}" width="200">
+        {% endif %}
 
     </ul>
 </nav>

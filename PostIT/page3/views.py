@@ -24,7 +24,7 @@ from rest_framework.decorators import api_view
 
 
 # Utility functions import
-from .utilityFunctions import get_featured_communities, Get_Gamer_Profiles_For_User_profiles_Page
+from .utilityFunctions import get_featured_communities, Get_Gamer_Profiles_For_User_profiles_Page, get_user_vouch_information, get_user_following_info,Get_Logged_in_User_Gamer_Profiles
 
 
 def is_ajax(request):
@@ -56,8 +56,6 @@ def home_timeline(request, post_id=None):
 
     # joined_communities = request.user.profile.communities.all()
 
-    featured_communities, joined_communities = get_featured_communities(
-        request)
     # Set up pagination
     # request.session['loaded_posts'] = object_list
     p = Paginator(object_list, 4)
@@ -89,8 +87,6 @@ def home_timeline(request, post_id=None):
             'last_viewed': last_viewed,
             'has_images_to_show': has_images_to_show,
             'profile': profile,
-            'featured_communities': featured_communities,
-            'joined_communities': joined_communities,
             'media_url': "127.0.0.1: 8000/media",
             'main_game_profile': main_game_profile,
             'game_logos': GameProfile.games_logo_list,
@@ -104,8 +100,6 @@ def home_timeline(request, post_id=None):
             'last_viewed': last_viewed,
             'has_images_to_show': has_images_to_show,
             'profiles': profiles,
-            'featured_communities': featured_communities,
-            'joined_communities': joined_communities,
             'media_url': "127.0.0.1: 8000/media",
             'main_game_profile': main_game_profile,
             'gamer_profiles': gamer_profiles,
@@ -113,6 +107,8 @@ def home_timeline(request, post_id=None):
             'page': 'home-timeline',
         }
     # print("SETTINGS: ", static(settings.MEDIA_URL))
+    context.update(get_featured_communities(
+        request))
     return render(request, 'base/home_timeline.html', context)
 
 
@@ -300,7 +296,7 @@ def upload_reply(request, pk):
         form1 = PostImageForm()
         form2 = PostVideoForm()
         imageform = ImageForm()
-
+    context.update(get_featured_communities(request))
     return render(request, 'post/replies/replies_page.html', context)
 
 
@@ -762,8 +758,10 @@ def liked_by(request, post_id):
     liked_by = post.likes.all()
     print("LIKEDBY: ", liked_by)
     context = {
-        'liked_by': liked_by,
+        'account_items_list': liked_by,
     }
+    context.update(get_featured_communities(request))
+    context.update(get_user_following_info(request))
     return render(request, 'post/liked_by.html', context)
 
 
@@ -774,9 +772,42 @@ def vouched_by(request, profile_id):
     vouched_by = profile.vouched_by.all()
     print("VOUCHED BY: ", vouched_by)
     context = {
-        'vouched_by': vouched_by,
+        'account_items_list': vouched_by,
     }
+    context.update(get_featured_communities(request))
+    context.update(get_user_following_info(request))
+
     return render(request, 'gamerProfile/vouched_by.html', context)
+
+
+@login_required
+@csrf_exempt
+def followers(request, profile_id):
+    profile = Profile.objects.get(id=profile_id)
+    followers = profile.followers.all()
+    print("Followed By: ", followers)
+    context = {
+        'account_items_list': followers,
+    }
+    context.update(get_featured_communities(request))
+    context.update(get_user_following_info(request))
+
+    return render(request, 'user/followers_list.html', context)
+
+
+@login_required
+@csrf_exempt
+def following(request, profile_id):
+    profile = Profile.objects.get(id=profile_id)
+    following = profile.following.all()
+    print("Following: ", followers)
+    context = {
+        'account_items_list': following,
+    }
+    context.update(get_featured_communities(request))
+    context.update(get_user_following_info(request))
+
+    return render(request, 'user/following_list.html', context)
 
 
 @login_required
@@ -786,7 +817,7 @@ def vouch_user(request):
         result = ''
         print("HERE")
         id = int(request.POST.get('userid'))
-        profile = get_object_or_404(Profile, id=id)
+        profile = get_object_or_404(Profile, user_id=id)
         print("Vouching for: ", profile.user)
         print("My id:", request.user.id)
 
@@ -804,6 +835,36 @@ def vouch_user(request):
         # test = post.vouches.filter(id=request.user.id)
         # print(test)
         return JsonResponse({'result': profile.vouched_by.count(), 'vouched_for_user': vouched_for_user})
+
+
+@login_required
+@csrf_exempt
+def follow_user(request):
+    if request.POST.get('action') == 'post':
+        result = ''
+        id = int(request.POST.get('userid'))
+        profile_to_follow = get_object_or_404(Profile, user_id=id)
+        profile_following = get_object_or_404(Profile, user_id=request.user.id)
+        # print(id)
+    if profile_to_follow.followers.filter(id=request.user.id).exists():
+        profile_to_follow.followers.remove(request.user)
+        result = False
+        profile_to_follow.save()
+
+        unfollowed_user = get_object_or_404(User, id=id)
+        profile_following.following.remove(unfollowed_user)
+        profile_following.save()
+
+    else:
+        profile_to_follow.followers.add(request.user)
+        result = True
+        profile_to_follow.save()
+
+        followed_user = get_object_or_404(User, id=id)
+        profile_following.following.add(followed_user)
+        profile_following.save()
+
+    return JsonResponse({'result': result, })
 
 
 @login_required
@@ -923,55 +984,14 @@ def deletePost(request, pk):
 
 
 def user_profile_stats(request, user):
-    if(user != 'favicon.png'):
+    if(user != 'favicon.png') or (user != 'favicon.png HTTP/1.1'):
         user = User.objects.get(username=user)
         posts = Post.objects.filter(author=user)
         profile = Profile.objects.filter(user=user)[0]
         image_list = ImageFiles.objects.all()
 
-        gamer_profiles = Get_Gamer_Profiles_For_User_profiles_Page(request, user)[
-            'gamer_profiles']
-
-        additional_info = []
-        for g in gamer_profiles:
-            info_obj = g.additional_info
-
-            dict_obj = {}
-            for i in range(len(info_obj)):
-                dict_obj[i] = info_obj[i]
-            additional_info.append({'game': g.game,
-                                    'info': dict_obj})
-        if user.profile.vouched_by.filter(id=request.user.id).exists():
-            vouched_for_user = True
-        else:
-            vouched_for_user = False
-
-        context = {'posts': posts, 'profile_owner': user,
-                   'profile': profile, 'image_list': image_list,
-                   'additional_info': additional_info,
-                   'game_logos': GameProfile.games_logo_list,
-                   'page': 'user_profile_page',
-                   'user_to_view': user.username,
-                   'vouch_count': user.profile.vouched_by.count(),
-                   'vouched_for_user': vouched_for_user,
-                   'page': 'user_profile'
-                   }
-        context.update(
-            Get_Gamer_Profiles_For_User_profiles_Page(request, user))
-        print("Parry ", context)
-        return render(request, 'user/user_profile_stats.html', context=context)
-    return render(request, 'user/user_profile_stats.html', context={})
-
-
-def user_posts_page(request, user):
-    try:
-        if(user != 'favicon.png'):
-            user = User.objects.get(username=user)
-            posts = Post.objects.filter(author=user)
-            profile = Profile.objects.filter(user=user)[0]
-            image_list = ImageFiles.objects.all()
-
-            gamer_profiles = Get_Gamer_Profiles_For_User_profiles_Page(request, user)[
+        try:
+            gamer_profiles = Get_Logged_in_User_Gamer_Profiles(request, user)[
                 'gamer_profiles']
 
             additional_info = []
@@ -983,22 +1003,72 @@ def user_posts_page(request, user):
                     dict_obj[i] = info_obj[i]
                 additional_info.append({'game': g.game,
                                         'info': dict_obj})
+        except:
+            additional_info = []
 
-                if user.profile.vouched_by.filter(id=request.user.id).exists():
-                    vouched_for_user = True
-                else:
-                    vouched_for_user = False
+        context = {'posts': posts, 'profile_owner': user,
+                   'profile': profile, 'image_list': image_list,
+                   'additional_info': additional_info,
+                   'game_logos': GameProfile.games_logo_list,
+                   'page': 'user_profile_page',
+                   'user_to_view': user.username,
+                   }
+
+        context.update(
+            Get_Gamer_Profiles_For_User_profiles_Page(request, user))
+        context.update(
+            Get_Logged_in_User_Gamer_Profiles(request, user))
+
+        context.update(get_featured_communities(request))
+        context.update(get_user_vouch_information(request, user))
+        print("Penalty ", context)
+        return render(request, 'user/user_profile_stats.html', context=context)
+    return render(request, 'user/user_profile_stats.html', context={})
+
+
+@login_required(login_url='/users/login_user')
+@csrf_exempt
+def user_posts_page(request, user):
+    try:
+        if(user != 'favicon.png'):
+            user = User.objects.get(username=user)
+            posts = Post.objects.filter(author=user)
+            profile = Profile.objects.filter(user=user)[0]
+            print("Post Author Profile: ", profile)
+            image_list = ImageFiles.objects.all()
+
+            additional_info = []
+            try:
+                gamer_profiles = Get_Logged_in_User_Gamer_Profiles(request, user)[
+                    'gamer_profiles']
+
+                for g in gamer_profiles:
+                    info_obj = g.additional_info
+
+                    dict_obj = {}
+                    for i in range(len(info_obj)):
+                        dict_obj[i] = info_obj[i]
+                    additional_info.append({'game': g.game,
+                                            'info': dict_obj})
+            except:
+                additional_info = []
 
             context = {'posts': posts, 'profile_owner': user,
                        'profile': profile, 'image_list': image_list,
                        'additional_info': additional_info,
                        'game_logos': GameProfile.games_logo_list,
-                       'vouch_count': user.profile.vouched_by.count(),
-                       'vouched_for_user': vouched_for_user,
-                       'page': 'user_profile',
+                       'page': 'user_posts_page',
                        }
-            context.update(
-                Get_Gamer_Profiles_For_User_profiles_Page(request, user))
+            if request.user.profile:
+                print("Logged in user profile: ", request.user.profile.id)
+                context.update(
+                    Get_Gamer_Profiles_For_User_profiles_Page(request, user))
+                context.update(
+                    Get_Logged_in_User_Gamer_Profiles(request, user))
+
+            context.update(get_featured_communities(request))
+            context.update(get_user_vouch_information(request, user))
+            print("Post Author page context: ", context)
             return render(request, 'user/user_posts_page.html', context)
         else:
             return redirect('home-page')
@@ -1325,6 +1395,9 @@ def Gamer_Profile_Data(request, user):
                          'game_logo': GameProfile.games_logo_list[gamer_profiles[0].game],
                          })
 
+# Mobile Sidebar Gamer profile Data Start
+
+
 def Mobile_Sidebar_Gamer_Profile_Data(request, user):
     gamer_profiles = GameProfile.objects.filter(
         user=User.objects.get(username=user), game=request.POST['game'])
@@ -1354,6 +1427,8 @@ def Mobile_Sidebar_Gamer_Profile_Data(request, user):
     return JsonResponse({"gamer_profile_stats": html,
                          'game_logo': GameProfile.games_logo_list[gamer_profiles[0].game],
                          })
+
+# Mobile Sidebar Gamer profile Data End
 
 
 def User_Profile_Page_Data(request, user, game):
@@ -1531,15 +1606,15 @@ def search_results(request):
         search_query = request.POST['search_query'].lower().replace(' ', '')
         posts_list = []
         people_list = []
+        accounts_list = []
         all_posts = Post.objects.all().order_by('-post_datetime')
         all_profiles = Profile.objects.all()
         profiles = Profile.objects.all()
         image_list = ImageFiles.objects.all()
 
         for p in all_posts:
-            if p.body.lower().find(search_query) != -1:
+            if search_query in p.body.lower():
                 posts_list.append(p)
-
             elif len(p.tags) > 0 and p.get_Tag() != "":
 
                 for t in p.get_Tag():
@@ -1547,18 +1622,27 @@ def search_results(request):
                         posts_list.append(p)
             elif str(p.category).lower().replace(' ', '').find(search_query) != -1:
                 posts_list.append(p)
-            if p.author.username.find(search_query) != -1:
+
+            if search_query in p.author.username.lower():
                 posts_list.append(p)
 
         for pr in all_profiles:
-            if pr.user.username.find(search_query) != -1:
-                people_list.append(pr)
-
+            if search_query in pr.user.username.lower():
+                accounts_list.append(pr.user)
         print(posts_list)
+        context = {'posts_list': posts_list,
+                   'search_query': og_search_query, 'profiles': profiles,
+                   'people_list': people_list, 'image_list': image_list,
+                   'account_items_list': accounts_list,
+                   }
+        context.update(get_user_following_info(request))
+        context.update(Get_Gamer_Profiles_For_User_profiles_Page(
+            request, request.user))
+        context.update(Get_Logged_in_User_Gamer_Profiles(
+            request, request.user))
 
-        return render(request, 'search/search_results.html', context={'posts_list': posts_list,
-                                                                      'search_query': og_search_query, 'profiles': profiles,
-                                                                      'people_list': people_list, 'image_list': image_list})
+        context.update(get_featured_communities(request))
+        return render(request, 'search/search_results.html', context=context)
     return render(request, 'search/search_results.html')
 
 
@@ -1689,6 +1773,7 @@ def community_members(request, community_id):
         'page': 'community_members_page',
         'user_joined_communities': user_joined_communities,
     }
+    context.update(get_user_following_info(request))
     return render(request, 'community/community_members.html', context)
 
 
@@ -1698,23 +1783,27 @@ def show_communities(request):
     communities = Community.objects.all()
     user_joined_communities = request.user.profile.communities.all()
     print("user_joined_communities: ", user_joined_communities)
-    featured_communities, joined_communities = get_featured_communities(
-        request)
+
     # gamer_profiles = GameProfile.objects.filter(user=request.user)
     # try:
     #     main_gamer_profile = Main_Profile.objects.get(
     #         user=User.objects.get(username=request.user))
     # except:
     #     main_gamer_profile = None
+
     context = {
         'communities': communities,
         'user_joined_communities': user_joined_communities,
-        'featured_communities': featured_communities,
-        'joined_communities': joined_communities,
+
+
         # 'gamer_profiles': gamer_profiles,
         # 'main_game_profile': main_gamer_profile,
         # 'game_logos': GameProfile.games_logo_list,
     }
+
+    context.update(get_featured_communities(
+        request))
+    print(context)
     return render(request, 'community/communities_list_all.html', context)
 
 
@@ -1755,6 +1844,33 @@ def join_community(request):
                   request.user.profile.communities.all())
             buttonText = "Joined"
         return JsonResponse({'result': "success", 'buttonText': buttonText})
+
+
+def show_user_joined_communities(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        profile = Profile.objects.get(user=user_id)
+        user_joined_communities = profile.communities.all()
+        this_user_joined_communities = request.user.profile.communities.all()
+
+        context = {
+            'profile': profile,
+            'user_joined_communities': user_joined_communities,
+            'this_user_joined_communities': this_user_joined_communities,
+            'page': 'user_communities_page',
+        }
+        context.update(
+            Get_Gamer_Profiles_For_User_profiles_Page(request, user))
+        context.update(
+            Get_Logged_in_User_Gamer_Profiles(request, user))
+        context.update(get_featured_communities(request))
+        context.update(get_user_vouch_information(request, user))
+    except:
+        profile = ""
+
+    context.update(get_featured_communities(request))
+    print(context)
+    return render(request, 'community/user_joined_communities.html', context=context)
 
 
 def add_post_community(request, community_id):

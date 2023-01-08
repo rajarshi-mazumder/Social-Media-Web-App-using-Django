@@ -5,9 +5,9 @@
     {%for logo, url in game_logos.items%}
     {%endfor%}
 
-    {%if page == 'user_profile' %}
+
     <div class="page" style="display:none ;">{{page}}</div>
-    {%endif%}
+
     <div class="sidebar-section">
         <div class="sidebar-section-title">
             Profile
@@ -53,9 +53,10 @@
     $('.gamer_profiles_dropdown-container').css('display', 'none');
 
     $(document).ready(function () {
-        $('#gamer_profiles-btn').click(Toggle_Dropdown_Display);
-        
-        if ($('.page').text().trim() == "user_profile")
+        document.getElementById("gamer_profiles-btn").addEventListener("click", Toggle_Dropdown_Display);
+        if (($('.page').text().trim() == "user_posts_page") ||
+            ($('.page').text().trim() == "user_profile_page") ||
+            ($('.page').text().trim() == "user_communities_page"))
             $('.sidebar').addClass("custom_margin_top");
     });
 
@@ -76,7 +77,6 @@
                 $('.gamer_profile_stats_section').html(response['gamer_profile_stats']);
                 Toggle_Dropdown_Display();
                 $('.gamer_profiles_btn_text').text($('.game_name').text());
-                console.log("Robbie: ",$('.game_name').text())
                 $('.gamer_profiles-btn-img').attr("src", response['game_logo']);
 
             }
@@ -85,7 +85,6 @@
 
 
     function Toggle_Dropdown_Display() {
-
         if ($('.gamer_profiles_dropdown-container').css('display') == 'flex') {
             $('.gamer_profiles_dropdown-container').css('display', 'none');
         }

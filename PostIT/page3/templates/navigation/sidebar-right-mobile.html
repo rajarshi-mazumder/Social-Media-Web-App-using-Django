@@ -1,38 +1,37 @@
+<div class="profile_user" style="display: none;">
+    {{ user.username }}
+</div>
+{%for logo, url in game_logos.items%}
+{%endfor%}
 
-    <div class="profile_user" style="display: none;">
-        {{ user.username }}
+{%if page == 'user_profile' %}
+<div class="page" style="display:none ;">{{page}}</div>
+{%endif%}
+<div class="sidebar-section">
+    <div class="sidebar-section-title">
+        Profile
     </div>
-    {%for logo, url in game_logos.items%}
-    {%endfor%}
 
-    {%if page == 'user_profile' %}
-    <div class="page" style="display:none ;">{{page}}</div>
+    {%if gamer_profiles%}
+
+    {%include 'gamerProfile/mobile_specific/gamer_profile_section_sidebar_mobile.html' %}
+
+
+    <div class="mobile_sidebar_gamer_profile_stats_section">
+        {%include 'gamerProfile/mobile_specific/mobile_sidebar_gamer_profile_stats.html' %}
+    </div>
     {%endif%}
-    <div class="sidebar-section">
-        <div class="sidebar-section-title">
-            Profile
-        </div>
 
-        {%if gamer_profiles%}
+    {% if user.is_authenticated%}
+    {%include 'navigation/sidebar_page_links.html' %}
+    {%endif%}
 
-        {%include 'gamerProfile/mobile_specific/gamer_profile_section_sidebar_mobile.html' %}
+</div>
 
-        {%endif%}
 
-        <div class="mobile_sidebar_gamer_profile_stats_section">
-            {%include 'gamerProfile/mobile_specific/mobile_sidebar_gamer_profile_stats.html' %}
-        </div>
 
-        {% if user.is_authenticated%}
-        {%include 'navigation/sidebar_page_links.html' %}
-        {%endif%}
+{% include 'community/communities_list.html' %}
 
-    </div>
-
-    
-
-    {% include 'community/communities_list.html' %}
-    
 
 
 <script>

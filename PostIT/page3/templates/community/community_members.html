@@ -67,9 +67,16 @@ Page3 - Community Members
                                     {{user.profile.bio}}
                                 </div>
                             </div>
-                            <div class="interact-button button-1" value="{{user.id}}">
+
+                            {% if user in users_currently_following %}
+                            <button class="interact-button button-1" value="{{user.id}}">
+                                Following
+                            </button>
+                            {% else %}
+                            <button class="interact-button button-1" value="{{user.id}}">
                                 Follow
-                            </div>
+                            </button>
+                            {% endif %}
 
                         </div>
 
@@ -126,70 +133,6 @@ Page3 - Community Members
 
 <script>
 
-
-    $(document).on('click', '#like-button', function (e) {
-        e.preventDefault();
-
-        var this_ = $(this)
-        postid = this_.attr("value").valueOf()
-
-        // var somevar = this_.attr()
-        $.ajax({
-            type: 'POST',
-            url: '{% url "like" %}',
-            data: {
-                postid: postid,
-                // postid: $('#like-button').val(),
-                action: 'post',
-                // postid: '{{ post.pk }}',
-            },
-            success: function (json) {
-
-                // this.getElementById("like-button").innerHTML = json['result']
-                // document.getElementsByTagName('{{post.id}}').innerHTML = json['result']
-
-                // document.getElementById("like_count").innerHTML = json['result'];
-                // no_of_likes = this_.attr("name").valueOf();
-                no_of_likes = json['result'];
-                console.log(json)
-                updateText(this_, no_of_likes)
-            },
-            error: function (xhr, errmsg, err) {
-
-            }
-        });
-    })
-
-    function playPauseVideo() {
-        let videos = document.querySelectorAll("video");
-        console.log("VIDEOS" + videos)
-        videos.forEach((video) => {
-            // We can only control playback without insteraction if video is mute
-            video.muted = true;
-            // Play is a promise so we need to check we have it
-            let playPromise = video.play();
-            if (playPromise !== undefined) {
-                playPromise.then((_) => {
-                    let observer = new IntersectionObserver(
-                        (entries) => {
-                            entries.forEach((entry) => {
-                                if (
-                                    entry.intersectionRatio !== 1 &&
-                                    !video.paused
-                                ) {
-                                    video.pause();
-                                } else if (video.paused) {
-                                    video.play();
-                                }
-                            });
-                        },
-                        { threshold: 0.9 }
-                    );
-                    observer.observe(video);
-                });
-            }
-        });
-    }
 
 
 </script>
@@ -307,6 +250,45 @@ Page3 - Community Members
 
 </script>
 
+<script>
+    function updateInteractButtonText(btn) {
+        if (following_status) {
+
+            btn[0].innerHTML = "Following"
+        }
+        else {
+            btn[0].innerHTML = "Follow"
+        }
+
+        console.log(btn[0].innerHTML)
+    }
+
+
+    $(document).on('click', '.interact-button', function (e) {
+        e.preventDefault();
+        console.log("Trying to follow: ")
+        var this_ = $(this)
+        userid = this_.attr("value").valueOf()
+
+        // var somevar = this_.attr()
+        $.ajax({
+            type: 'POST',
+            url: '{% url "follow-user" %}',
+            data: {
+                userid: userid,
+                action: 'post',
+            },
+            success: function (json) {
+                following_status = json['result'];
+                console.log(json)
+                updateInteractButtonText(this_, following_status)
+            },
+            error: function (xhr, errmsg, err) {
+
+            }
+        });
+    })
+</script>
 
 
 
