@@ -94,4 +94,10 @@ urlpatterns = [
     path('unfollow/<str:who_to_unfollow>',
          views.Unfollow, name="unfollow"),
     # Get/ Update followers end
+
+    # Get mobile sidebar data start
+    path('get_mobile_sidebar_gamer_profile_stats/<str:user>',
+         views.Mobile_Sidebar_Gamer_Profile_Data, name="get-mobile-sidebar-gamer-profile-data"),
+    # Get mobile sidebar data end
+    
 ]

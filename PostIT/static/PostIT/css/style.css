@@ -850,7 +850,8 @@ h2::-webkit-scrollbar {
 
 
 
-#gamer_profiles-btn {
+#gamer_profiles-btn,
+#mobile-sidebar-gamer_profiles-btn {
     display: flex;
     align-items: center;
     padding: 15px;
@@ -864,18 +865,21 @@ h2::-webkit-scrollbar {
     justify-content: space-between;
 }
 
-#gamer_profiles-btn div {
+#gamer_profiles-btn div,
+#mobile-sidebar-gamer_profiles-btn div {
     display: flex;
     justify-content: flex-start;
     font-weight: bold;
 }
 
-#gamer_profiles-btn i {
+#gamer_profiles-btn i,
+#mobile-sidebar-gamer_profiles-btn i {
     position: relative;
     top: -4px;
 }
 
-#gamer_profiles-btn img {
+#gamer_profiles-btn img,
+#mobile-sidebar-gamer_profiles-btn img {
     width: 20px;
     height: 20px;
     object-fit: cover;
@@ -884,14 +888,16 @@ h2::-webkit-scrollbar {
 
 
 
-.gamer_profiles_dropdown-container {
+.gamer_profiles_dropdown-container,
+.mobile_sidebar_gamer_profiles_dropdown-container {
     width: inherit;
     margin: 0 auto;
 
 }
 
 
-.gamer_profiles_dropdown {
+.gamer_profiles_dropdown,
+.mobile_sidebar_gamer_profiles_dropdown {
     display: flex;
     position: absolute;
     margin: 0 auto;
@@ -907,13 +913,15 @@ h2::-webkit-scrollbar {
 
 
 
-.gamer_profiles_dropdown img {
+.gamer_profiles_dropdown img,
+.mobile_sidebar_gamer_profiles_dropdown img {
     width: 20px;
     height: 20px;
     object-fit: cover;
 }
 
-.gamer_profiles_dropdown-item {
+.gamer_profiles_dropdown-item,
+.mobile_sidebar_gamer_profiles_dropdown-item {
     margin: 0 10px;
     padding: 0 10px;
 }

@@ -15,12 +15,12 @@
 
         {%if gamer_profiles%}
 
-        {%include 'gamerProfile/gamer_profile_section_sidebar.html' %}
+        {%include 'gamerProfile/mobile_specific/gamer_profile_section_sidebar_mobile.html' %}
 
         {%endif%}
 
-        <div class="gamer_profile_stats_section">
-            {%include 'gamerProfile/gamer_profile_stats.html' %}
+        <div class="mobile_sidebar_gamer_profile_stats_section">
+            {%include 'gamerProfile/mobile_specific/mobile_sidebar_gamer_profile_stats.html' %}
         </div>
 
         {% if user.is_authenticated%}
@@ -36,32 +36,32 @@
 
 
 <script>
-    var selected_gamer_profile;
-    $('.gamer_profiles_dropdown-container').css('display', 'none');
+    var mobile_sidebar_selected_gamer_profile;
+    $('.mobile_sidebar_gamer_profiles_dropdown-container').css('display', 'none');
 
     $(document).ready(function () {
-        $('#gamer_profiles-btn').click(Toggle_Dropdown_Display);
+        $('#mobile-sidebar-gamer_profiles-btn').click(Toggle_Mobile_Sidebar_Dropdown_Display);
         if ($('.page').text().trim() == "user_profile")
             $('.sidebar').addClass("custom_margin_top");
     });
 
-    $('.gamer_profiles_dropdown-btn').click(function () {
-        selected_gamer_profile = $(this).text().trim();
+    $('.mobile_sidebar_gamer_profiles_dropdown-btn').click(function () {
+        mobile_sidebar_selected_gamer_profile = $(this).text().trim();
 
         user_name = $('.sidebar_username').text().replaceAll(' ', '');
         $.ajax({
             type: 'POST',
-            url: `/get_gamer_profile_stats/${user_name}`,
+            url: `/get_mobile_sidebar_gamer_profile_stats/${user_name}`,
             dataType: "json",
             data: {
-                game: selected_gamer_profile,
+                game: mobile_sidebar_selected_gamer_profile,
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
             },
             success: function (response) {
 
-                $('.gamer_profile_stats_section').html(response['gamer_profile_stats']);
-                Toggle_Dropdown_Display();
-                $('.gamer_profiles_btn_text').text($('.game_name').text());
+                $('.mobile_sidebar_gamer_profile_stats_section').html(response['gamer_profile_stats']);
+                Toggle_Mobile_Sidebar_Dropdown_Display();
+                $('.mobile-sidebar-gamer-profiles-btn-text').text($('.mobile_sidebar_game_name').text());
                 $('.gamer_profiles-btn-img').attr("src", response['game_logo']);
 
             }
@@ -69,10 +69,10 @@
     });
 
 
-    function Toggle_Dropdown_Display() {
-        if ($('.gamer_profiles_dropdown-container').css('display') == 'flex') {
-            $('.gamer_profiles_dropdown-container').css('display', 'none');
+    function Toggle_Mobile_Sidebar_Dropdown_Display() {
+        if ($('.mobile_sidebar_gamer_profiles_dropdown-container').css('display') == 'flex') {
+            $('.mobile_sidebar_gamer_profiles_dropdown-container').css('display', 'none');
         }
-        else $('.gamer_profiles_dropdown-container').css('display', 'flex');
+        else $('.mobile_sidebar_gamer_profiles_dropdown-container').css('display', 'flex');
     }
 </script>

@@ -275,13 +275,14 @@
 
 }
 
-.gamer_profile_stats_section,
+.gamer_profile_stats_section, .mobile_sidebar_gamer_profile_stats_section,
 .sidebar_gamer_profile_stats_section .gamer_profle_info {
     display: flex;
     flex-direction: column;
 }
 
-.gamer_profile_stats_section .game_stat,
+.gamer_profile_stats_section .game_stat, 
+.mobile_sidebar_gamer_profile_stats_section .game_stat,
 .sidebar_gamer_profile_stats_section .gamer_profle_info .game_stat {
     padding: 10px 20px;
     display: flex;
@@ -290,13 +291,13 @@
     font-weight: bold;
 }
 
-.gamer_profile_stats_section,
+.gamer_profile_stats_section, .mobile_sidebar_gamer_profile_stats_section,
 .sidebar_gamer_profile_stats_section .label {
     color: var(--text-secondary-color);
 
 }
 
-.gamer_profile_stats_section,
+.gamer_profile_stats_section, .mobile_sidebar_gamer_profile_stats_section,
 .sidebar_gamer_profile_stats_section .value {
     color: var(--text-secondary2-color);
 }

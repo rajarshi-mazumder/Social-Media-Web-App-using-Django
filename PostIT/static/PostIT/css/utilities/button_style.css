@@ -106,7 +106,8 @@
     text-decoration: none !important;
 }
 
-.gamer_profiles_dropdown button {
+.gamer_profiles_dropdown button,
+.mobile_sidebar_gamer_profiles_dropdown button {
     display: flex;
     padding: 10px 20px;
     align-items: center;
@@ -115,7 +116,8 @@
     color: var(--text-secondary-color);
 }
 
-.gamer_profiles_dropdown button:hover {
+.gamer_profiles_dropdown button:hover,
+.mobile_sidebar_gamer_profiles_dropdown button:hover {
     background-color: var(--tertiary1_bg_color);
     border-radius: 10px;
 }

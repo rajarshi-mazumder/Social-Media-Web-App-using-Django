@@ -76,6 +76,7 @@
                 $('.gamer_profile_stats_section').html(response['gamer_profile_stats']);
                 Toggle_Dropdown_Display();
                 $('.gamer_profiles_btn_text').text($('.game_name').text());
+                console.log("Robbie: ",$('.game_name').text())
                 $('.gamer_profiles-btn-img').attr("src", response['game_logo']);
 
             }
@@ -84,6 +85,7 @@
 
 
     function Toggle_Dropdown_Display() {
+
         if ($('.gamer_profiles_dropdown-container').css('display') == 'flex') {
             $('.gamer_profiles_dropdown-container').css('display', 'none');
         }
