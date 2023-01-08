@@ -25,9 +25,9 @@ Page3 - Profile
                 </div>
 
 
-                {%for g in desired_gamer_profiles%}
+                {%for g in selected_user_gamer_profiles%}
 
-                {% if g.game == desired_main_gamer_profile.main_gamer_profile.game %}
+                {% if g.game == selected_user_main_gamer_profile.main_gamer_profile.game %}
 
                 <div class="main_game" style="display: none;">{{g.game}}</div>
 
@@ -36,8 +36,8 @@ Page3 - Profile
                 {%endif%}
                 {%endfor%}
                 <div class="game-specific-all-stats">
-                    {%for g in desired_gamer_profiles%}
-                    {% if g.game == desired_main_gamer_profile.main_gamer_profile.game %}
+                    {%for g in selected_user_gamer_profiles%}
+                    {% if g.game == selected_user_main_gamer_profile.main_gamer_profile.game %}
                     <button id="gamer_profiles-btn_to_show_all_stats">
                         <div>
                             {%for logo, url in game_logos.items%}
@@ -57,7 +57,7 @@ Page3 - Profile
                 </div>
                 <div class="gamer_profiles_all_stats_dropdown-container">
                     <div class="gamer_profiles_all_stats_dropdown">
-                        {%for g in desired_gamer_profiles%}
+                        {%for g in selected_user_gamer_profiles%}
                         <button class="gamer_profiles_all_stats_dropdown-btn">
 
                             {%for logo, url in game_logos.items%}

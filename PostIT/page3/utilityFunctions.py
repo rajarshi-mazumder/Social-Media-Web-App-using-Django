@@ -48,8 +48,8 @@ def Get_Gamer_Profiles_For_User_profiles_Page(request, user):
         selected_user_gamer_profiles = None
         selected_user_main_gamer_profile = None
                 
-    context = {'desired_gamer_profiles': selected_user_gamer_profiles,
-                'desired_main_gamer_profile': selected_user_main_gamer_profile,
+    context = {'selected_user_gamer_profiles': selected_user_gamer_profiles,
+                'selected_user_main_gamer_profile': selected_user_main_gamer_profile,
                 'game_logos': GameProfile.games_logo_list, }
     print("Aimer: ", context)
 
