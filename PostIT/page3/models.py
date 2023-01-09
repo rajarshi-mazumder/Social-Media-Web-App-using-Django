@@ -76,6 +76,7 @@ class Profile(models.Model):
     featured_communities = models.ManyToManyField(
         Community, default=None, blank=True, related_name='featuredCommunities')
     is_private = models.BooleanField(null=True, blank=True, default=False)
+    age= models.IntegerField(null=True)
 
     def __str__(self):
         return str(self.user)
@@ -200,7 +201,6 @@ class GameProfile(models.Model):
         APAC = 'APAC', 'Asia Pacific'
         EMEA = 'EMEA', 'Europe'
         NA = 'NA', 'North America'
-        JA = 'JA', 'Japan'
 
     class CODServers(models.TextChoices):
         APAC = 'APAC', 'Asia Pacific'
@@ -216,45 +216,66 @@ class GameProfile(models.Model):
         EMEA = 'EMEA', 'Europe'
         NA = 'NA', 'North America'
 
+    Valorant_Regions= {'APAC': ['Tokyo', 'Singapore', 'Mumbai', 'Seoul'],
+                       'EMEA': ['London', 'Paris', 'Kyiv', 'Barcelona'],
+                       'NA': ['San Francisco', 'FLorida', 'Texas', 'Vancouver'],
+                       'LATAM': ['Buenos Aires', 'Rio de Janeiro', 'Mexico City', 'Havana'],
+                        }
+    COD_Regions= {      'APAC': ['Tokyo', 'Singapore', 'Mumbai', 'Tehran'],
+                       'EMEA': ['London', 'Paris', 'Kyiv', 'Barcelona', 'Madrid','Rome'],
+                       'NA': ['San Francisco', 'FLorida', 'Texas', 'Vancouver', 'Washington'],
+                       'LATAM': ['Buenos Aires', 'Rio de Janeiro', 'Mexico City', 'Santiago'],
+                        }
+    LOL_Regions= {      'APAC': ['Osaka','Kyoto','Fukouka', 'Singapore', 'Delhi', 'Jerusalem'],
+                       'EMEA': ['London', 'Paris', 'Kyiv', 'Barcelona', 'Madrid','Rome'],
+                       'NA': ['San Francisco', 'FLorida', 'Texas', 'Vancouver', 'Washington'],
+                       'LATAM': ['Buenos Aires', 'Rio de Janeiro', 'Mexico City', 'Montevideo'],
+                        }
+    CS_Regions= {      'APAC': ['Seoul','Tokyo','Karachi', 'Singapore', 'Delhi', 'Mumbai'],
+                       'EMEA': ['London', 'Paris', 'Kyiv', 'Barcelona', 'Madrid','Brighton','Reading','Portsmouth'],
+                       'NA': ['San Francisco','Chicago',  'FLorida', 'Texas', 'Vancouver', 'Washington'],
+                       'LATAM': ['Buenos Aires', 'Rio de Janeiro','Amazon','Cairo',  'Mexico City', 'Montevideo'],
+                        }
+    
     class ValorantRanks(models.TextChoices):
-        Iron = 'IRON', 'Iron :((('
-        Bronze = 'Bronze', 'Bronze :(('
-        Silver = 'Silver', 'Silver :('
-        Gold = 'Gold', 'Gold :('
+        Iron = 'IRON', 'Iron'
+        Bronze = 'Bronze', 'Bronze'
+        Silver = 'Silver', 'Silver'
+        Gold = 'Gold', 'Gold'
         Platinum = 'Platinum', 'Platinum '
-        Diamond = 'Diamond', 'Diamond :) '
-        Asencdant = 'Asencdant', 'Asencdant :)) '
-        Immortal = 'Immortal', 'Immortal >_< '
-        Radiant = 'Radiant', 'Radiant :> '
+        Diamond = 'Diamond', 'Diamond'
+        Asencdant = 'Asencdant', 'Asencdant'
+        Immortal = 'Immortal', 'Immortal'
+        Radiant = 'Radiant', 'Radiant'
 
     class LOLRanks(models.TextChoices):
-        Iron = 'IRON', 'Iron :((('
-        Bronze = 'Bronze', 'Bronze :(('
-        Silver = 'Silver', 'Silver :('
-        Gold = 'Gold', 'Gold :('
+        Iron = 'IRON', 'Iron'
+        Bronze = 'Bronze', 'Bronze'
+        Silver = 'Silver', 'Silver'
+        Gold = 'Gold', 'Gold'
         Platinum = 'Platinum', 'Platinum '
-        Diamond = 'Diamond', 'Diamond :) '
-        Master = 'Master', 'Master :)) '
-        Grandmaster = 'Grandmaster', 'Grandmaster >_< '
-        Challenger = 'Challenger', 'Challenger :> '
+        Diamond = 'Diamond', 'Diamond'
+        Master = 'Master', 'Master'
+        Grandmaster = 'Grandmaster', 'Grandmaster'
+        Challenger = 'Challenger', 'Challenger'
 
     class CODRanks(models.TextChoices):
-        Rookie = 'Rookie', 'Rookie :((('
-        Veteran = 'Veteran', 'Veteran :(('
-        Elite = 'Elite', 'Elite :('
-        Pro = 'Pro', 'Pro :('
-        Master = 'Master', 'Master '
-        Grandmaster = 'Grandmaster', 'Grandmaster :) '
-        Legendary = 'Legendary', 'Legendary :)) '
+        Rookie = 'Rookie', 'Rookie'
+        Veteran = 'Veteran', 'Veteran'
+        Elite = 'Elite', 'Elite'
+        Pro = 'Pro', 'Pro'
+        Master = 'Master', 'Master'
+        Grandmaster = 'Grandmaster', 'Grandmaster'
+        Legendary = 'Legendary', 'Legendary'
 
     class CSRanks(models.TextChoices):
 
-        Silver = 'Silver', 'Silver :('
-        Gold = 'Gold', 'Gold :('
-        Master_Guardian = 'Master Guardian', 'Master Guardian '
-        Distinguished_Master_Guardian = 'Distinguished Master Guardian', 'Distinguished Master Guardian :) '
-        Legendary = 'Legendary', 'Legendary :)) '
-        Elite = 'Elite', 'Elite >_< '
+        Silver = 'Silver', 'Silver'
+        Gold = 'Gold', 'Gold'
+        Master_Guardian = 'Master Guardian', 'Master Guardian'
+        Distinguished_Master_Guardian = 'Distinguished Master Guardian', 'Distinguished Master Guardian'
+        Legendary = 'Legendary', 'Legendary'
+        Elite = 'Elite', 'Elite'
 
     class User_Status(models.TextChoices):
         LFTeams = 'Looking for teams', 'Looking for teams'
@@ -290,7 +311,11 @@ class GameProfile(models.Model):
 
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     game = models.CharField(max_length=50, choices=games_list)
-    server = models.CharField(max_length=50, choices=servers_list)
+    region = models.CharField(max_length=50, choices=servers_list, null=True)
+
+    servers =ArrayField(models.CharField(
+        max_length=50, null=True, blank=True, default=""), blank=True, null=True, default=list)
+
     rank = models.CharField(max_length=50, choices=ranks_list, default="")
     user_status = models.CharField(
         max_length=50, choices=User_Status.choices, default='none')
@@ -316,6 +341,8 @@ class GameProfile(models.Model):
 
     remarks = models.CharField(
         max_length=400, default="", blank=True, null=True)
+    
+    
 
     def __str__(self):
         return str(self.user) + " | " + str(self.game) + " | " + str(self.server) + " | " + str(self.rank)

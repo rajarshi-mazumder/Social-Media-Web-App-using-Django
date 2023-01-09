@@ -1345,16 +1345,19 @@ def Matchmaking_Data(request, user):
         rank = request.POST['rank']
         user_profiles = []
         proflies = []
-        game_profiles = GameProfile.objects.filter(game=pref_game)
+        game_profiles = GameProfile.objects.filter(game__contains=pref_game,
+        rank__contains=rank, server__contains= pref_server)
+        
         for g in game_profiles:
-            this_user = User.objects.get(username=g.user).id
-            this_profile = (Profile.objects.filter(user=int(this_user)))
-            if(this_profile):
-                print(this_profile[0].bio)
+            queried_user = User.objects.get(username=g.user).id
+            queried_profile = (Profile.objects.filter(user=int(queried_user)))
+            if(queried_profile):
+                print(queried_profile[0].bio)
                 obj = {'username': g.user.username, 'game': g.game, 'rank': g.rank, 'server': g.server,
-                       'bio': this_profile[0].bio, 'profile_pic': str(this_profile[0].profile_pic), 'user_status': g.user_status}
+                       'bio': queried_profile[0].bio, 'profile_pic': str(queried_profile[0].profile_pic), 'user_status': g.user_status}
                 proflies.append(obj)
 
+        
         print("PROFILES :", proflies)
         context = {'profiles': proflies}
 
@@ -1362,6 +1365,7 @@ def Matchmaking_Data(request, user):
             'matchmaking/matchmaking_found_list.html', context, request=request)
 
         return JsonResponse({"profiles": html})
+
 
 
 def Gamer_Profile_Data(request, user):
@@ -1546,6 +1550,7 @@ def get_game_rank_server(request, game):
 def get_saved_game_rank_server(request, game):
     ranks = []
     servers = []
+    regions=[]
     default_additonal_fields = []
     default_roles = []
     default_user_status = []
