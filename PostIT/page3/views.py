@@ -24,7 +24,7 @@ from rest_framework.decorators import api_view
 
 
 # Utility functions import
-from .utilityFunctions import get_featured_communities, Get_Gamer_Profiles_For_User_profiles_Page, get_user_vouch_information, get_user_following_info,Get_Logged_in_User_Gamer_Profiles
+from .utilityFunctions import get_featured_communities, Get_Gamer_Profiles_For_User_profiles_Page, get_user_vouch_information, get_user_following_info, Get_Logged_in_User_Gamer_Profiles
 
 
 def is_ajax(request):
@@ -1021,7 +1021,7 @@ def user_profile_stats(request, user):
 
         context.update(get_featured_communities(request))
         context.update(get_user_vouch_information(request, user))
-        print("Penalty ", context)
+        print("Parry ", context)
         return render(request, 'user/user_profile_stats.html', context=context)
     return render(request, 'user/user_profile_stats.html', context={})
 
@@ -1607,11 +1607,13 @@ def search_results(request):
         posts_list = []
         people_list = []
         accounts_list = []
+        communities_list = []
         all_posts = Post.objects.all().order_by('-post_datetime')
         all_profiles = Profile.objects.all()
         profiles = Profile.objects.all()
+        all_communities = Community.objects.all()
         image_list = ImageFiles.objects.all()
-
+        user_joined_communities = request.user.profile.communities.all()
         for p in all_posts:
             if search_query in p.body.lower():
                 posts_list.append(p)
@@ -1629,18 +1631,26 @@ def search_results(request):
         for pr in all_profiles:
             if search_query in pr.user.username.lower():
                 accounts_list.append(pr.user)
+        for community in all_communities:
+            if search_query in community.name.lower():
+                communities_list.append(community)
+            elif search_query in community.bio.lower():
+                communities_list.append(community)
+
         print(posts_list)
+        print("Communities list", communities_list)
         context = {'posts_list': posts_list,
                    'search_query': og_search_query, 'profiles': profiles,
                    'people_list': people_list, 'image_list': image_list,
                    'account_items_list': accounts_list,
+                   'user_joined_communities': user_joined_communities,
+                   'communities': communities_list,
                    }
         context.update(get_user_following_info(request))
         context.update(Get_Gamer_Profiles_For_User_profiles_Page(
             request, request.user))
-        context.update(Get_Logged_in_User_Gamer_Profiles(
-            request, request.user))
-
+        context.update(
+            Get_Logged_in_User_Gamer_Profiles(request, request.user))
         context.update(get_featured_communities(request))
         return render(request, 'search/search_results.html', context=context)
     return render(request, 'search/search_results.html')

@@ -53,11 +53,15 @@
     $('.gamer_profiles_dropdown-container').css('display', 'none');
 
     $(document).ready(function () {
-        document.getElementById("gamer_profiles-btn").addEventListener("click", Toggle_Dropdown_Display);
+
+        console.log("Astra")
+        $('#gamer_profiles-btn').click(Toggle_Dropdown_Display);
         if (($('.page').text().trim() == "user_posts_page") ||
             ($('.page').text().trim() == "user_profile_page") ||
             ($('.page').text().trim() == "user_communities_page"))
             $('.sidebar').addClass("custom_margin_top");
+
+
     });
 
     $('.gamer_profiles_dropdown-btn').click(function () {

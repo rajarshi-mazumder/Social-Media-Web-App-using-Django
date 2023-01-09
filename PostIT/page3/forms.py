@@ -135,9 +135,11 @@ class CreateCommunityForm(ModelForm):
     class Meta:
         model = Community
         fields = ('name', 'bio', 'profile_pic')
-        # widgets = {
-        #     'community_admins': forms.Select(choices=all_users, attrs={'class': 'form-control'}),
-        # }
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Add a bio...'}),
+            # 'community_admins': forms.Select(choices=all_users, attrs={'class': 'form-control'}),
+        }
 
 
 class EditCommunityForm(ModelForm):

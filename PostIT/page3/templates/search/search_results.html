@@ -19,6 +19,7 @@ Page3 Homepage
                 <!-- <h1>Search Results for: {{search_query}}</h1> -->
                 <button id="posts_btn">Posts</button>
                 <button id="people_btn">People</button>
+                <button id="communities_btn">Communities</button>
 
             </div>
             <br />
@@ -43,6 +44,9 @@ Page3 Homepage
                         {%endfor%}
 
                     </div>
+                    <div id="communities-list">
+                        {% include 'community/account_items_list.html' %}
+                    </div>
                 </div>
 
 
@@ -66,20 +70,35 @@ Page3 Homepage
 
 <script>
     $('#people-list').hide();
+    $('#communities-list').hide();
+
     $('#people_btn').removeClass('selected-tab')
+    $('#communities_btn').removeClass('selected-tab')
     $('#posts_btn').addClass('selected-tab')
 
     $('#people_btn').click(function () {
         $('#posts_list').hide();
+        $('#communities-list').hide();
         $('#people-list').show();
         $('#people_btn').addClass('selected-tab')
         $('#posts_btn').removeClass('selected-tab')
+        $('#communities_btn').removeClass('selected-tab')
     });
     $('#posts_btn').click(function () {
         $('#people-list').hide();
+        $('#communities-list').hide();
         $('#posts_list').show();
         $('#people_btn').removeClass('selected-tab')
+        $('#communities_btn').removeClass('selected-tab')
         $('#posts_btn').addClass('selected-tab')
+    });
+    $('#communities_btn').click(function () {
+        $('#people-list').hide();
+        $('#posts_list').hide();
+        $('#communities-list').show();
+        $('#people_btn').removeClass('selected-tab')
+        $('#posts_btn').removeClass('selected-tab')
+        $('#communities_btn').addClass('selected-tab')
     });
 </script>
 

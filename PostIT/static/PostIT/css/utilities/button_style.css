@@ -161,7 +161,7 @@ button {
 .button-section button {
     margin: 0 20px;
     padding: 10px 20px;
-    width: 80px;
+    max-width: 140px;
 }
 
 .profile-interct-button,
