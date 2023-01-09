@@ -48,7 +48,7 @@ def home_timeline(request, post_id=None):
         main_game_profile = Main_Profile.objects.get(user=request.user)
 
         gamer_profiles = GameProfile.objects.filter(user=request.user)
-        print("User's GAME PROFILES: ", gamer_profiles)
+        print(" Deathly ", request.user)
     except:
         main_game_profile = None
         print("MAIN GAME PROFILE: ", main_game_profile)
@@ -109,6 +109,7 @@ def home_timeline(request, post_id=None):
     # print("SETTINGS: ", static(settings.MEDIA_URL))
     context.update(get_featured_communities(
         request))
+    
     return render(request, 'base/home_timeline.html', context)
 
 
@@ -1139,7 +1140,7 @@ def create_game_profile(request, user):
                 game_profile = GameProfile.objects.filter(user=user.id,
                                                           game=request.POST.get("game"))
                 game_profile.update(
-                    server=request.POST.get("server"), rank=request.POST.get("rank"),
+                    region=request.POST.get("regions"), rank=request.POST.get("rank"),
                     additional_info=additional_info, roles_rating=roles,
                     remarks=request.POST.get("remarks"), looking_for_friends=is_looking_for_friends,
                     time_available=request.POST.get('time_available'),
@@ -1167,7 +1168,7 @@ def create_game_profile(request, user):
             else:
 
                 new_gamer_profile = GameProfile(user=user, game=request.POST.get('game'),
-                                                server=request.POST.get('server'), rank=request.POST.get('rank'),
+                                                region=request.POST.get('regions'), rank=request.POST.get('rank'),
                                                 additional_info=additional_info, roles_rating=roles,
                                                 remarks=request.POST.get(
                                                     "remarks"),
@@ -1277,7 +1278,7 @@ def edit_gamer_profile(request, user):
                                                           game=request.POST.get("game_to_edit"))
 
                 game_profile.update(
-                    server=request.POST.get("server"), rank=request.POST.get("rank"),
+                    region=request.POST.get("regions"), rank=request.POST.get("rank"),
                     additional_info=additional_info, roles_rating=roles,
                     remarks=request.POST.get("remarks"), looking_for_friends=is_looking_for_friends,
                     time_available=request.POST.get('time_available'),
@@ -1341,19 +1342,19 @@ def Matchmaking_Data(request, user):
     if request.method == 'POST':
         print(request.POST)
         pref_game = request.POST['game']
-        pref_server = request.POST['server']
+        pref_region = request.POST['region']
         rank = request.POST['rank']
         user_profiles = []
         proflies = []
         game_profiles = GameProfile.objects.filter(game__contains=pref_game,
-        rank__contains=rank, server__contains= pref_server)
+        rank__contains=rank, region__contains= pref_region)
         
         for g in game_profiles:
             queried_user = User.objects.get(username=g.user).id
             queried_profile = (Profile.objects.filter(user=int(queried_user)))
             if(queried_profile):
                 print(queried_profile[0].bio)
-                obj = {'username': g.user.username, 'game': g.game, 'rank': g.rank, 'server': g.server,
+                obj = {'username': g.user.username, 'game': g.game, 'rank': g.rank, 'region': g.region,
                        'bio': queried_profile[0].bio, 'profile_pic': str(queried_profile[0].profile_pic), 'user_status': g.user_status}
                 proflies.append(obj)
 
@@ -1508,38 +1509,38 @@ def User_Profile_Page_Data(request, user, game):
 def get_game_rank_server(request, game):
 
     ranks = []
-    servers = []
+    regions = []
     additional_info_fields = []
     default_roles = []
     if game == "Valorant":
         ranks = GameProfile.ValorantRanks.choices
-        servers = GameProfile.ValorantServers.choices
+        regions = GameProfile.ValorantRegions.choices
         additional_info_fields = GameProfile.Valorant_additional_fields
         default_roles = GameProfile.Valorant_Roles
 
     if game == "Call of Duty":
         ranks = GameProfile.CODRanks.choices
-        servers = GameProfile.CODServers.choices
+        regions = GameProfile.CODRegions.choices
         additional_info_fields = GameProfile.COD_additional_fields
         default_roles = GameProfile.COD_Roles
 
     if game == "League of Legends":
         ranks = GameProfile.LOLRanks.choices
-        servers = GameProfile.LOLServers.choices
+        regions = GameProfile.LOLRegions.choices
         additional_info_fields = GameProfile.LOL_additional_fields
         default_roles = GameProfile.LOL_Roles
 
     if game == "Counter Strike: GO":
         ranks = GameProfile.CSRanks.choices
-        servers = GameProfile.CSServers.choices
+        regions = GameProfile.CSRegions.choices
         additional_info_fields = GameProfile.CS_GO_additional_fields
         default_roles = GameProfile.CS_GO_Roles
 
     default_user_status = GameProfile.User_Status.choices
     is_profile_exists = GameProfile.objects.filter(user=request.user,
                                                    game=game).exists()
-    print(game, ranks, servers, additional_info_fields)
-    return JsonResponse({"ranks": ranks, "servers": servers,
+    print(game, ranks, regions, additional_info_fields)
+    return JsonResponse({"ranks": ranks, "regions": regions,
                         "additional_fields": additional_info_fields,
                          "default_roles": default_roles,
                          "is_profile_exists": is_profile_exists,
@@ -1558,35 +1559,35 @@ def get_saved_game_rank_server(request, game):
 
     if game == "Valorant":
         ranks = GameProfile.ValorantRanks.choices
-        servers = GameProfile.ValorantServers.choices
-        default_additonal_fields = GameProfile.Valorant_additional_fields
+        regions = GameProfile.ValorantRegions.choices
+        additional_info_fields = GameProfile.Valorant_additional_fields
         default_roles = GameProfile.Valorant_Roles
 
     if game == "Call of Duty":
         ranks = GameProfile.CODRanks.choices
-        servers = GameProfile.CODServers.choices
-        default_additonal_fields = GameProfile.COD_additional_fields
+        regions = GameProfile.CODRegions.choices
+        additional_info_fields = GameProfile.COD_additional_fields
         default_roles = GameProfile.COD_Roles
 
     if game == "League of Legends":
         ranks = GameProfile.LOLRanks.choices
-        servers = GameProfile.LOLServers.choices
-        default_additonal_fields = GameProfile.LOL_additional_fields
+        regions = GameProfile.LOLRegions.choices
+        additional_info_fields = GameProfile.LOL_additional_fields
         default_roles = GameProfile.LOL_Roles
 
     if game == "Counter Strike: GO":
         ranks = GameProfile.CSRanks.choices
-        servers = GameProfile.CSServers.choices
-        default_additonal_fields = GameProfile.CS_GO_additional_fields
+        regions = GameProfile.CSRegions.choices
+        additional_info_fields = GameProfile.CS_GO_additional_fields
         default_roles = GameProfile.CS_GO_Roles
 
     default_user_status = GameProfile.User_Status.choices
     saved_gamer_profile = GameProfile.objects.get(user=request.user,
                                                   game=game)
     print(request.user)
-    return JsonResponse({"ranks": ranks, "servers": servers,
+    return JsonResponse({"ranks": ranks, "regions": regions,
                         "saved_rank": saved_gamer_profile.rank,
-                         "saved_server": saved_gamer_profile.server,
+                         "saved_region": saved_gamer_profile.region,
                          "additional_fields": saved_gamer_profile.additional_info,
                          "default_additonal_fields": default_additonal_fields,
                          "default_roles": default_roles,

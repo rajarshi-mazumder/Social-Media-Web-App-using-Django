@@ -30,8 +30,8 @@ Create Gamer Profile
                             <div class="game">{{form.game}}</div>
                         </div>
                         <div class="profile-item">
-                            <div class="label"> Preferred Server</div>
-                            <select class="servers" name="server" form="gamerprofile_form"></select>
+                            <div class="label"> Preferred Region</div>
+                            <select class="regions" name="regions" form="gamerprofile_form"></select>
                         </div>
                         <div class="profile-item">
                             <div class="label"> Current Rank</div>
@@ -164,9 +164,9 @@ Login first!
                     ShowPopup();
                 }
 
-                $('.servers').empty();
-                for (let i = 0; i < response['servers'].length; i++) {
-                    $('.servers').append(`<option>${response['servers'][i][0]}</option>`)
+                $('.regions').empty();
+                for (let i = 0; i < response['regions'].length; i++) {
+                    $('.regions').append(`<option>${response['regions'][i][0]}</option>`)
                 }
 
                 $('.ranks').empty();
@@ -270,7 +270,7 @@ Login first!
             data: {
                 game: pref_game,
                 rank: $('.ranks').val(),
-                server: $('.servers').val(),
+                regions: $('.regions').val(),
                 additional_info: {
                     1: additional_info
                 }

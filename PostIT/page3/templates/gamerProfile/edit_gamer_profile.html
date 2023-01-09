@@ -37,8 +37,8 @@ Create Gamer Profile
                             <input type="text" class="in_game_user_id" name="in_game_user_id" form="gamerprofile_form">
                         </div>
                         <div class="profile-item">
-                            <div class="label"> Preferred Server</div>
-                            <select class="servers" name="server" form="gamerprofile_form"></select>
+                            <div class="label"> Preferred Region</div>
+                            <select class="regions" name="regions" form="gamerprofile_form"></select>
                         </div>
                         <div class="profile-item">
                             <div class="label"> Current Rank</div>
@@ -158,12 +158,12 @@ Login first!
 
                 $('.in_game_user_id').val(response['in_game_user_id']);
 
-                $('.servers').empty();
-                for (let i = 0; i < response['servers'].length; i++) {
-                    if (response['servers'][i][0] == response['saved_server'])
-                        $('.servers').append(`<option selected="selected">${response['servers'][i][0]}</option>`)
+                $('.regions').empty();
+                for (let i = 0; i < response['regions'].length; i++) {
+                    if (response['regions'][i][0] == response['saved_region'])
+                        $('.regions').append(`<option selected="selected">${response['regions'][i][0]}</option>`)
                     else
-                        $('.servers').append(`<option>${response['servers'][i][0]}</option>`)
+                        $('.regions').append(`<option>${response['regions'][i][0]}</option>`)
 
                 }
 
@@ -314,7 +314,7 @@ Login first!
             data: {
                 game: pref_game,
                 rank: $('.ranks').val(),
-                server: $('.servers').val(),
+                region: $('.regions').val(),
                 body: $('#post_body').val(),
                 is_main: is_main,
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
