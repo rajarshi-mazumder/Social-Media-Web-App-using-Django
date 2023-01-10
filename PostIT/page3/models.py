@@ -198,23 +198,26 @@ class GameProfile(models.Model):
                   ('League of Legends', 'League of Legends'), ('Counter Strike: GO', 'Counter Strike: GO')]
 
     class ValorantRegions(models.TextChoices):
-        APAC = 'APAC', 'Asia Pacific'
-        EMEA = 'EMEA', 'Europe'
-        NA = 'NA', 'North America'
+        APAC = 'APAC', 'APAC'
+        EMEA = 'EMEA', 'EMEA'
+        NA = 'NA', 'NA'
+        LATAM= 'LATAM', 'LATAM'
 
     class CODRegions(models.TextChoices):
-        APAC = 'APAC', 'Asia Pacific'
-        EMEA = 'EMEA', 'Europe'
-        NA = 'NA', 'North America'
+        APAC = 'APAC', 'APAC'
+        EMEA = 'EMEA', 'EMEA'
+        NA = 'NA', 'NA'
 
     class LOLRegions(models.TextChoices):
-        APAC = 'APAC', 'Asia Pacific'
-        EMEA = 'EMEA', 'Europe'
-        NA = 'NA', 'North America'
+        APAC = 'APAC', 'APAC'
+        EMEA = 'EMEA', 'EMEA'
+        NA = 'NA', 'NA'
 
     class CSRegions(models.TextChoices):
-        EMEA = 'EMEA', 'Europe'
-        NA = 'NA', 'North America'
+        APAC = 'APAC', 'APAC'
+        EMEA = 'EMEA', 'EMEA'
+        NA = 'NA', 'NA'
+        LATAM= 'LATAM', 'LATAM'
 
     Valorant_Servers= {'APAC': ['Tokyo', 'Singapore', 'Mumbai', 'Seoul'],
                        'EMEA': ['London', 'Paris', 'Kyiv', 'Barcelona'],
