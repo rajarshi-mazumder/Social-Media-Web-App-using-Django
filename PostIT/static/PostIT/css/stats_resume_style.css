@@ -1,0 +1,212 @@
+/* Gamer profile all stats section start */
+
+.gamer_profile_all_stats_section {
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    margin: 10px auto;
+    padding: 20px 0;
+    border-radius: 10px;
+}
+
+.gamer_profile_all_stats_section .divided_section {
+    display: flex;
+    /* justify-content: space-between; */
+}
+
+.gamer_profile_all_stats_section .overview-section {
+    /* border-right: 1px solid var(--border-color); */
+    padding: 20px;
+    background-color: var(--secondary_bg_color);
+    border-radius: 10px;
+}
+
+.gamer_profile_all_stats_section .section-info {
+    width: 100%;
+}
+
+.gamer_profile_all_stats_section .mid-left-info {
+    padding-right: 15px;
+}
+
+.gamer_profile_all_stats_section .mid-section {
+    width: 100%;
+    display: flex;
+    padding: 20px;
+    background-color: var(--secondary_bg_color);
+    border-radius: 10px;
+}
+
+.gamer_profile_all_stats_section .mid-section .mid-left-section {
+    /* background-color: aqua; */
+    border-right: 1px solid var(--border-color);
+}
+
+.gamer_profile_all_stats_section .section-label {
+
+    color: var(--text-secondary-color);
+    font-size: small;
+    font-weight: bold;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+    margin-left: 20px;
+    padding-bottom: 5px;
+    /* margin-right: auto; */
+}
+
+
+.gamer_profile_all_stats_section .game_stat {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 5px 20px;
+    justify-items: start;
+    align-items: center;
+    min-height: 40px;
+    border-bottom: 1px solid var(--tertiary1_bg_color);
+    position: relative;
+}
+
+.gamer_profile_all_stats_section .top_game_stat {
+    grid-template-columns: 1fr 1fr !important;
+}
+
+.gamer_profile_all_stats_section .vertical {
+    display: flex !important;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.gamer_profile_all_stats_section .vertical .value {
+    width: 100%;
+    text-align: left;
+}
+
+
+.gamer_profile_all_stats_section .game_stat div {
+    display: flex;
+
+}
+
+.gamer_profile_all_stats_section .game_stat i {
+    padding: 0 5px 0 0;
+    color: inherit;
+    margin-right: 10px;
+}
+
+.gamer_profile_all_stats_section .game_stat .label,
+.bar_stats .label {
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+    position: relative;
+    /* background-color: var(--text-secondary-color); */
+    justify-self: start;
+    width: 100%;
+    color: var(--text-secondary-color);
+    font-size: small;
+}
+
+.gamer_profile_all_stats_section .game_stat .value {
+    padding-left: 10px;
+    color: var(--text-secondary3-color);
+    font-weight: bold;
+    font-size: medium;
+}
+
+.gamer_profile_all_stats_section .top_game_stat .value {
+    justify-self: start;
+    /* text-align: right; */
+}
+
+.gamer_profile_all_stats_section .section_divider {
+    width: 90%;
+    height: 2px;
+    background-color: var(--text-secondary-color);
+    margin: 20px auto;
+}
+
+.gamer_profile_all_stats_section .flexible {
+    height: 100%;
+    display: flex !important;
+
+}
+
+.gamer_profile_all_stats_section .flexible div {
+    width: 100%;
+}
+
+.gamer_profile_all_stats_section .value {
+    text-align: left;
+}
+
+.gamer_profile_all_stats_section .clip_text {
+    word-wrap: break-word;
+}
+
+.gamer_profile_all_stats_section .stat_container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.gamer_profile_all_stats_section .bar_label {
+    margin-left: 35px;
+    color: var(--text-secondary-color);
+    font-size: small;
+    font-weight: bold;
+}
+
+.gamer_profile_all_stats_section .bar_stats {
+    margin: 20px 0;
+}
+
+.gamer_profile_all_stats_section .bar_stats .label {
+    display: flex;
+    text-align: left;
+    margin: 10px 0;
+    margin-left: 10px;
+    width: 95%;
+    /* background-color: var(--text-secondary-color); */
+    height: 35px;
+    align-items: center;
+    border-radius: 5px;
+    /* color: black; */
+}
+
+.gamer_profile_all_stats_section .section-info .label i {
+    color: inherit;
+}
+
+.gamer_profile_all_stats_section .bar_stats .bar_holder {
+    width: 80%;
+    background-color: var(--tertiary1_bg_color);
+    height: 10px;
+    position: relative;
+    z-index: 1;
+    border-radius: 10px;
+    margin: 2px auto;
+    margin-bottom: 15px;
+}
+
+.gamer_profile_all_stats_section .bar_stats .bar_display {
+    width: 70%;
+    background-color: var(--primary_color);
+    height: 10px;
+    position: absolute;
+    z-index: 2;
+    top: 0px;
+    left: 0px;
+    border-radius: 10px;
+}
+
+.gamer_profile_all_stats_section .game-logo {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 10px;
+    /* margin-left: 15px; */
+    margin-top: 15px;
+}
+
+/* Gamer profile all stats section end */

@@ -1,0 +1,77 @@
+<div class="profile_user" style="display: none;">
+    {{ user.username }}
+</div>
+{%for logo, url in game_logos.items%}
+{%endfor%}
+
+{%if page == 'user_profile' %}
+<div class="page" style="display:none ;">{{page}}</div>
+{%endif%}
+<div class="sidebar-section">
+    <div class="sidebar-section-title">
+        Profile
+    </div>
+
+    {%if gamer_profiles%}
+
+    {%include 'gamerProfile/mobile_specific/gamer_profile_section_sidebar_mobile.html' %}
+
+
+    <div class="mobile_sidebar_gamer_profile_stats_section">
+        {%include 'gamerProfile/mobile_specific/mobile_sidebar_gamer_profile_stats.html' %}
+    </div>
+    {%endif%}
+
+    {% if user.is_authenticated%}
+    {%include 'navigation/sidebar_page_links.html' %}
+    {%endif%}
+
+</div>
+
+
+
+{% include 'community/communities_list.html' %}
+
+
+
+<script>
+    var mobile_sidebar_selected_gamer_profile;
+    $('.mobile_sidebar_gamer_profiles_dropdown-container').css('display', 'none');
+
+    $(document).ready(function () {
+        $('#mobile-sidebar-gamer_profiles-btn').click(Toggle_Mobile_Sidebar_Dropdown_Display);
+        if ($('.page').text().trim() == "user_profile")
+            $('.sidebar').addClass("custom_margin_top");
+    });
+
+    $('.mobile_sidebar_gamer_profiles_dropdown-btn').click(function () {
+        mobile_sidebar_selected_gamer_profile = $(this).text().trim();
+
+        user_name = $('.sidebar_username').text().replaceAll(' ', '');
+        $.ajax({
+            type: 'POST',
+            url: `/get_mobile_sidebar_gamer_profile_stats/${user_name}`,
+            dataType: "json",
+            data: {
+                game: mobile_sidebar_selected_gamer_profile,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (response) {
+
+                $('.mobile_sidebar_gamer_profile_stats_section').html(response['gamer_profile_stats']);
+                Toggle_Mobile_Sidebar_Dropdown_Display();
+                $('.mobile-sidebar-gamer-profiles-btn-text').text($('.mobile_sidebar_game_name').text());
+                $('.gamer_profiles-btn-img').attr("src", response['game_logo']);
+
+            }
+        })
+    });
+
+
+    function Toggle_Mobile_Sidebar_Dropdown_Display() {
+        if ($('.mobile_sidebar_gamer_profiles_dropdown-container').css('display') == 'flex') {
+            $('.mobile_sidebar_gamer_profiles_dropdown-container').css('display', 'none');
+        }
+        else $('.mobile_sidebar_gamer_profiles_dropdown-container').css('display', 'flex');
+    }
+</script>
