@@ -105,7 +105,7 @@ class GameProfileForm(ModelForm):
     class Meta:
         model = GameProfile
         # fields = '__all__'
-        fields = ('game', 'server', 'rank')
+        fields = ('game', 'region', 'rank')
         # widgets = {
         #     'game': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Valorant'}),
         #     # 'author': forms.TextInput(attrs={'class': 'form-control', 'value': '', 'id': 'author-name', 'type': 'hidden'}),
@@ -118,7 +118,7 @@ class GameProfileForm(ModelForm):
 class MatchmakingForm(ModelForm):
     class Meta:
         model = GameProfile
-        fields = ('game', 'server', 'rank')
+        fields = ('game', 'region', 'rank')
 
 
 # Community

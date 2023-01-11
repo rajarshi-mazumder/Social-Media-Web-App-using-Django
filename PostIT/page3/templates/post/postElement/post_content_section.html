@@ -62,10 +62,11 @@
 
 </section>
 
-<a class="post-body-section" onclick="storeScroll()" href="{% url 'upload_reply' post.pk %}">
+<a class="post-body-section" id="post-body-section" onclick="storeScroll()" href="{% url 'upload_reply' post.pk %}">
     {% if replyingToIsReply %}
     <p>@{{replyingToAuthor}} </p>
-    {% endif %}{{post.body|safe}}
+    {% endif %}
+    {{post.body|linebreaksbr}}
 </a>
 
 <div class="post-tags">

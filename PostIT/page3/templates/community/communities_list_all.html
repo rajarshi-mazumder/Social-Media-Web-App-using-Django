@@ -16,8 +16,26 @@ Page3 - Communities List
     <div class="page-contents">
 
         <div class="posts-timeline">
+            {% if result == 'all_communities' %}
             <div class="page-title">All Communities</div>
-            <br />
+            {% else %}
+            <div class="page-title">
+                <button class="button-custom-width">
+                    {{result}}
+                    <a href="{% url 'show-communities' %}"><i class="fa-solid fa-xmark"></i></a>
+                </button>
+            </div>
+
+            {% endif %}
+            <div class="page-specific-search-bar">
+                <form action="{% url 'search-communities'  %}" method="POST" enctype="multipart/form-data"
+                    id="search-form">
+                    {% csrf_token %}
+                    <input class="search-bar" name="search_query" type="text" placeholder="Search for Community ">
+                    <button id="search_btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+            </div>
+
             {% include 'community/account_items_list.html'%}
 
 

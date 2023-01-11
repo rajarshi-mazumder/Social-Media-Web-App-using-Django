@@ -24,7 +24,12 @@ from rest_framework.decorators import api_view
 
 
 # Utility functions import
-from .utilityFunctions import get_featured_communities, Get_Gamer_Profiles_For_User_profiles_Page, get_user_vouch_information, get_user_following_info, Get_Logged_in_User_Gamer_Profiles
+from .utilityFunctions import get_featured_communities, \
+    Get_Gamer_Profiles_For_User_profiles_Page, get_user_vouch_information, \
+    get_user_following_info, Get_Logged_in_User_Gamer_Profiles, \
+    get_gamer_profile_info_sidebar, get_user_gamer_profile_data
+
+from .organizeGameData import organizeGametData
 
 
 def is_ajax(request):
@@ -48,7 +53,7 @@ def home_timeline(request, post_id=None):
         main_game_profile = Main_Profile.objects.get(user=request.user)
 
         gamer_profiles = GameProfile.objects.filter(user=request.user)
-        print("User's GAME PROFILES: ", gamer_profiles)
+        print(" Deathly ", request.user)
     except:
         main_game_profile = None
         print("MAIN GAME PROFILE: ", main_game_profile)
@@ -109,6 +114,7 @@ def home_timeline(request, post_id=None):
     # print("SETTINGS: ", static(settings.MEDIA_URL))
     context.update(get_featured_communities(
         request))
+
     return render(request, 'base/home_timeline.html', context)
 
 
@@ -618,6 +624,63 @@ def add_video_post(request):
     return render(request, 'post/addPost/add_video_post.html', context)
 
 
+@login_required(login_url='/users/login_user')
+def add_profile_post(request, game):
+    profile_info = ""
+    try:
+        gamer_profile_data = get_user_gamer_profile_data(request, game)
+
+        if bool(gamer_profile_data):
+
+            profile_info = organizeGametData(request, gamer_profile_data)
+            print(profile_info)
+    except:
+        pass
+
+    form = PostForm()
+
+    if request.method == 'POST':
+        print(request.POST)
+        form = PostForm(request.POST, request.FILES)
+        tags = request.POST['tags']
+        if form.is_valid():
+            # form.save()
+            instance = form.save(commit=False)
+            instance.author = request.user
+            instance.user_profile = request.user.profile
+            print("PRINTING PROFILE: ", request.user.profile)
+            instance.save()
+            if len(tags) > 0:
+                tags_list = tags.replace(' ', '').split(",")
+
+                for t in tags_list:
+                    if not(Tags.objects.filter(tag_name=t).exists()):
+
+                        new_tag = Tags(tag_name=t)
+                        new_tag.save()
+                        Tags.objects.get(id=new_tag.id).post.add(
+                            Post.objects.get(id=instance.id))
+
+                    else:
+                        print("MATCHED: ", Tags.objects.filter(tag_name=t))
+                        Tags.objects.get(tag_name=t).post.add(
+                            Post.objects.get(id=instance.id))
+
+                post_obj = Post.objects.get(id=instance.id)
+                post_obj.set_Tag(tags_list)
+                post_obj.save()
+            return redirect('home-page')
+        else:
+            return render(request, 'post/addPost/add_post.html', context)
+    else:
+        form = PostForm(initial={'body': profile_info})
+    context = {
+        'form': form
+    }
+
+    return render(request, 'post/addPost/add_post.html', context)
+
+
 def get_parent_post(parent_id, arr):
     parents = Post.objects.get(id=parent_id)
     if parents:
@@ -1111,10 +1174,11 @@ def create_game_profile(request, user):
             additional_info = []
             roles = []
             is_looking_for_friends = False
-
+            servers = []
             experience = []
             teams = []
             positions = []
+            peak_rank = ""
             for i in request.POST.items():
                 if "field" in i[0]:
                     additional_info.append(i[1])
@@ -1127,19 +1191,36 @@ def create_game_profile(request, user):
                     positions.append(i[1])
             # END for experience fields---------------
 
+             # for server field---------------
+            try:
+                servers = request.POST.getlist('servers')
+            except:
+                servers = []
+
             for i in range(len(teams)):
                 experience.append([teams[i], positions[i]])
             if(request.POST.get('is_looking_for_friends') == 'on'):
                 is_looking_for_friends = True
 
             comm_rating = request.POST.get("comm_rating")
+            try:
+                peak_rank = request.POST.get("peak_rank")
+            except:
+                peak_rank = None
+
+            if user.profile.age:
+                age = user.profile.age
+            else:
+                age = None
 
             if(GameProfile.objects.filter(user=user.id, game=request.POST.get("game"))):
 
                 game_profile = GameProfile.objects.filter(user=user.id,
                                                           game=request.POST.get("game"))
                 game_profile.update(
-                    server=request.POST.get("server"), rank=request.POST.get("rank"),
+                    region=request.POST.get("regions"), rank=request.POST.get("rank"),
+                    servers=servers, peak_rank=peak_rank,
+                    age=age,
                     additional_info=additional_info, roles_rating=roles,
                     remarks=request.POST.get("remarks"), looking_for_friends=is_looking_for_friends,
                     time_available=request.POST.get('time_available'),
@@ -1167,7 +1248,9 @@ def create_game_profile(request, user):
             else:
 
                 new_gamer_profile = GameProfile(user=user, game=request.POST.get('game'),
-                                                server=request.POST.get('server'), rank=request.POST.get('rank'),
+                                                region=request.POST.get('regions'), rank=request.POST.get('rank'),
+                                                servers=servers, peak_rank=peak_rank,
+                                                age=age,
                                                 additional_info=additional_info, roles_rating=roles,
                                                 remarks=request.POST.get(
                                                     "remarks"),
@@ -1242,9 +1325,10 @@ def edit_gamer_profile(request, user):
             roles = []
             is_looking_for_friends = False
             experience = []
-
+            servers = []
             teams = []
             positions = []
+            peak_rank = ""
 
             # for additional fields---------------
             for i in request.POST.items():
@@ -1261,23 +1345,39 @@ def edit_gamer_profile(request, user):
                     positions.append(i[1])
             # END for experience fields---------------
 
+            # for server field---------------
+            try:
+                servers = request.POST.getlist('servers')
+            except:
+                servers = []
+            # END for server field---------------
+
             for i in range(len(teams)):
                 experience.append([teams[i], positions[i]])
 
-            print(experience, "Icarus")
-            print(request.POST, "Suns")
             if(request.POST.get('is_looking_for_friends') == 'on'):
                 is_looking_for_friends = True
 
             comm_rating = request.POST.get("comm_rating")
+            try:
+                peak_rank = request.POST.get("peak_rank")
+            except:
+                peak_rank = None
 
+            if user.profile.age:
+                age = user.profile.age
+            else:
+                age = None
             if(GameProfile.objects.filter(user=user.id, game=request.POST.get("game_to_edit"))):
 
                 game_profile = GameProfile.objects.filter(user=user.id,
                                                           game=request.POST.get("game_to_edit"))
 
                 game_profile.update(
-                    server=request.POST.get("server"), rank=request.POST.get("rank"),
+                    region=request.POST.get("regions"), rank=request.POST.get("rank"),
+                    servers=servers,
+                    peak_rank=peak_rank,
+                    age=age,
                     additional_info=additional_info, roles_rating=roles,
                     remarks=request.POST.get("remarks"), looking_for_friends=is_looking_for_friends,
                     time_available=request.POST.get('time_available'),
@@ -1341,18 +1441,20 @@ def Matchmaking_Data(request, user):
     if request.method == 'POST':
         print(request.POST)
         pref_game = request.POST['game']
-        pref_server = request.POST['server']
+        pref_region = request.POST['region']
         rank = request.POST['rank']
         user_profiles = []
         proflies = []
-        game_profiles = GameProfile.objects.filter(game=pref_game)
+        game_profiles = GameProfile.objects.filter(game__contains=pref_game,
+                                                   rank__contains=rank, region__contains=pref_region)
+
         for g in game_profiles:
-            this_user = User.objects.get(username=g.user).id
-            this_profile = (Profile.objects.filter(user=int(this_user)))
-            if(this_profile):
-                print(this_profile[0].bio)
-                obj = {'username': g.user.username, 'game': g.game, 'rank': g.rank, 'server': g.server,
-                       'bio': this_profile[0].bio, 'profile_pic': str(this_profile[0].profile_pic), 'user_status': g.user_status}
+            queried_user = User.objects.get(username=g.user).id
+            queried_profile = (Profile.objects.filter(user=int(queried_user)))
+            if(queried_profile):
+                print(queried_profile[0].bio)
+                obj = {'username': g.user.username, 'game': g.game, 'rank': g.rank, 'region': g.region,
+                       'bio': queried_profile[0].bio, 'profile_pic': str(queried_profile[0].profile_pic), 'user_status': g.user_status}
                 proflies.append(obj)
 
         print("PROFILES :", proflies)
@@ -1504,38 +1606,45 @@ def User_Profile_Page_Data(request, user, game):
 def get_game_rank_server(request, game):
 
     ranks = []
-    servers = []
+    regions = []
     additional_info_fields = []
     default_roles = []
+    default_servers = []
+
     if game == "Valorant":
         ranks = GameProfile.ValorantRanks.choices
-        servers = GameProfile.ValorantServers.choices
+        regions = GameProfile.ValorantRegions.choices
         additional_info_fields = GameProfile.Valorant_additional_fields
         default_roles = GameProfile.Valorant_Roles
+        default_servers = GameProfile.Valorant_Servers
 
     if game == "Call of Duty":
         ranks = GameProfile.CODRanks.choices
-        servers = GameProfile.CODServers.choices
+        regions = GameProfile.CODRegions.choices
         additional_info_fields = GameProfile.COD_additional_fields
         default_roles = GameProfile.COD_Roles
+        default_servers = GameProfile.COD_Servers
 
     if game == "League of Legends":
         ranks = GameProfile.LOLRanks.choices
-        servers = GameProfile.LOLServers.choices
+        regions = GameProfile.LOLRegions.choices
         additional_info_fields = GameProfile.LOL_additional_fields
         default_roles = GameProfile.LOL_Roles
+        default_servers = GameProfile.LOL_Servers
 
     if game == "Counter Strike: GO":
         ranks = GameProfile.CSRanks.choices
-        servers = GameProfile.CSServers.choices
+        regions = GameProfile.CSRegions.choices
         additional_info_fields = GameProfile.CS_GO_additional_fields
         default_roles = GameProfile.CS_GO_Roles
+        default_servers = GameProfile.CS_Servers
 
     default_user_status = GameProfile.User_Status.choices
     is_profile_exists = GameProfile.objects.filter(user=request.user,
                                                    game=game).exists()
-    print(game, ranks, servers, additional_info_fields)
-    return JsonResponse({"ranks": ranks, "servers": servers,
+    print(game, ranks, regions, additional_info_fields)
+    return JsonResponse({"ranks": ranks, "regions": regions,
+                         "servers": default_servers,
                         "additional_fields": additional_info_fields,
                          "default_roles": default_roles,
                          "is_profile_exists": is_profile_exists,
@@ -1546,44 +1655,54 @@ def get_game_rank_server(request, game):
 def get_saved_game_rank_server(request, game):
     ranks = []
     servers = []
-    default_additonal_fields = []
+    default_servers = []
+    regions = []
+    additional_info_fields = []
     default_roles = []
     default_user_status = []
     remarks = ""
 
     if game == "Valorant":
         ranks = GameProfile.ValorantRanks.choices
-        servers = GameProfile.ValorantServers.choices
-        default_additonal_fields = GameProfile.Valorant_additional_fields
+        regions = GameProfile.ValorantRegions.choices
+        additional_info_fields = GameProfile.Valorant_additional_fields
         default_roles = GameProfile.Valorant_Roles
+        default_servers = GameProfile.Valorant_Servers
 
     if game == "Call of Duty":
         ranks = GameProfile.CODRanks.choices
-        servers = GameProfile.CODServers.choices
-        default_additonal_fields = GameProfile.COD_additional_fields
+        regions = GameProfile.CODRegions.choices
+        additional_info_fields = GameProfile.COD_additional_fields
         default_roles = GameProfile.COD_Roles
+        default_servers = GameProfile.COD_Servers
 
     if game == "League of Legends":
         ranks = GameProfile.LOLRanks.choices
-        servers = GameProfile.LOLServers.choices
-        default_additonal_fields = GameProfile.LOL_additional_fields
+        regions = GameProfile.LOLRegions.choices
+        additional_info_fields = GameProfile.LOL_additional_fields
         default_roles = GameProfile.LOL_Roles
+        default_servers = GameProfile.LOL_Servers
 
     if game == "Counter Strike: GO":
         ranks = GameProfile.CSRanks.choices
-        servers = GameProfile.CSServers.choices
-        default_additonal_fields = GameProfile.CS_GO_additional_fields
+        regions = GameProfile.CSRegions.choices
+        additional_info_fields = GameProfile.CS_GO_additional_fields
         default_roles = GameProfile.CS_GO_Roles
+        default_servers = GameProfile.CS_Servers
 
     default_user_status = GameProfile.User_Status.choices
     saved_gamer_profile = GameProfile.objects.get(user=request.user,
                                                   game=game)
-    print(request.user)
-    return JsonResponse({"ranks": ranks, "servers": servers,
-                        "saved_rank": saved_gamer_profile.rank,
-                         "saved_server": saved_gamer_profile.server,
+    print(additional_info_fields, "Itachi")
+    return JsonResponse({"ranks": ranks,
+                         "peak_rank": saved_gamer_profile.peak_rank,
+                         "regions": regions,
+                         "servers": default_servers,
+                        "saved_servers": saved_gamer_profile.servers,
+                         "saved_rank": saved_gamer_profile.rank,
+                         "saved_region": saved_gamer_profile.region,
                          "additional_fields": saved_gamer_profile.additional_info,
-                         "default_additonal_fields": default_additonal_fields,
+                         "default_additonal_fields": additional_info_fields,
                          "default_roles": default_roles,
                          "roles_rating": saved_gamer_profile.roles_rating,
                          "remarks": saved_gamer_profile.remarks,
@@ -1599,6 +1718,7 @@ def get_saved_game_rank_server(request, game):
                          })
 
 
+@login_required(login_url='/users/login_user')
 def search_results(request):
 
     if request.method == 'POST':
@@ -1790,30 +1910,34 @@ def community_members(request, community_id):
 @login_required
 @csrf_exempt
 def show_communities(request):
-    communities = Community.objects.all()
+    all_communities = Community.objects.all()
     user_joined_communities = request.user.profile.communities.all()
-    print("user_joined_communities: ", user_joined_communities)
 
-    # gamer_profiles = GameProfile.objects.filter(user=request.user)
-    # try:
-    #     main_gamer_profile = Main_Profile.objects.get(
-    #         user=User.objects.get(username=request.user))
-    # except:
-    #     main_gamer_profile = None
+    if request.method == 'POST':
+        og_search_query = request.POST['search_query']
+        search_query = request.POST['search_query'].lower().replace(' ', '')
+        print("Search query: ", search_query)
+        communities_list = []
+        for community in all_communities:
+            if search_query in community.name.lower():
+                communities_list.append(community)
+            elif search_query in community.bio.lower():
+                communities_list.append(community)
+        communities = communities_list
+        result = og_search_query
+    else:
+        communities = all_communities
+        result = "all_communities"
 
     context = {
         'communities': communities,
         'user_joined_communities': user_joined_communities,
-
-
-        # 'gamer_profiles': gamer_profiles,
-        # 'main_game_profile': main_gamer_profile,
-        # 'game_logos': GameProfile.games_logo_list,
+        'result': result,
     }
 
     context.update(get_featured_communities(
         request))
-    print(context)
+    context.update(get_gamer_profile_info_sidebar(request))
     return render(request, 'community/communities_list_all.html', context)
 
 

@@ -30,12 +30,24 @@ Create Gamer Profile
                             <div class="game">{{form.game}}</div>
                         </div>
                         <div class="profile-item">
-                            <div class="label"> Preferred Server</div>
-                            <select class="servers" name="server" form="gamerprofile_form"></select>
+                            <div class="label"> Preferred Region</div>
+                            <select class="regions" name="regions" form="gamerprofile_form"></select>
+                        </div>
+                        <div class="profile-item">
+                            <select class="servers" name="servers" id=servers form="gamerprofile_form" multiple
+                                style="display: none;">
+                            </select>
+                            <div class="label"> Preferred Servers</div>
+                            <div class="multi-select-input-box"></div>
+                            <div class="servers-options-list"></div>
                         </div>
                         <div class="profile-item">
                             <div class="label"> Current Rank</div>
                             <select class="ranks" name="rank" form="gamerprofile_form"></select>
+                        </div>
+                        <div class="profile-item">
+                            <div class="label"> Peak Rank</div>
+                            <input class="peak_rank" name="peak_rank" form="gamerprofile_form">
                         </div>
                         <div class="profile-item">
                             <div class="label"> Achievements</div>
@@ -126,7 +138,10 @@ Login first!
     var pref_game = $('.game select').val();
     $(document).ready(function () {
         pref_game = $('.game select').val();
-
+        $('.multi-select-input-box').click(Toggle_Select_Dropdown_List)
+        $('.servers-options-list').hide();
+        $('.multi-select-input-box')
+            .text(`no servers  \xa0selected`)
     })
 
     $(".post_form").hide();
@@ -164,10 +179,15 @@ Login first!
                     ShowPopup();
                 }
 
-                $('.servers').empty();
-                for (let i = 0; i < response['servers'].length; i++) {
-                    $('.servers').append(`<option>${response['servers'][i][0]}</option>`)
+                $('.regions').empty();
+                for (let i = 0; i < response['regions'].length; i++) {
+                    $('.regions').append(`<option>${response['regions'][i][0]}</option>`)
                 }
+
+                $('.regions').click(function () {
+                    Get_Servers_From_Region(response)
+                })
+                Get_Servers_From_Region(response);
 
                 $('.ranks').empty();
                 for (let i = 0; i < response['ranks'].length; i++) {
@@ -208,6 +228,7 @@ Login first!
         })
     })
 
+
     var exp_counter = 0;
 
     $('.add_exp_button').click(function () {
@@ -236,6 +257,59 @@ Login first!
             }
         })
     });
+
+    function Get_Servers_From_Region(response) {
+        $('#servers').empty();
+        var selected_region = $('.regions :selected').text();
+        servers_in_region = response['servers'][selected_region]
+
+        for (let i = 0; i < servers_in_region.length; i++) {
+            $('#servers').append(`<option  
+            value="${servers_in_region[i]}">${servers_in_region[i]}</option>`)
+        }
+
+        var options = $('#servers option');
+
+        var options_values = $.map(options, function (option) {
+            return option.value;
+        });
+
+        $('.servers-options-list').empty();
+        for (let i = 0; i < options_values.length; i++) {
+
+            $('.servers-options-list').append(`<div class="select_option" id="${selected_region}_${options_values[i]}">
+                <input type="checkbox" id="${options_values[i]}" class="select_checkbox" value="${options_values[i]}" >
+                <div class="select_value">${options_values[i]}</div>
+                </div>`)
+        }
+
+        $('.select_option').click(function () {
+            Toggle_Select_Server($(this))
+        })
+
+    }
+
+    function Toggle_Select_Server($obj) {
+        let value = $obj.find('.select_value').text().trim()
+        if (!$obj.find('.select_checkbox').prop('checked')) {
+            $obj.find('.select_checkbox').prop('checked', true);
+            $(`#servers option[value=${value}]`).prop("selected", true)
+            $obj.addClass("is_selected")
+            $('.multi-select-input-box')
+                .text(`${document.getElementById("servers").selectedOptions.length}  \xa0selected`)
+        }
+        else {
+            $obj.find('.select_checkbox').prop('checked', false);
+            $(`#servers option[value=${value}]`).prop("selected", false)
+            $obj.removeClass("is_selected")
+            $('.multi-select-input-box')
+                .text(`${document.getElementById("servers").selectedOptions.length}  \xa0selected`)
+        }
+    }
+
+    function Toggle_Select_Dropdown_List() {
+        $('.servers-options-list').toggle();
+    }
 
     function HidePopup() {
         $('.profile_exists_popup').css('display', 'none');
@@ -270,7 +344,7 @@ Login first!
             data: {
                 game: pref_game,
                 rank: $('.ranks').val(),
-                server: $('.servers').val(),
+                regions: $('.regions').val(),
                 additional_info: {
                     1: additional_info
                 }

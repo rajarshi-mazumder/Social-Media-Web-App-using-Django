@@ -17,19 +17,32 @@
             <div class="value">{{g.in_game_user_id}}</div>
         </div>
 
+        {% if g.age %}
         <div class="game_stat top_game_stat">
-            <div class="label"><i class="fa-solid fa-ranking-star"></i>Rank :</div>
-            <div class="value">{{g.rank}}</div>
+            <div class="label"><i class="fa-solid fa-calendar"></i>Age :</div>
+            <div class="value">{{g.age}}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="game_stat top_game_stat">
+            <div class="label"><i class="fa-solid fa-ranking-star"></i>Current/ Peak Rank :</div>
+            <div class="value">{{g.rank}}
+                {% if g.peak_rank %}
+                /{{g.peak_rank}}
+                {% endif %}
+            </div>
         </div>
 
         <div class="game_stat top_game_stat">
-            <div class="label"><i class="fa-solid fa-server"></i> Server :</div>
-            <div class="value"> {{g.server}}</div>
+            <div class="label"><i class="fa-solid fa-server"></i> Region (Servers) :</div>
+            <div class="value"> {{g.region}}
+                ({%for server in g.servers %}
+                {{server}}, &nbsp;
+                {%endfor%})
+            </div>
         </div>
-        <div class="game_stat top_game_stat">
-            <div class="label"><i class="fa-solid fa-location-dot"></i> Region :</div>
-            <div class="value"> </div>
-        </div>
+
         <div class="game_stat top_game_stat">
             <div class="label"><i class="fa-solid fa-clock"></i> Availability :</div>
             <div class="value"> {{g.time_available}}</div>
@@ -66,7 +79,7 @@
             </div>
             <div class="game_stat">
                 <div class="label">
-                    <i class="fa-solid fa-ranking-star"></i> Peak Rank:
+                    <i class="fa-solid fa-map-location"></i> Best Maps:
                 </div>
                 <div class="value">
                     {{item.info.1}}
@@ -127,6 +140,7 @@
             Career
         </div>
         <br><br>
+
         {%for item in g.experience%}
         <div class="game_stat">
             <div class="label">
@@ -162,6 +176,11 @@
 <div class="full_width_section">
 
 </div>
+<center>
+    <a href="{% url 'add-profile-post' g.game %}">
+        <button class="button-5" value="{{g.game}}">Create post with your Profile</button>
+    </a>
+</center>
 {%endfor%}
 
 <script>

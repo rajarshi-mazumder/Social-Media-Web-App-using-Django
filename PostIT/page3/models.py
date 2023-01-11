@@ -59,6 +59,10 @@ class Community(models.Model):
 
 class Profile(models.Model):
     # This is User profile
+
+    gender_choices = [('Male', 'Male'), ('Female', 'Female'),
+                      ('Transgender', 'Transgender'), ('Other', 'Other')]
+
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
     profile_pic = models.ImageField(
@@ -76,6 +80,9 @@ class Profile(models.Model):
     featured_communities = models.ManyToManyField(
         Community, default=None, blank=True, related_name='featuredCommunities')
     is_private = models.BooleanField(null=True, blank=True, default=False)
+    age = models.IntegerField(null=True, blank=True, default=None)
+    gender = models.CharField(
+        max_length=255, null=True, choices=gender_choices, blank=True, default=None)
 
     def __str__(self):
         return str(self.user)
@@ -196,65 +203,88 @@ class GameProfile(models.Model):
     games_list = [('Valorant', 'Valorant'), ('Call of Duty', 'Call of Duty'),
                   ('League of Legends', 'League of Legends'), ('Counter Strike: GO', 'Counter Strike: GO')]
 
-    class ValorantServers(models.TextChoices):
-        APAC = 'APAC', 'Asia Pacific'
-        EMEA = 'EMEA', 'Europe'
-        NA = 'NA', 'North America'
-        JA = 'JA', 'Japan'
+    class ValorantRegions(models.TextChoices):
+        APAC = 'APAC', 'APAC'
+        EMEA = 'EMEA', 'EMEA'
+        NA = 'NA', 'NA'
+        LATAM = 'LATAM', 'LATAM'
 
-    class CODServers(models.TextChoices):
-        APAC = 'APAC', 'Asia Pacific'
-        EMEA = 'EMEA', 'Europe'
-        NA = 'NA', 'North America'
+    class CODRegions(models.TextChoices):
+        APAC = 'APAC', 'APAC'
+        EMEA = 'EMEA', 'EMEA'
+        NA = 'NA', 'NA'
 
-    class LOLServers(models.TextChoices):
-        APAC = 'APAC', 'Asia Pacific'
-        EMEA = 'EMEA', 'Europe'
-        NA = 'NA', 'North America'
+    class LOLRegions(models.TextChoices):
+        APAC = 'APAC', 'APAC'
+        EMEA = 'EMEA', 'EMEA'
+        NA = 'NA', 'NA'
 
-    class CSServers(models.TextChoices):
-        EMEA = 'EMEA', 'Europe'
-        NA = 'NA', 'North America'
+    class CSRegions(models.TextChoices):
+        APAC = 'APAC', 'APAC'
+        EMEA = 'EMEA', 'EMEA'
+        NA = 'NA', 'NA'
+        LATAM = 'LATAM', 'LATAM'
+
+    Valorant_Servers = {'APAC': ['Tokyo', 'Singapore', 'Mumbai', 'Seoul'],
+                        'EMEA': ['London', 'Paris', 'Kyiv', 'Barcelona'],
+                        'NA': ['San_Francisco', 'FLorida', 'Texas', 'Vancouver'],
+                        'LATAM': ['Buenos_Aires', 'Rio_de_Janeiro', 'Mexico_City', 'Havana'],
+                        }
+    COD_Servers = {'APAC': ['Tokyo', 'Singapore', 'Mumbai', 'Tehran'],
+                   'EMEA': ['London', 'Paris', 'Kyiv', 'Barcelona', 'Madrid', 'Rome'],
+                   'NA': ['San_Francisco', 'FLorida', 'Texas', 'Vancouver', 'Washington'],
+                   'LATAM': ['Buenos_Aires', 'Rio_de_Janeiro', 'Mexico_City', 'Santiago'],
+                   }
+    LOL_Servers = {'APAC': ['Osaka', 'Kyoto', 'Fukouka', 'Singapore', 'Delhi', 'Jerusalem'],
+                   'EMEA': ['London', 'Paris', 'Kyiv', 'Barcelona', 'Madrid', 'Rome'],
+                   'NA': ['San_Francisco', 'FLorida', 'Texas', 'Vancouver', 'Washington'],
+                   'LATAM': ['Buenos_Aires', 'Rio_de_Janeiro', 'Mexico_City', 'Montevideo'],
+                   }
+    CS_Servers = {'APAC': ['Seoul', 'Tokyo', 'Karachi', 'Singapore', 'Delhi', 'Mumbai'],
+                  'EMEA': ['London', 'Paris', 'Kyiv', 'Barcelona', 'Madrid', 'Brighton', 'Reading', 'Portsmouth'],
+                  'NA': ['San_Francisco', 'Chicago',  'FLorida', 'Texas', 'Vancouver', 'Washington'],
+                  'LATAM': ['Buenos_Aires', 'Cairo', 'Abuja', 'Rio_de_Janeiro', 'Mexico_City', 'Montevideo'],
+                  }
 
     class ValorantRanks(models.TextChoices):
-        Iron = 'IRON', 'Iron :((('
-        Bronze = 'Bronze', 'Bronze :(('
-        Silver = 'Silver', 'Silver :('
-        Gold = 'Gold', 'Gold :('
+        Iron = 'IRON', 'Iron'
+        Bronze = 'Bronze', 'Bronze'
+        Silver = 'Silver', 'Silver'
+        Gold = 'Gold', 'Gold'
         Platinum = 'Platinum', 'Platinum '
-        Diamond = 'Diamond', 'Diamond :) '
-        Asencdant = 'Asencdant', 'Asencdant :)) '
-        Immortal = 'Immortal', 'Immortal >_< '
-        Radiant = 'Radiant', 'Radiant :> '
+        Diamond = 'Diamond', 'Diamond'
+        Asencdant = 'Asencdant', 'Asencdant'
+        Immortal = 'Immortal', 'Immortal'
+        Radiant = 'Radiant', 'Radiant'
 
     class LOLRanks(models.TextChoices):
-        Iron = 'IRON', 'Iron :((('
-        Bronze = 'Bronze', 'Bronze :(('
-        Silver = 'Silver', 'Silver :('
-        Gold = 'Gold', 'Gold :('
+        Iron = 'IRON', 'Iron'
+        Bronze = 'Bronze', 'Bronze'
+        Silver = 'Silver', 'Silver'
+        Gold = 'Gold', 'Gold'
         Platinum = 'Platinum', 'Platinum '
-        Diamond = 'Diamond', 'Diamond :) '
-        Master = 'Master', 'Master :)) '
-        Grandmaster = 'Grandmaster', 'Grandmaster >_< '
-        Challenger = 'Challenger', 'Challenger :> '
+        Diamond = 'Diamond', 'Diamond'
+        Master = 'Master', 'Master'
+        Grandmaster = 'Grandmaster', 'Grandmaster'
+        Challenger = 'Challenger', 'Challenger'
 
     class CODRanks(models.TextChoices):
-        Rookie = 'Rookie', 'Rookie :((('
-        Veteran = 'Veteran', 'Veteran :(('
-        Elite = 'Elite', 'Elite :('
-        Pro = 'Pro', 'Pro :('
-        Master = 'Master', 'Master '
-        Grandmaster = 'Grandmaster', 'Grandmaster :) '
-        Legendary = 'Legendary', 'Legendary :)) '
+        Rookie = 'Rookie', 'Rookie'
+        Veteran = 'Veteran', 'Veteran'
+        Elite = 'Elite', 'Elite'
+        Pro = 'Pro', 'Pro'
+        Master = 'Master', 'Master'
+        Grandmaster = 'Grandmaster', 'Grandmaster'
+        Legendary = 'Legendary', 'Legendary'
 
     class CSRanks(models.TextChoices):
 
-        Silver = 'Silver', 'Silver :('
-        Gold = 'Gold', 'Gold :('
-        Master_Guardian = 'Master Guardian', 'Master Guardian '
-        Distinguished_Master_Guardian = 'Distinguished Master Guardian', 'Distinguished Master Guardian :) '
-        Legendary = 'Legendary', 'Legendary :)) '
-        Elite = 'Elite', 'Elite >_< '
+        Silver = 'Silver', 'Silver'
+        Gold = 'Gold', 'Gold'
+        Master_Guardian = 'Master Guardian', 'Master Guardian'
+        Distinguished_Master_Guardian = 'Distinguished Master Guardian', 'Distinguished Master Guardian'
+        Legendary = 'Legendary', 'Legendary'
+        Elite = 'Elite', 'Elite'
 
     class User_Status(models.TextChoices):
         LFTeams = 'Looking for teams', 'Looking for teams'
@@ -269,14 +299,14 @@ class GameProfile(models.Model):
                        'Call of Duty': '/media/images/logos/COD_icon.jpg',
                        'Counter Strike: GO': '/media/images/logos/CSGO_icon.png',
                        }
-    servers_list = [('Val', ValorantServers.choices), ('COD', CODServers.choices),
-                    ('LOL', LOLServers.choices), ('CS', CSServers.choices)]
+    regions_list = [('Val', ValorantRegions.choices), ('COD', CODRegions.choices),
+                    ('LOL', LOLRegions.choices), ('CS', CSRegions.choices)]
 
     ranks_list = [('Val', ValorantRanks.choices), ('COD', CODRanks.choices),
                   ('LOL', LOLRanks.choices), ('CS', CSRanks.choices)]
 
     Valorant_additional_fields = [
-        'Preferred Agents', 'Peak Rank', 'Tracker Link']
+        'Preferred Agents', 'Best Maps', 'Tracker Link']
     LOL_additional_fields = ['Agents', 'Abilities', 'Role', 'Hours Played']
     COD_additional_fields = ['Guns', 'Maps', 'Role']
     CS_GO_additional_fields = ['Guns', 'Maps', 'Role']
@@ -289,9 +319,16 @@ class GameProfile(models.Model):
                    'In Game Leader', 'Lurker', 'AWper']
 
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    age = models.IntegerField(null=True, blank=True, default=None)
+
     game = models.CharField(max_length=50, choices=games_list)
-    server = models.CharField(max_length=50, choices=servers_list)
+    region = models.CharField(max_length=50, choices=regions_list, null=True)
+
+    servers = ArrayField(models.CharField(
+        max_length=50, null=True, blank=True, default=""), blank=True, null=True, default=list)
+
     rank = models.CharField(max_length=50, choices=ranks_list, default="")
+    peak_rank = models.CharField(max_length=50, null=True, default="")
     user_status = models.CharField(
         max_length=50, choices=User_Status.choices, default='none')
 
@@ -318,7 +355,7 @@ class GameProfile(models.Model):
         max_length=400, default="", blank=True, null=True)
 
     def __str__(self):
-        return str(self.user) + " | " + str(self.game) + " | " + str(self.server) + " | " + str(self.rank)
+        return str(self.user) + " | " + str(self.game) + " | " + str(self.region) + " | " + str(self.rank)
 
 
 class Main_Profile(models.Model):
