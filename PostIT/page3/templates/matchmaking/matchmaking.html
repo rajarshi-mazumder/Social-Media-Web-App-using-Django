@@ -8,45 +8,59 @@ Create Gamer Profile
 {% load crispy_forms_tags %}
 {%load static%}
 
+{% include 'navigation/navbar-top.html' %}
 <body class="main-body">
+    {% include 'navigation/sidebar-left.html' %}
     {% if user.is_authenticated %}
-    <div class="matchmaking-main">
-        <h1>Start Matchmaking <div id="currentuser">{{user.username}}</div>
-        </h1>
-        <form action="" method="POST" enctype="multipart/form-data" id="matchmaking-form">
+    <div class="page-contents">
+        <div class="posts-timeline">
 
-            {% csrf_token %}
-            <div class="matchmaking-item">
-                <div> Preferred Game</div>
-                <div class="game">{{form.game}}</div>
+            <div class="matchmaking-main">
+                <h1>Start Matchmaking <div id="currentuser">{{user.username}}</div>
+                </h1>
+                <form action="" method="POST" enctype="multipart/form-data" id="matchmaking-form">
+    
+                    {% csrf_token %}
+                    <div class="matchmaking-item">
+                        <div> Preferred Game</div>
+                        <div class="game">{{form.game}}</div>
+                    </div>
+                    <hr />
+                    <div class="matchmaking-item">
+                        <div> Preferred Region</div>
+                        <select class="regions" form="matchmaking-form"></select>
+                    </div>
+                    <div class="matchmaking-item">
+                        <select id="servers" form="matchmaking-form" multiple style="display: none;"></select>
+                        <div> Preferred Servers</div>
+                        <div class="multi-select-input-box"></div>
+                            <div class="servers-options-list"></div>
+                    </div>
+                    <hr />
+    
+                    <div class="matchmaking-item">
+                        <div> Preferred Rank to pair with</div>
+                        <select class="ranks" form="matchmaking-form">Enter preferred rank to pair with</select>
+                    </div>
+    
+    
+                    <button type="submit" name="submit-btn">Create</button>
+                </form>
+                <div class="profiles-section">
+                    {%include 'matchmaking/matchmaking_found_list.html' %}
+                </div>
             </div>
-            <hr />
-            <div class="matchmaking-item">
-                <div> Preferred Server</div>
-                <select class="servers" form="matchmaking-form"></select>
-            </div>
-            <hr />
-
-            <div class="matchmaking-item">
-                <div> Preferred Rank to pair with</div>
-                <select class="ranks" form="matchmaking-form">Enter preferred rank to pair with</select>
-            </div>
-
-
-            <button type="submit" name="submit-btn">Create</button>
-        </form>
-    </div>
+        </div>
+        {% include 'navigation/sidebar.html' %}
     {{profiles}}
 
 
-    <div class="profiles-section">
-        {%include 'matchmaking/matchmaking_found_list.html' %}
-    </div>
+   
 
     {% else %}
     Login first!
     {% endif %}
-
+    </div>
 </body>
 <script src="{% static 'PostIT/js/jquery.waypoints.min.js' %}"></script>
 <script src="{% static 'PostIT/js/infinite.min.js'%}"></script>
@@ -59,11 +73,12 @@ Create Gamer Profile
 
         $('.game select').click(function () {
             var pref_game = $('.game select').val();
-            console.log([pref_game]);
             $.ajax({
                 type: 'GET',
                 url: `/getgamerank_server/${pref_game}`,
                 success: function (response) {
+
+                    $('.multi-select-input-box').text(`no servers  \xa0selected`)
 
                     $('.ranks').empty();
                     for (let i = 0; i < response['ranks'].length; i++) {
@@ -72,12 +87,17 @@ Create Gamer Profile
                     }
                     $('.ranks').val($('.ranks option:last').val());
 
-                    $('.servers').empty();
-                    for (let i = 0; i < response['servers'].length; i++) {
-
-                        $('.servers').append(`<option>${response['servers'][i][0]}</option>`)
+                    $('.regions').empty();
+                    for (let i = 0; i < response['regions'].length; i++) {
+                        $('.regions').append(`<option>${response['regions'][i][0]}</option>`)
                     }
-                    $('.servers').val($('.servers option:last').val());
+                    $('.regions').val($('.regions option:first').val());
+
+                    $('.regions').click(function () {
+                    Get_Servers_For_Matchmaking(response);
+                    $('.multi-select-input-box').text(`no servers  \xa0selected`)
+                    })
+                    Get_Servers_For_Matchmaking(response);
 
                 },
                 error: function (response) {
@@ -87,23 +107,74 @@ Create Gamer Profile
         })
     });
 
+    function Get_Servers_For_Matchmaking(response)
+    {
+        $('#servers').empty();
+        var selected_region = $('.regions :selected').text();
+        servers_in_region = response['servers'][selected_region]
+
+        for (let i = 0; i < servers_in_region.length; i++) {
+            $('#servers').append(`<option  
+            value="${servers_in_region[i]}">${servers_in_region[i]}</option>`)
+        }
+
+        var options = $('#servers option');
+
+        var options_values = $.map(options, function (option) {
+            return option.value;
+        });
+        
+
+        $('.servers-options-list').empty();
+        for (let i = 0; i < options_values.length; i++) {
+
+            $('.servers-options-list').append(`<div class="select_option" id="${selected_region}_${options_values[i]}">
+                <input type="checkbox" id="${options_values[i]}" class="select_checkbox" value="${options_values[i]}" >
+                <div class="select_value">${options_values[i]}</div>
+                </div>`)
+        }
+
+        $('.select_option').click(function () {
+            Toggle_Select_Server($(this))
+        })
+    }
+    function Toggle_Select_Server($obj) {
+        let value = $obj.find('.select_value').text().trim()
+        if (!$obj.find('.select_checkbox').prop('checked')) {
+            $obj.find('.select_checkbox').prop('checked', true);
+            $(`#servers option[value=${value}]`).prop("selected", true)
+            $obj.addClass("is_selected")
+            $('.multi-select-input-box')
+                .text(`${document.getElementById("servers").selectedOptions.length}  \xa0 selected`)
+        }
+        else {
+            $obj.find('.select_checkbox').prop('checked', false);
+            $(`#servers option[value=${value}]`).prop("selected", false)
+            $obj.removeClass("is_selected")
+            $('.multi-select-input-box')
+                .text(`${document.getElementById("servers").selectedOptions.length}  \xa0selected`)
+        }
+    }
+
+
     $(document).on('submit', '#matchmaking-form', function (e) {
         e.preventDefault();
         var pref_game = $('.game select').val();
         var user_name = $('#currentuser').text();
-        console.log(user_name)
+        console.log($('#servers').val())
         $.ajax({
             type: 'POST',
             url: `/matchmaking_data/${user_name}`,
             data: {
                 game: pref_game,
                 rank: $('.ranks').val(),
-                server: $('.servers').val(),
+                region: $('.regions').val(),
+                servers: $('#servers').val(),
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
             },
             success: function (response) {
                 $('.gamer_profiles').empty();
-                console.log(response['profiles'])
+
                 $('.profiles-section').html(response['profiles']);
 
                 //for(let i=0; i< response['profiles'].length; i++)

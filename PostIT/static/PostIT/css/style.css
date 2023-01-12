@@ -1075,7 +1075,7 @@ input[type="checkbox"]:checked::before {
 #matchmaking-form select {
     background: #333;
     width: 150px;
-    height: 30px;
+    min-height: 30px;
     border-radius: 5px;
     color: white
 }

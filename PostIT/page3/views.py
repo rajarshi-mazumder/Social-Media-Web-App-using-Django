@@ -30,7 +30,7 @@ from .utilityFunctions import get_featured_communities, \
     get_gamer_profile_info_sidebar, get_user_gamer_profile_data
 
 from .organizeGameData import organizeGametData
-
+from .matchmaking_functions import Filter_Profiles
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
@@ -1439,31 +1439,21 @@ def Matchmaking_Data(request, user):
     form = GameProfileForm()
 
     if request.method == 'POST':
-        print(request.POST)
-        pref_game = request.POST['game']
-        pref_region = request.POST['region']
-        rank = request.POST['rank']
-        user_profiles = []
-        proflies = []
-        game_profiles = GameProfile.objects.filter(game__contains=pref_game,
-                                                   rank__contains=rank, region__contains=pref_region)
+        
 
-        for g in game_profiles:
-            queried_user = User.objects.get(username=g.user).id
-            queried_profile = (Profile.objects.filter(user=int(queried_user)))
-            if(queried_profile):
-                print(queried_profile[0].bio)
-                obj = {'username': g.user.username, 'game': g.game, 'rank': g.rank, 'region': g.region,
-                       'bio': queried_profile[0].bio, 'profile_pic': str(queried_profile[0].profile_pic), 'user_status': g.user_status}
-                proflies.append(obj)
+        matched_profiles= Filter_Profiles(request)
 
-        print("PROFILES :", proflies)
-        context = {'profiles': proflies}
+        # context = {'profiles': proflies}
+
+        context = {
+        'account_items_list': matched_profiles}
+        context.update(get_featured_communities(request))
+        context.update(get_user_following_info(request))
 
         html = render_to_string(
             'matchmaking/matchmaking_found_list.html', context, request=request)
-
         return JsonResponse({"profiles": html})
+        # return render(request, 'post/liked_by.html', context)
 
 
 def Gamer_Profile_Data(request, user):
@@ -1642,7 +1632,7 @@ def get_game_rank_server(request, game):
     default_user_status = GameProfile.User_Status.choices
     is_profile_exists = GameProfile.objects.filter(user=request.user,
                                                    game=game).exists()
-    print(game, ranks, regions, additional_info_fields)
+
     return JsonResponse({"ranks": ranks, "regions": regions,
                          "servers": default_servers,
                         "additional_fields": additional_info_fields,
