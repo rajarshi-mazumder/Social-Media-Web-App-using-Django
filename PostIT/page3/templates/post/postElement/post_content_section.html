@@ -11,7 +11,7 @@
 <section class="post-header-section">
     <div class="profile-pic">
         {%if post.author.profile.profile_pic.name %}
-        <a href="{%url 'user-posts-page' post.author%}"><img src="{{ post.author.profile.profile_pic.url }}"
+        <a href="{%url 'user-profile-stats' post.author%}"><img src="{{ post.author.profile.profile_pic.url }}"
                 width="500"></a>
         {% endif %}
         <!-- <img src="{{ post.user_profile.profile_pic.url }}" width="500"> -->
@@ -19,7 +19,9 @@
 
     <span class="post-profile-section">
         <div class="row-1">
-            {{post.author}}
+            <a href="{%url 'user-profile-stats' post.author%}">
+                {{post.author}}
+            </a>
             {% if post.is_lft_lfp_post %}
             <a href="{% url 'vouched-by' post.author.profile.id %}" class="vouch-info"><i class="fa-solid fa-award"></i>
                 {{post.author.profile.vouched_by.count}}

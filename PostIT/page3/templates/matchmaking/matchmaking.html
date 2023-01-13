@@ -9,6 +9,7 @@ Create Gamer Profile
 {%load static%}
 
 {% include 'navigation/navbar-top.html' %}
+
 <body class="main-body">
     {% include 'navigation/sidebar-left.html' %}
     {% if user.is_authenticated %}
@@ -19,7 +20,7 @@ Create Gamer Profile
                 <h1>Start Matchmaking <div id="currentuser">{{user.username}}</div>
                 </h1>
                 <form action="" method="POST" enctype="multipart/form-data" id="matchmaking-form">
-    
+
                     {% csrf_token %}
                     <div class="matchmaking-item">
                         <div> Preferred Game</div>
@@ -34,16 +35,16 @@ Create Gamer Profile
                         <select id="servers" form="matchmaking-form" multiple style="display: none;"></select>
                         <div> Preferred Servers</div>
                         <div class="multi-select-input-box"></div>
-                            <div class="servers-options-list"></div>
+                        <div class="servers-options-list"></div>
                     </div>
                     <hr />
-    
+
                     <div class="matchmaking-item">
                         <div> Preferred Rank to pair with</div>
                         <select class="ranks" form="matchmaking-form">Enter preferred rank to pair with</select>
                     </div>
-    
-    
+
+
                     <button type="submit" name="submit-btn">Create</button>
                 </form>
                 <div class="profiles-section">
@@ -52,14 +53,14 @@ Create Gamer Profile
             </div>
         </div>
         {% include 'navigation/sidebar.html' %}
-    {{profiles}}
+        {{profiles}}
 
 
-   
 
-    {% else %}
-    Login first!
-    {% endif %}
+
+        {% else %}
+        Login first!
+        {% endif %}
     </div>
 </body>
 <script src="{% static 'PostIT/js/jquery.waypoints.min.js' %}"></script>
@@ -94,8 +95,8 @@ Create Gamer Profile
                     $('.regions').val($('.regions option:first').val());
 
                     $('.regions').click(function () {
-                    Get_Servers_For_Matchmaking(response);
-                    $('.multi-select-input-box').text(`no servers  \xa0selected`)
+                        Get_Servers_For_Matchmaking(response);
+                        $('.multi-select-input-box').text(`no servers  \xa0selected`)
                     })
                     Get_Servers_For_Matchmaking(response);
 
@@ -107,8 +108,7 @@ Create Gamer Profile
         })
     });
 
-    function Get_Servers_For_Matchmaking(response)
-    {
+    function Get_Servers_For_Matchmaking(response) {
         $('#servers').empty();
         var selected_region = $('.regions :selected').text();
         servers_in_region = response['servers'][selected_region]
@@ -123,7 +123,7 @@ Create Gamer Profile
         var options_values = $.map(options, function (option) {
             return option.value;
         });
-        
+
 
         $('.servers-options-list').empty();
         for (let i = 0; i < options_values.length; i++) {

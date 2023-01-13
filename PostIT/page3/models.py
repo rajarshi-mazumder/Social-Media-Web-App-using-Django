@@ -247,7 +247,7 @@ class GameProfile(models.Model):
                   }
 
     class ValorantRanks(models.TextChoices):
-        Iron = 'Iron', 'Iron'
+        Iron = 'IRON', 'Iron'
         Bronze = 'Bronze', 'Bronze'
         Silver = 'Silver', 'Silver'
         Gold = 'Gold', 'Gold'
@@ -256,8 +256,7 @@ class GameProfile(models.Model):
         Ascendant = 'Ascendant', 'Ascendant'
         Immortal = 'Immortal', 'Immortal'
         Radiant = 'Radiant', 'Radiant'
-    
-    
+
     class LOLRanks(models.TextChoices):
         Iron = 'IRON', 'Iron'
         Bronze = 'Bronze', 'Bronze'
@@ -269,7 +268,6 @@ class GameProfile(models.Model):
         Grandmaster = 'Grandmaster', 'Grandmaster'
         Challenger = 'Challenger', 'Challenger'
 
-    
     class CODRanks(models.TextChoices):
         Rookie = 'Rookie', 'Rookie'
         Veteran = 'Veteran', 'Veteran'
@@ -279,7 +277,6 @@ class GameProfile(models.Model):
         Grandmaster = 'Grandmaster', 'Grandmaster'
         Legendary = 'Legendary', 'Legendary'
 
-
     class CSRanks(models.TextChoices):
 
         Silver = 'Silver', 'Silver'
@@ -288,32 +285,28 @@ class GameProfile(models.Model):
         Distinguished_Master_Guardian = 'Distinguished Master Guardian', 'Distinguished Master Guardian'
         Legendary = 'Legendary', 'Legendary'
         Elite = 'Elite', 'Elite'
-    
-    
-    Valorant_Ranks_Order= {"Iron":1, "Bronze":2,"Silver" :3,
-                            "Gold":4, "Platinum":5,"Diamond":6,
-                            "Ascendant":7, "Immortal":8, "Radiant":9,
-                             "Max_Rank":9, }
-    
-    LOL_Ranks_Order= {"Iron":1, "Bronze":2,"Silver" :3,
-                            "Gold":4, "Platinum":5,"Diamond":6,
-                            "Master":7, "Grandmaster":8, "Challenger":9,"Max_Rank":9,}
-    
-    COD_Ranks_Order= {"Rookie":1, "Veteran":2,"Elite" :3,
-                        "Pro":4, "Master":5,"Grandmaster":6,
-                        "Legendary":7,"Max_Rank":8}
 
-    CS_Ranks_Order= {"Silver":1, "Gold":2,"Master Guardian" :3,
-                            "Distinguished Master Guardian":4,
-                             "Legendary":5,"Elite":6,"Max_Rank":6,}
-                             
+    Valorant_Ranks_Order = {"Iron": 1, "Bronze": 2, "Silver": 3,
+                            "Gold": 4, "Platinum": 5, "Diamond": 6,
+                            "Ascendant": 7, "Immortal": 8, "Radiant": 9,
+                            "Max_Rank": 9, }
+
+    LOL_Ranks_Order = {"Iron": 1, "Bronze": 2, "Silver": 3,
+                       "Gold": 4, "Platinum": 5, "Diamond": 6,
+                       "Master": 7, "Grandmaster": 8, "Challenger": 9, "Max_Rank": 9, }
+
+    COD_Ranks_Order = {"Rookie": 1, "Veteran": 2, "Elite": 3,
+                       "Pro": 4, "Master": 5, "Grandmaster": 6,
+                       "Legendary": 7, "Max_Rank": 8}
+
+    CS_Ranks_Order = {"Silver": 1, "Gold": 2, "Master Guardian": 3,
+                      "Distinguished Master Guardian": 4,
+                      "Legendary": 5, "Elite": 6, "Max_Rank": 6, }
+
     class User_Status(models.TextChoices):
         LFTeams = 'Looking for teams', 'Looking for teams'
         LFTalent = 'Looking for talent', 'Looking for talent'
         none = 'none', 'none'
-
-
-   
 
     # Adding or changing fields here requires changes in views.py
     experience_fields = ['Team/ Org Name', 'Role/ Experience']
@@ -379,7 +372,7 @@ class GameProfile(models.Model):
         max_length=400, default="", blank=True, null=True)
 
     def __str__(self):
-        return str(self.user) + " | " + str(self.game) + " | " + str(self.region)+ " | " + str(self.servers) + " | " + str(self.rank)
+        return str(self.user) + " | " + str(self.game) + " | " + str(self.region) + " | " + str(self.servers) + " | " + str(self.rank)
 
 
 class Main_Profile(models.Model):

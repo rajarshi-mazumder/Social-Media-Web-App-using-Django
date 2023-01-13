@@ -1,11 +1,15 @@
 {% load static %}
 <div class="sidebar-page-links">
-    <button class="page-link" onclick="location.href=`{% url 'matchmaking-home' user%}`">
-        <a href="{% url 'matchmaking-home' user%}">
+    {%if gamer_profiles %}
+    <button class="page-link" onclick="location.href=`{% url 'user-profile-stats' user%}`">
+        <a href="{%url 'user-profile-stats' user %}">
 
-            Matchmaking
+            View Gamer Profiles
         </a>
     </button>
+    {% endif %}
+
+
     {% if page == 'edit-gamer-profile' or page == 'home-timeline' %}
     <button class="page-link" onclick="location.href=`{% url 'create-gamer-profile' user.username %}`">
         <a href="{% url 'create-gamer-profile' user.username %}">
@@ -13,6 +17,7 @@
             Create New Gamer Profile
         </a>
     </button>
+
     {% endif %}
 
     {% if page == 'create-gamer-profile' or page == 'home-timeline' %}
@@ -23,18 +28,29 @@
             Edit Gamer Profile
         </a>
     </button>
+
+
+
     {%endif%}
     {% endif %}
 
+    <button class="page-link" onclick="location.href=`{% url 'matchmaking-home' user%}`">
+        <a href="{% url 'matchmaking-home' user%}">
+
+            Matchmaking
+        </a>
+    </button>
+
     <!-- User Profile Page -->
-    {%if page == 'user_profile_page' %}
-    {%if user_to_view == user.username%}
+    {%if page == 'user_profile_page' or page == 'user_posts_page' or page == 'user_communities_page' %}
+
     <button class="page-link" onclick="location.href=`{% url 'create-gamer-profile' user.username %}`">
         <a href="{% url 'create-gamer-profile' user.username %}">
 
             Create New Gamer Profile
         </a>
     </button>
+
     {%if gamer_profiles %}
     <button class="page-link" onclick="location.href=`{% url 'edit-gamer-profile' user.username %}`">
         <a href="{% url 'edit-gamer-profile' user.username %}">
@@ -42,7 +58,7 @@
             Edit Gamer Profile
         </a>
     </button>
-    {%endif%}
+
     {%endif%}
     {%endif%}
     <!-- User Profile Page -->

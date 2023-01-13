@@ -32,6 +32,7 @@ from .utilityFunctions import get_featured_communities, \
 from .organizeGameData import organizeGametData
 from .matchmaking_functions import Filter_Profiles
 
+
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
@@ -631,7 +632,6 @@ def add_profile_post(request, game):
         gamer_profile_data = get_user_gamer_profile_data(request, game)
 
         if bool(gamer_profile_data):
-
             profile_info = organizeGametData(request, gamer_profile_data)
             print(profile_info)
     except:
@@ -1049,9 +1049,7 @@ def deletePost(request, pk):
 def user_profile_stats(request, user):
     if(user != 'favicon.png') or (user != 'favicon.png HTTP/1.1'):
         user = User.objects.get(username=user)
-        posts = Post.objects.filter(author=user)
         profile = Profile.objects.filter(user=user)[0]
-        image_list = ImageFiles.objects.all()
 
         try:
             gamer_profiles = Get_Logged_in_User_Gamer_Profiles(request, user)[
@@ -1069,8 +1067,8 @@ def user_profile_stats(request, user):
         except:
             additional_info = []
 
-        context = {'posts': posts, 'profile_owner': user,
-                   'profile': profile, 'image_list': image_list,
+        context = {'profile_owner': user,
+                   'profile': profile,
                    'additional_info': additional_info,
                    'game_logos': GameProfile.games_logo_list,
                    'page': 'user_profile_page',
@@ -1100,25 +1098,8 @@ def user_posts_page(request, user):
             print("Post Author Profile: ", profile)
             image_list = ImageFiles.objects.all()
 
-            additional_info = []
-            try:
-                gamer_profiles = Get_Logged_in_User_Gamer_Profiles(request, user)[
-                    'gamer_profiles']
-
-                for g in gamer_profiles:
-                    info_obj = g.additional_info
-
-                    dict_obj = {}
-                    for i in range(len(info_obj)):
-                        dict_obj[i] = info_obj[i]
-                    additional_info.append({'game': g.game,
-                                            'info': dict_obj})
-            except:
-                additional_info = []
-
             context = {'posts': posts, 'profile_owner': user,
                        'profile': profile, 'image_list': image_list,
-                       'additional_info': additional_info,
                        'game_logos': GameProfile.games_logo_list,
                        'page': 'user_posts_page',
                        }
@@ -1439,21 +1420,19 @@ def Matchmaking_Data(request, user):
     form = GameProfileForm()
 
     if request.method == 'POST':
-        
-
-        matched_profiles= Filter_Profiles(request)
+        matched_profiles = Filter_Profiles(request)
 
         # context = {'profiles': proflies}
 
         context = {
-        'account_items_list': matched_profiles}
+            'account_items_list': matched_profiles}
         context.update(get_featured_communities(request))
         context.update(get_user_following_info(request))
 
         html = render_to_string(
             'matchmaking/matchmaking_found_list.html', context, request=request)
+
         return JsonResponse({"profiles": html})
-        # return render(request, 'post/liked_by.html', context)
 
 
 def Gamer_Profile_Data(request, user):

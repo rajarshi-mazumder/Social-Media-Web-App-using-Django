@@ -51,7 +51,7 @@
         <div class="sidebar-profile-section">
 
             <div class="sidebar-profile-pic">
-                <a href="{%url 'user-posts-page' user %}">
+                <a href="{%url 'user-profile-stats' user %}">
                     {% if user.profile.profile_pic.name %}
                     <img src="{{ user.profile.profile_pic.url}}" width="200">
                     {% else %}

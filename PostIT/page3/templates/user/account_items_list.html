@@ -3,7 +3,7 @@
 <div class="account-list-item">
 
     <div class="profile-pic">
-        <a href="{%url 'user-posts-page' user %}">
+        <a href="{%url 'user-profile-stats' user %}">
             {% if user.profile.profile_pic.name %}
             <img src="{{ user.profile.profile_pic.url}}">
             {% else %}
@@ -14,7 +14,7 @@
     </div>
     <div class="info">
         <div class="username">
-            <a href="{%url 'user-posts-page' user %}">@{{user.username}}</a>
+            <a href="{%url 'user-profile-stats' user %}">@{{user.username}}</a>
         </div>
         <div class="bio">
             {{user.profile.bio}}
