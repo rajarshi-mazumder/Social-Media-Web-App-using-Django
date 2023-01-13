@@ -1058,6 +1058,32 @@ input[type="checkbox"]:checked::before {
 
 
 
+.matchmaking-main {
+    margin: 0 auto;
+    margin-top: 40px;
+    max-width: 900px;
+    background-color: var(--post_bg_color);
+
+}
+
+.matchmaking-main #matchmaking-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#matchmaking-form select {
+    background: #333;
+    width: 150px;
+    min-height: 30px;
+    border-radius: 5px;
+    color: white
+}
+
+.matchmaking-item {
+    margin: 10px;
+}
+
 
 
 .gameprofile-wrapper {
