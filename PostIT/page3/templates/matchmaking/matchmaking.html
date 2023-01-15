@@ -17,35 +17,35 @@ Create Gamer Profile
         <div class="posts-timeline">
 
             <div class="matchmaking-main">
-                <h1>Start Matchmaking <div id="currentuser">{{user.username}}</div>
-                </h1>
+                <div class="page-label">Start &nbsp;  Matchmaking <div id="currentuser">{{user.username}}</div>
+            </div>
                 <form action="" method="POST" enctype="multipart/form-data" id="matchmaking-form">
 
                     {% csrf_token %}
-                    <div class="matchmaking-item">
-                        <div> Preferred Game</div>
+                    <div class="matchmaking-item m-top">
+                        <div class="label"> Preferred Game</div>
                         <div class="game">{{form.game}}</div>
                     </div>
-                    <hr />
-                    <div class="matchmaking-item">
-                        <div> Preferred Region</div>
+
+                    <div class="matchmaking-item m-top">
+                        <div class="label"> Preferred Region</div>
                         <select class="regions" form="matchmaking-form"></select>
                     </div>
-                    <div class="matchmaking-item">
+                    <div class="matchmaking-item m-mid servers-section">
                         <select id="servers" form="matchmaking-form" multiple style="display: none;"></select>
-                        <div> Preferred Servers</div>
+                        <div class="label"> Preferred Servers</div>
                         <div class="multi-select-input-box"></div>
                         <div class="servers-options-list"></div>
                     </div>
-                    <hr />
+     
 
-                    <div class="matchmaking-item">
-                        <div> Preferred Rank to pair with</div>
+                    <div class="matchmaking-item m-mid">
+                        <div class="label"> Preferred Rank to pair with</div>
                         <select class="ranks" form="matchmaking-form">Enter preferred rank to pair with</select>
                     </div>
 
 
-                    <button type="submit" name="submit-btn">Create</button>
+                    <button class="m-bottom" type="submit" name="submit-btn">Create</button>
                 </form>
                 <div class="profiles-section">
                     {%include 'matchmaking/matchmaking_found_list.html' %}
@@ -63,14 +63,20 @@ Create Gamer Profile
         {% endif %}
     </div>
 </body>
+<nav id="main-bottom-nav">
+    {% include 'navigation/navbar-bottom.html' %}
+</nav>
 <script src="{% static 'PostIT/js/jquery.waypoints.min.js' %}"></script>
 <script src="{% static 'PostIT/js/infinite.min.js'%}"></script>
+
+<script src="{% static 'PostIT/js/bottom_navbar.js'%}"></script>
 
 <script>
 
     $(document).ready(function () {
         $('.game select').attr("placeholder", "");
-
+        $('.multi-select-input-box').click(Toggle_Select_Dropdown_List)
+        $('.servers-options-list').hide();
 
         $('.game select').click(function () {
             var pref_game = $('.game select').val();
@@ -195,5 +201,11 @@ Create Gamer Profile
         )
 
     })
+</script>
+
+<script>
+    function Toggle_Select_Dropdown_List() {
+        $('.servers-options-list').toggle();
+    }
 </script>
 {% endblock content %}

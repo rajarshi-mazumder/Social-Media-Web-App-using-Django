@@ -252,9 +252,7 @@ i:hover {
     margin: auto 0;
 }
 
-#main-nav .nav-right-mobile-ul {
-    display: none;
-}
+
 
 #main-nav li {
     text-align: center;
@@ -964,7 +962,8 @@ h2::-webkit-scrollbar {
 }
 
 .gamer_profile_form select,
-.gamer_profile_form .multi-select-input-box {
+.gamer_profile_form .multi-select-input-box
+ {
     background-color: var(--tertiary1_bg_color);
     margin: 5px;
     border-radius: 10px;
@@ -977,7 +976,8 @@ h2::-webkit-scrollbar {
     cursor: pointer;
 }
 
-.gamer_profile_form .multi-select-input-box {
+.gamer_profile_form .multi-select-input-box
+{
     margin-left: 0;
 }
 
@@ -1057,32 +1057,6 @@ input[type="checkbox"]:checked::before {
 
 
 
-
-.matchmaking-main {
-    margin: 0 auto;
-    margin-top: 40px;
-    max-width: 900px;
-    background-color: var(--post_bg_color);
-
-}
-
-.matchmaking-main #matchmaking-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#matchmaking-form select {
-    background: #333;
-    width: 150px;
-    min-height: 30px;
-    border-radius: 5px;
-    color: white
-}
-
-.matchmaking-item {
-    margin: 10px;
-}
 
 
 
@@ -1663,21 +1637,7 @@ input[type="checkbox"]:checked::before {
         display: none;
     }
 
-    #main-nav .nav-right-mobile-ul {
-        display: flex;
-        justify-self: flex-end;
-        align-self: flex-end;
-        align-items: flex-end;
-        justify-content: flex-end;
-
-    }
-
-    #main-nav .nav-right-mobile-ul img {
-        width: 40px;
-        height: 40px;
-        object-fit: cover;
-        border-radius: 50%;
-    }
+    
 
     .search-bar {
         width: 300px;

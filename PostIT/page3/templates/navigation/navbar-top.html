@@ -9,6 +9,7 @@
 
         </div>
     </div>
+
     <ul class="nav-left-ul">
 
 
@@ -30,11 +31,12 @@
         </li>
 
     </ul>
+    
     <ul class="nav-right-ul">
         {% if user.is_authenticated %}
         {% if user.profile.id %}
         <li class="nav-add-post">
-            <a href=""><i class="fa-solid fa-plus"></i><br />Add Post
+            <a var(--post_bg_color);><i class="fa-solid fa-plus"></i><br />Add Post
                 <span class="arrow">&#x25BC;</span>
             </a>
 
@@ -51,20 +53,6 @@
                     <a href="{% url 'add-video-post' %}"><i class="fa-solid fa-video"></i>Video Post</a>
                 </li>
             </ul>
-            <!-- <div class="add-post-options-holder">
-                        <div class="add-post-options" id="add-post-options">
-                            <ul>
-        
-                                <li class="add-post-option"><a class="create-post" href="{% url 'add-post' %}"><i
-                                            class="fa-solid fa-feather"></i>Text
-                                        Post</a></li>
-                                <li class="add-post-option"><a href="{% url 'add-image-post' %}"><i
-                                            class="fa-regular fa-image "></i>Image Post</a>
-                                </li>
-                                <li class="add-post-option"><a href="{% url 'add-video-post' %}"><i
-                                            class="fa-solid fa-video "></i>Video Post</a></li>
-                            </ul>
-                        </div> -->
 
             </div>
         </li>
@@ -110,16 +98,6 @@
 
     </ul>
 
-    <ul class="nav-right-mobile-ul">
-
-        {% if user.profile.profile_pic.name %}
-        <img class="profile-img-navbar" src="{{ user.profile.profile_pic.url}}" width="200">
-        {% else %}
-
-        <img src="{% static 'PostIT/images/profilepic.jpg' %}" width="200">
-        {% endif %}
-
-    </ul>
 </nav>
 <div class="blocker-navbar" id="blocker-navbar"></div>
 

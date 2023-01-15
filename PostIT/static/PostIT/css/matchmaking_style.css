@@ -3,22 +3,91 @@
     background-color: var(--post_bg_color);
     border-radius: 10px;
 }
-
+.matchmaking-main .page-label{
+    text-align: left;
+     display: flex;
+     padding: 10px 20px;
+     font-size: large;
+     border-radius: 10px 10px 0 0;
+     margin-bottom: 20px;
+     height: 60px;
+     background-color: #333;
+}
+.matchmaking-main #currentuser{
+    margin-left: 10px;
+}
 .matchmaking-main #matchmaking-form {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-areas: 'm-top m-top'
+                          'm-mid m-mid'
+                        'm-bottom m-bottom';
+    gap: 10px;
     align-items: center;
-}
-
-#matchmaking-form select {
-    background: #333;
-    width: 150px;
-    min-height: 30px;
-    border-radius: 5px;
-    color: white
-}
-
+    background-color: var(--tertiary1_bg_color);
+    margin: 10px;
+    border-radius: 10px;
+    padding: 10px;
+}   
 .matchmaking-item {
     margin: 10px;
+    width: 100%;
+    height: 80px;
+}
+.matchmaking-item .m-top{
+    grid-area: m-top;
+}
+.matchmaking-item .m-mid{
+    grid-area: m-mid;
+}
+.matchmaking-item .m-bottom{
+    grid-area: m-bottom;
+}
+.matchmaking-item .label{
+    height: 20px;
+    margin-bottom: 10px;
+}
+#matchmaking-form select {
+    background: #333;
+    width: 100%;
+    min-height: 30px;
+    border-radius: 5px;
+    color: white;
+    border: 1px solid white;
 }
 
+#matchmaking-form .multi-select-input-box
+ {
+    background: #333;
+    width: 100%;
+    min-height: 30px;
+    border-radius: 5px;
+    color: white;
+    border: 1px solid white;
+}
+
+#matchmaking-form .multi-select-input-box
+{
+    margin-left: 0;
+}
+
+#matchmaking-form .servers-section{
+    position: relative;
+}
+#matchmaking-form .servers-section .servers-options-list{
+    position: absolute;
+    top: 70px;
+    background-color: var(--secondary_bg_color);
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 5px;
+}
+
+#matchmaking-form .servers-section .servers-options-list .select_checkbox{
+    display: none;
+}
+#matchmaking-form .servers-section .servers-options-list .select_option:hover {
+    cursor: pointer;
+}
+#matchmaking-form .servers-section .servers-options-list .is_selected {
+    background-color: var(--primary_color);
+}
