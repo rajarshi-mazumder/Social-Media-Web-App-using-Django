@@ -145,6 +145,7 @@ def Filter_Profiles(request):
         queried_game = pref_game
         max_rank_number = 0
         high_elo_check = False
+        print("Kyedae", g)
 
         if(queried_game == "Valorant"):
             max_rank_number = GameProfile.Valorant_Ranks_Order["Max_Rank"]
@@ -199,4 +200,4 @@ def Filter_Profiles(request):
                 proflies.append(obj)
                 matched_profiles.append(quieried_user_profile)
 
-        return matched_profiles
+    return matched_profiles
