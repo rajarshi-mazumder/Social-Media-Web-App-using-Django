@@ -204,23 +204,7 @@ Create Gamer Profile
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
             },
             success: function (response) {
-                $('.gamer_profiles').empty();
-
                 $('.profiles-section').html(response['profiles']);
-
-                //for(let i=0; i< response['profiles'].length; i++)
-                //{   
-                // const el = document.createElement('div');
-                // el.setAttribute('id', 'my-id');
-
-
-                // $('.gamer_profiles').append(`<img src="/media/${response['profiles'][i]['profile_pic']}"/>`)
-                // $('.gamer_profiles').append(`<div>${response['profiles'][i]['bio']}</div>`)
-                // $('.gamer_profiles').append(`<div>User Status: ${response['profiles'][i]['user_status']}</div>`)
-                // $('.gamer_profiles').appendTo(".gameprofile-wrapper");
-                //}
-
-
             }
         }
         )

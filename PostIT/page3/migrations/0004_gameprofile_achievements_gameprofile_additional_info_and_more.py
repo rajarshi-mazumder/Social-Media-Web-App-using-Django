@@ -15,8 +15,4 @@ class Migration(migrations.Migration):
 
     operations = [
 
-        migrations.AddField(
-            model_name='profile',
-            name='is_private',
-            field=models.BooleanField(blank=True, default=False, null=True),
-        ), ]
+         ]

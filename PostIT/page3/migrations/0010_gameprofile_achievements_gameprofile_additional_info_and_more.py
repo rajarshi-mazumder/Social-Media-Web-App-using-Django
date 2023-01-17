@@ -14,11 +14,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-
-        migrations.AddField(
-            model_name='gameprofile',
-            name='peak_rank',
-            field=models.CharField(choices=[('Val', [('IRON', 'Iron'), ('Bronze', 'Bronze'), ('Silver', 'Silver'), ('Gold', 'Gold'), ('Platinum', 'Platinum '), ('Diamond', 'Diamond'), ('Asencdant', 'Asencdant'), ('Immortal', 'Immortal'), ('Radiant', 'Radiant')]), ('COD', [('Rookie', 'Rookie'), ('Veteran', 'Veteran'), ('Elite', 'Elite'), ('Pro', 'Pro'), ('Master', 'Master'), ('Grandmaster', 'Grandmaster'), ('Legendary', 'Legendary')]), ('LOL', [(
-                'IRON', 'Iron'), ('Bronze', 'Bronze'), ('Silver', 'Silver'), ('Gold', 'Gold'), ('Platinum', 'Platinum '), ('Diamond', 'Diamond'), ('Master', 'Master'), ('Grandmaster', 'Grandmaster'), ('Challenger', 'Challenger')]), ('CS', [('Silver', 'Silver'), ('Gold', 'Gold'), ('Master Guardian', 'Master Guardian'), ('Distinguished Master Guardian', 'Distinguished Master Guardian'), ('Legendary', 'Legendary'), ('Elite', 'Elite')])], default='', max_length=50),
-        ),
     ]

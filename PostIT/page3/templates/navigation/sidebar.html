@@ -12,7 +12,6 @@
         <div class="sidebar-section-title">
             Profile
         </div>
-
         {%if gamer_profiles%}
 
         {%include 'gamerProfile/gamer_profile_section_sidebar.html' %}
@@ -60,8 +59,6 @@
             ($('.page').text().trim() == "user_profile_page") ||
             ($('.page').text().trim() == "user_communities_page"))
             $('.sidebar').addClass("custom_margin_top");
-
-
     });
 
     $('.gamer_profiles_dropdown-btn').click(function () {

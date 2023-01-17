@@ -13,28 +13,4 @@ class Migration(migrations.Migration):
         ('page3', '0001_initial'),
     ]
 
-    operations = [
-        migrations.AddField(
-            model_name='community',
-            name='community_header_pic',
-            field=models.ImageField(
-                blank=True, null=True, upload_to='images/profile'),
-        ),
-        migrations.AddField(
-            model_name='community',
-            name='post_date',
-            field=models.DateField(auto_now_add=True, null=True),
-        ),
-        migrations.AddField(
-            model_name='community',
-            name='post_datetime',
-            field=models.DateTimeField(auto_now_add=True, null=True),
-        ),
-        migrations.AddField(
-            model_name='community',
-            name='rules',
-            field=django.contrib.postgres.fields.ArrayField(base_field=models.CharField(
-                blank=True, default='', max_length=500, null=True), blank=True, default=list, null=True, size=None),
-        ),
-
-    ]
+    operations = [    ]

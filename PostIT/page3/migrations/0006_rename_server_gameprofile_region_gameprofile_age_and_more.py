@@ -11,24 +11,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='gameprofile',
-            old_name='server',
-            new_name='region',
-        ),
-        migrations.AddField(
-            model_name='gameprofile',
-            name='age',
-            field=models.IntegerField(null=True),
-        ),
-        migrations.AddField(
-            model_name='gameprofile',
-            name='servers',
-            field=django.contrib.postgres.fields.ArrayField(base_field=models.CharField(blank=True, default='', max_length=50, null=True), blank=True, default=list, null=True, size=None),
-        ),
-        migrations.AddField(
-            model_name='profile',
-            name='age',
-            field=models.IntegerField(null=True),
-        ),
+        
     ]
