@@ -50,6 +50,8 @@ class Community(models.Model):
     post_datetime = models.DateTimeField(auto_now_add=True, null=True)
     rules = ArrayField(models.CharField(
         max_length=500, null=True, blank=True, default=""), blank=True, null=True, default=list)
+    post_types = ArrayField(models.CharField(
+        max_length=50, null=True, blank=True, default=""), blank=True, null=True, default=list)
     # post = models.ManyToManyField(
     #     Post, default=None, blank=True, related_name='community_posts')
 
@@ -126,6 +128,8 @@ class Post(models.Model):
     vouches = models.ManyToManyField(
         User, default=None, blank=True, related_name='vouches')
     vouch_count = models.BigIntegerField(default='0')
+    post_type = models.CharField(
+        max_length=255, default='', blank=True)
 
     def set_Tag(self, lst):
         self.tags = json.dumps(lst)

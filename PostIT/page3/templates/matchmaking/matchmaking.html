@@ -16,41 +16,59 @@ Create Gamer Profile
     <div class="page-contents">
         <div class="posts-timeline">
 
-            <div class="matchmaking-main">
-                <div class="page-label">Start &nbsp;  Matchmaking <div id="currentuser">{{user.username}}</div>
-            </div>
+            <div class="post matchmaking">
+
+
+                <div id="currentuser" style="display: none;">
+                    {{user.username}}</div>
+
                 <form action="" method="POST" enctype="multipart/form-data" id="matchmaking-form">
+                    <div class="matchmaking-filters-form">
+                        <div class="header"> Matchmaking
+                        </div>
+                        <hr>
+                        {% csrf_token %}
+                        <div class="matchmaking-item ">
+                            <div class="label">Game</div>
+                            <div class="game">{{form.game}}</div>
+                        </div>
 
-                    {% csrf_token %}
-                    <div class="matchmaking-item m-top">
-                        <div class="label"> Preferred Game</div>
-                        <div class="game">{{form.game}}</div>
+                        <div class="matchmaking-item ">
+                            <div class="label">Region</div>
+                            <select class="regions" form="matchmaking-form"></select>
+                        </div>
+                        <div class="matchmaking-item  servers-section">
+                            <select id="servers" form="matchmaking-form" multiple style="display: none;"></select>
+                            <div class="label">Servers</div>
+                            <div class="multi-select-input-box"></div>
+                            <div class="servers-options-list"></div>
+                        </div>
+
+
+                        <div class="matchmaking-item ">
+                            <div class="label">Rank</div>
+                            <select class="ranks" form="matchmaking-form">Enter preferred rank to pair with</select>
+                        </div>
+
+
+                        <button type="submit" class="button-custom-width" name="submit-btn"
+                            onclick="showMatchmakingResults()">Search <i
+                                class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
-
-                    <div class="matchmaking-item m-top">
-                        <div class="label"> Preferred Region</div>
-                        <select class="regions" form="matchmaking-form"></select>
-                    </div>
-                    <div class="matchmaking-item m-mid servers-section">
-                        <select id="servers" form="matchmaking-form" multiple style="display: none;"></select>
-                        <div class="label"> Preferred Servers</div>
-                        <div class="multi-select-input-box"></div>
-                        <div class="servers-options-list"></div>
-                    </div>
-     
-
-                    <div class="matchmaking-item m-mid">
-                        <div class="label"> Preferred Rank to pair with</div>
-                        <select class="ranks" form="matchmaking-form">Enter preferred rank to pair with</select>
-                    </div>
-
-
-                    <button class="m-bottom" type="submit" name="submit-btn">Create</button>
                 </form>
-                <div class="profiles-section">
-                    {%include 'matchmaking/matchmaking_found_list.html' %}
-                </div>
+
             </div>
+
+            <div class="post matchmaking-results" id="matchmaking-results" style="display:none">
+                <center>
+
+                    <div class="profiles-section">
+                        {%include 'matchmaking/matchmaking_found_list.html' %}
+                    </div>
+                </center>
+            </div>
+
+
         </div>
         {% include 'navigation/sidebar.html' %}
         {{profiles}}
@@ -85,7 +103,9 @@ Create Gamer Profile
                 url: `/getgamerank_server/${pref_game}`,
                 success: function (response) {
 
-                    $('.multi-select-input-box').text(`no servers  \xa0selected`)
+                    //$('.multi-select-input-box').text(`no servers  \xa0selected`)
+                    var elem = "<i class='fa-solid fa-plus'></i>"
+                    $('.multi-select-input-box')[0].innerHTML = "no servers selected" + elem
 
                     $('.ranks').empty();
                     for (let i = 0; i < response['ranks'].length; i++) {
@@ -102,7 +122,9 @@ Create Gamer Profile
 
                     $('.regions').click(function () {
                         Get_Servers_For_Matchmaking(response);
-                        $('.multi-select-input-box').text(`no servers  \xa0selected`)
+                        //$('.multi-select-input-box').text(`no servers  \xa0selected`)
+                        var elem = "<i class='fa-solid fa-plus'></i>"
+                        $('.multi-select-input-box')[0].innerHTML = "no servers selected" + elem
                     })
                     Get_Servers_For_Matchmaking(response);
 
@@ -150,17 +172,20 @@ Create Gamer Profile
             $obj.find('.select_checkbox').prop('checked', true);
             $(`#servers option[value=${value}]`).prop("selected", true)
             $obj.addClass("is_selected")
-            $('.multi-select-input-box')
-                .text(`${document.getElementById("servers").selectedOptions.length}  \xa0 selected`)
+
+            var elem = "<i class='fa-solid fa-plus'></i>"
+            $('.multi-select-input-box')[0].innerHTML = document.getElementById("servers").selectedOptions.length + "  selected" + elem
         }
         else {
             $obj.find('.select_checkbox').prop('checked', false);
             $(`#servers option[value=${value}]`).prop("selected", false)
             $obj.removeClass("is_selected")
-            $('.multi-select-input-box')
-                .text(`${document.getElementById("servers").selectedOptions.length}  \xa0selected`)
+
+            var elem = "<i class='fa-solid fa-plus'></i>"
+            $('.multi-select-input-box')[0].innerHTML = document.getElementById("servers").selectedOptions.length + "  selected" + elem
         }
     }
+
 
 
     $(document).on('submit', '#matchmaking-form', function (e) {
@@ -206,6 +231,12 @@ Create Gamer Profile
 <script>
     function Toggle_Select_Dropdown_List() {
         $('.servers-options-list').toggle();
+    }
+</script>
+
+<script>
+    function showMatchmakingResults() {
+        $(".matchmaking-results").show();
     }
 </script>
 {% endblock content %}

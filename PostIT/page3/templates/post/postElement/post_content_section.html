@@ -1,11 +1,11 @@
 {% load static %}
 <div class="post-category-section">
     <!-- <i class="fa-solid fa-globe"></i> -->
-    <i class="fa-solid fa-puzzle-piece"></i>
+    <!-- <i class="fa-solid fa-puzzle-piece"></i> -->
     <!-- <span class="material-icons post-topic-icon">&#xf1c8;</span> -->
-    <a class="post-category">
-        {{post.category}}</a>
-    {{post.id}}
+    <!-- <a class="post-category">
+        {{post.category}}</a> -->
+
 </div>
 
 <section class="post-header-section">
@@ -30,7 +30,7 @@
             {% endif %}
         </div>
         <span class="date">
-            {{post.post_date}}
+            {{post.post_date}}<small> post id:{{post.id}}</small>
         </span>
     </span>
 
@@ -67,6 +67,12 @@
 <a class="post-body-section" id="post-body-section" onclick="storeScroll()" href="{% url 'upload_reply' post.pk %}">
     {% if replyingToIsReply %}
     <p>@{{replyingToAuthor}} </p>
+    {% endif %}
+
+    {% if post.post_type %}
+    <div class="post-type">
+        {{post.post_type}}
+    </div>
     {% endif %}
     {{post.body|linebreaksbr}}
 </a>

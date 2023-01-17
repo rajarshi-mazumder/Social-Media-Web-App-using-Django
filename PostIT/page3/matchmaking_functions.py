@@ -113,7 +113,7 @@ def Filter_Profiles(request):
                 k for k, v in GameProfile.CS_Ranks_Order.items() if v == rank_order+1][0]
 
     for g in game_profiles:
-        print("enokiii ", g)
+
         queried_user = User.objects.get(username=g.user).id
         quieried_user_profile = User.objects.get(username=g.user)
         queried_profile = (Profile.objects.filter(user=int(queried_user)))
@@ -124,8 +124,9 @@ def Filter_Profiles(request):
             for queried_server in pref_servers:
                 if queried_server == user_server:
                     servers_present = True
-
-        if(g.rank == rank and servers_present):
+        print("Ligue: ", servers_present, g)
+        if(g.rank == searched_rank and servers_present):
+            print("Matched Profile: ", quieried_user_profile)
             if(queried_profile):
                 print(queried_profile[0].bio)
                 obj = {'username': g.user.username, 'game': g.game, 'rank': g.rank, 'region': g.region,
@@ -145,7 +146,6 @@ def Filter_Profiles(request):
         queried_game = pref_game
         max_rank_number = 0
         high_elo_check = False
-        print("Kyedae", g)
 
         if(queried_game == "Valorant"):
             max_rank_number = GameProfile.Valorant_Ranks_Order["Max_Rank"]
@@ -191,12 +191,13 @@ def Filter_Profiles(request):
             for queried_server in pref_servers:
                 if queried_server == user_server:
                     servers_present = True
+        print("Bundesliga: ", servers_present, g)
 
         if servers_present and ((prev_rank != searched_rank and g.rank == prev_rank) or (next_rank != searched_rank and g.rank == next_rank) or (high_elo_check and g.rank != searched_rank)):
             if(queried_profile):
                 print(queried_profile[0].bio)
                 obj = {'username': g.user.username, 'game': g.game, 'rank': g.rank, 'region': g.region,
-                        'bio': queried_profile[0].bio, 'profile_pic': str(queried_profile[0].profile_pic), 'user_status': g.user_status}
+                       'bio': queried_profile[0].bio, 'profile_pic': str(queried_profile[0].profile_pic), 'user_status': g.user_status}
                 proflies.append(obj)
                 matched_profiles.append(quieried_user_profile)
 

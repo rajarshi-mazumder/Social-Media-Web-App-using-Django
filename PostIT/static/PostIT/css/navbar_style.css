@@ -1,6 +1,7 @@
-ul{
+ul {
     padding: 0;
 }
+
 #main-bottom-nav {
     display: none;
     align-items: center;
@@ -14,7 +15,8 @@ ul{
     z-index: 1000;
     border-top: 1px solid var(--primary_color);
 }
-.nav-bottom-add-post-ul{
+
+.nav-bottom-add-post-ul {
     display: flex;
     width: 100%;
     gap: 20px;
@@ -22,15 +24,18 @@ ul{
     margin: auto 0;
     padding: 0 20px;
 }
-.bottom-nav-container{
+
+.bottom-nav-container {
     position: relative;
 }
-.bottom-nav-container a{
+
+.bottom-nav-container a {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.bottom-nav-container img{
+
+.bottom-nav-container img {
     width: 60px;
     height: 60px;
     object-fit: cover;
@@ -38,33 +43,32 @@ ul{
 }
 
 .bottom-nav-container .add-post-submenu,
-.bottom-nav-container .profile-submenu
-{
-position: absolute;
-top: -130px;
-display: flex;
-flex-direction: column;
-background-color: var(--tertiary1_bg_color);
-width: 180px;
-padding: 10px;
-gap: 10px;
-border-radius: 10px;
+.bottom-nav-container .profile-submenu {
+    position: absolute;
+    top: -130px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--tertiary1_bg_color);
+    width: 180px;
+    padding: 10px;
+    gap: 10px;
+    border-radius: 10px;
 }
 
 .bottom-nav-container .add-post-submenu a,
-.bottom-nav-container .profile-submenu a
-{
+.bottom-nav-container .profile-submenu a {
     flex-direction: row;
 }
-.bottom-nav-container .profile-img-navbar{
-margin: 0 0 0 40px;
-border: 2px solid white;
+
+.bottom-nav-container .profile-img-navbar {
+    margin: 0 0 0 40px;
+    border: 2px solid white;
 }
 
 
 
 @media (max-width:500px) {
-    #main-bottom-nav{
+    #main-bottom-nav {
         display: flex;
-    } 
+    }
 }

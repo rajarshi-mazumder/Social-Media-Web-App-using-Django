@@ -22,6 +22,8 @@ Page3 Homepage
 
 
             <div class="posts-timeline">
+
+                {% include 'base/home_page_menus.html' %}
                 <div class="blocker-page-community" id="blocker-page-community"></div>
                 <ul>
                     {% if objects.has_next %}
@@ -66,7 +68,6 @@ Page3 Homepage
 <nav id="main-bottom-nav">
     {% include 'navigation/navbar-bottom.html' %}
 </nav>
-
 <script src="{% static 'PostIT/js/jquery.waypoints.min.js' %}"></script>
 <script src="{% static 'PostIT/js/infinite.min.js'%}"></script>
 

@@ -11,46 +11,52 @@
 
 
         </div>
-        <div class="profile-info-menu">
-            <div class="profile-info-menu-left">
-                <div class="community-name">
-                    <h5><b>{{ community.name }}</b></h5>
+        <div class="profile-text-info-container">
+            <div class="profile-info-menu">
+                <div class="profile-info-menu-left">
+                    <div class="community-name">
+                        <h5><b>{{ community.name }}</b></h5>
+                    </div>
+                    <div>
+                        <!-- <button class="profile-interct-button">Joined</button> -->
+                        {% if community in user_joined_communities%}
+                        <button id="join-community-button" class="button-1" value="{{community.id}}">Joined</button>
+                        {% else %}
+                        <button id="join-community-button" class="button-1" value="{{community.id}}">Join</button>
+                        {% endif %}
+
+                        {%if user == community.created_by %}
+                        <a href="{% url 'edit-community' community.id %}">
+                            <button class="button-1">Edit</button>
+                        </a>
+                        {% elif user in community.community_admins.all%}
+                        <a href="{% url 'edit-community' community.id %}">
+                            <button class="button-1">Edit</button>
+                        </a>
+                        {% endif%}
+
+
+                    </div>
                 </div>
-                <div>
-                    <!-- <button class="profile-interct-button">Joined</button> -->
-                    {% if community in user_joined_communities%}
-                    <button id="join-community-button" class="button-1" value="{{community.id}}">Joined</button>
-                    {% else %}
-                    <button id="join-community-button" class="button-1" value="{{community.id}}">Join</button>
-                    {% endif %}
+                <div class="profile-info-menu-right">
 
-                    {%if user == community.created_by %}
-                    <a href="{% url 'edit-community' community.id %}">
-                        <button class="button-1">Edit</button>
+                    <a href="{% url 'community-members' community.id %}" class="info">
+                        <div class="number">{{community.members.count}}</div>
+                        <div class="label">Members</div>
                     </a>
-                    {% elif user in community.community_admins.all%}
-                    <a href="{% url 'edit-community' community.id %}">
-                        <button class="button-1">Edit</button>
-                    </a>
-                    {% endif%}
-
+                    <div class="info">
+                        <div class="number">3.2k</div>
+                        <div class="label">Online</div>
+                    </div>
 
                 </div>
             </div>
-            <div class="profile-info-menu-right">
-
-                <a href="{% url 'community-members' community.id %}" class="info">
-                    <div class="number">{{community.members.count}}</div>
-                    <div class="label">Members</div>
-                </a>
-                <div class="info">
-                    <div class="number">3.2k</div>
-                    <div class="label">Online</div>
+            <div class="profile-info-bottom">
+                <div>
+                    <i class="fa-solid fa-circle-info"></i>{{community.bio}}
                 </div>
-
             </div>
         </div>
-
     </div>
     <div class="profile-info-tabs">
         {% if page == 'community_posts_page'%}

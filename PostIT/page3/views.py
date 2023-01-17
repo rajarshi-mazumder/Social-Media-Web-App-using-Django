@@ -691,6 +691,35 @@ def get_parent_post(parent_id, arr):
     return arr
 
 
+@login_required(login_url='/users/login_user')
+@csrf_exempt
+def get_lft_posts(request):
+    lft_posts = Post.objects.filter(
+        is_lft_lfp_post=True).order_by('-post_datetime')
+    print(lft_posts)
+
+    p = Paginator(lft_posts, 4)
+
+    # p = Paginator(Post.objects.all().order_by('-post_datetime'), 4)
+    page = request.GET.get('page')
+    objects = p.get_page(page)
+    a = 200
+    # printing
+    print(objects)
+
+    image_list = ""
+    profiles = Profile.objects.all()
+    context = {
+        "objects": objects,
+        "page": "lft-posts-page",
+    }
+    context.update(get_featured_communities(
+        request))
+    context.update(get_gamer_profile_info_sidebar(request))
+
+    return render(request, 'post/lft_posts.html', context)
+
+
 def edit_post(request, post_id):
     post = Post.objects.get(id=post_id)
     form = EditPostForm(request.POST or None, instance=post)
@@ -1412,6 +1441,9 @@ def MatchmakingHome(request, user):
     form = GameProfileForm()
     print(user)
     context = {'form': form}
+    context.update(get_featured_communities(request))
+    context.update(get_user_following_info(request))
+    context.update(get_gamer_profile_info_sidebar(request))
 
     return render(request, 'matchmaking/matchmaking.html', context)
 
@@ -1425,9 +1457,12 @@ def Matchmaking_Data(request, user):
         # context = {'profiles': proflies}
 
         context = {
-            'account_items_list': matched_profiles}
+            'account_items_list': matched_profiles,
+            'search_completed': True,
+        }
         context.update(get_featured_communities(request))
         context.update(get_user_following_info(request))
+        context.update(get_gamer_profile_info_sidebar(request))
 
         html = render_to_string(
             'matchmaking/matchmaking_found_list.html', context, request=request)
@@ -1982,16 +2017,25 @@ def add_post_community(request, community_id):
     try:
         community = Community.objects.get(id=community_id)
         print("COMMUNITY TO ADD POST TO: ", community)
+        community_post_types = community.post_types
+        print(community_post_types)
     except:
         return redirect("home-page")
 
     context = {
-        'form': form
+        'form': form,
+        'page': 'add-post-community',
+        'community_post_types': community_post_types,
     }
     if request.method == 'POST':
         print(request.POST)
         form = PostForm(request.POST, request.FILES)
         tags = request.POST['tags']
+        try:
+            post_type = request.POST['community-post-type']
+            print("POST_TYPE: ", post_type)
+        except:
+            post_type = None
         if form.is_valid():
             # form.save()
             instance = form.save(commit=False)
@@ -1999,6 +2043,8 @@ def add_post_community(request, community_id):
             instance.user_profile = request.user.profile
             if community:
                 instance.community = community
+            if post_type and post_type != "None":
+                instance.post_type = post_type
             print("PRINTING PROFILE: ", request.user.profile)
             instance.save()
             if len(tags) > 0:
@@ -2035,16 +2081,25 @@ def add_image_post_community(request, community_id):
     try:
         community = Community.objects.get(id=community_id)
         print("COMMUNITY TO ADD POST TO: ", community)
+        community_post_types = community.post_types
+        print(community_post_types)
     except:
         return redirect("home-page")
     context = {
-        'form': form
+        'form': form,
+        'page': 'add-post-community',
+        'community_post_types': community_post_types,
     }
     if request.method == 'POST':
         print(request.POST)
         form = PostImageForm(request.POST)
         files = request.FILES.getlist("image")
         tags = request.POST['tags']
+        try:
+            post_type = request.POST['community-post-type']
+            print("POST_TYPE: ", post_type)
+        except:
+            post_type = None
         if form.is_valid():
             # form.save()
             instance = form.save(commit=False)
@@ -2056,6 +2111,8 @@ def add_image_post_community(request, community_id):
                 instance.has_images = False
             if community:
                 instance.community = community
+            if post_type and post_type != "None":
+                instance.post_type = post_type
             instance.save()
             if len(tags) > 0:
                 tags_list = tags.replace(' ', '').split(",")
@@ -2090,8 +2147,14 @@ def add_image_post_community(request, community_id):
     else:
         form = PostImageForm()
         imageform = ImageForm()
+        context = {
+            'form': form,
+            'imageform': imageform,
+            'page': 'add-post-community',
+            'community_post_types': community_post_types,
+        }
 
-    return render(request, 'post/addPost/add_image_post.html', {"form": form, "imageform": imageform})
+    return render(request, 'post/addPost/add_image_post.html', context=context)
 
 
 def add_video_post_community(request, community_id):
@@ -2100,15 +2163,25 @@ def add_video_post_community(request, community_id):
     try:
         community = Community.objects.get(id=community_id)
         print("COMMUNITY TO ADD POST TO: ", community)
+        community_post_types = community.post_types
+        print(community_post_types)
     except:
         return redirect("home-page")
     context = {
-        'form': form
+        'form': form,
+        'page': 'add-post-community',
+        'community_post_types': community_post_types,
     }
+
     if request.method == 'POST':
         print(request.POST)
         form = PostVideoForm(request.POST, request.FILES)
         tags = request.POST['tags']
+        try:
+            post_type = request.POST['community-post-type']
+            print("POST_TYPE: ", post_type)
+        except:
+            post_type = None
         if form.is_valid():
             # form.save()
             instance = form.save(commit=False)
@@ -2118,6 +2191,8 @@ def add_video_post_community(request, community_id):
                 instance.has_video = True
             if community:
                 instance.community = community
+            if post_type and post_type != "None":
+                instance.post_type = post_type
             instance.save()
             if len(tags) > 0:
                 tags_list = tags.replace(' ', '').split(",")

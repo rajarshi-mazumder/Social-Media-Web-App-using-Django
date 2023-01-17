@@ -147,7 +147,7 @@ class EditCommunityForm(ModelForm):
     class Meta:
         model = Community
         fields = ('name', 'profile_pic', 'bio',
-                  'community_header_pic',
+                  'community_header_pic', 'post_types'
                   )
         widgets = {
             'community_admins': forms.Select(choices=all_users, attrs={'class': 'form-control'}),

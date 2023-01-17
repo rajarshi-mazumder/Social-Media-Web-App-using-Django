@@ -12,16 +12,17 @@
 
 
         </div>
-        <div class="profile-info-menu">
-            <div class="profile-info-menu-left">
-                <div class="name">
-                    <h5><b>{{ profile.user.username }}</b></h5>
-                </div>
-                <div>
-                    <!-- <button class="profile-interct-button follow_btn">Follow</button> -->
-                    <button class="profile-interct-button button-1 follow_btn">Follow</button>
+        <div class=" profile-text-info-container">
+            <div class="profile-info-menu">
+                <div class="profile-info-menu-left">
+                    <div class="name">
+                        <h5><b>{{ profile.user.username }}</b></h5>
+                    </div>
+                    <div>
+                        <!-- <button class="profile-interct-button follow_btn">Follow</button> -->
+                        <button class="profile-interct-button button-1 follow_btn">Follow</button>
 
-                    <!-- <button class="vouch-user-button button-3" value="{{profile.user.id}}">
+                        <!-- <button class="vouch-user-button button-3" value="{{profile.user.id}}">
                         {% if vouched_for_user %}
                         Vouched <i class='fa-solid fa-check'></i>
                         {% else %}
@@ -29,42 +30,52 @@
                         {% endif %}
                     </button> -->
 
-                    {% if vouched_for_user %}
+                        {% if vouched_for_user %}
 
-                    <button class="vouch-user-button button-4" value="{{profile.user.id}}">Vouched <i
-                            class='fa-solid fa-check'></i></button>
+                        <button class="vouch-user-button button-4" value="{{profile.user.id}}">Vouched <i
+                                class='fa-solid fa-check'></i></button>
 
-                    {% else %}
-                    <button class="vouch-user-button button-3" value="{{profile.user.id}}">Vouch </button>
+                        {% else %}
+                        <button class="vouch-user-button button-3" value="{{profile.user.id}}">Vouch </button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="profile-info-menu-right">
+
+                    {% if profile.id %}
+                    <a href="{% url 'followers' profile.id %}" class="info">
+                        <div class="number followers_count">{{profile.followers.count}}</div>
+                        <div class="label">Followers</div>
+                    </a>
+                    {% endif %}
+
+                    {% if profile.id %}
+                    <a href="{% url 'following' profile.id %}" class="info">
+                        <div class="number">{{profile.following.count}}</div>
+                        <div class="label">Following</div>
+                    </a>
+                    {% endif %}
+
+                    {% if profile.id %}
+                    <a href="{% url 'vouched-by' profile.id %}" class="info">
+                        <div class="number vouch-count">{{vouch_count}}</div>
+                        <div class="label">Vouches</div>
+                    </a>
                     {% endif %}
                 </div>
             </div>
-            <div class="profile-info-menu-right">
-
-                {% if profile.id %}
-                <a href="{% url 'followers' profile.id %}" class="info">
-                    <div class="number followers_count">{{profile.followers.count}}</div>
-                    <div class="label">Followers</div>
-                </a>
-                {% endif %}
-
-                {% if profile.id %}
-                <a href="{% url 'following' profile.id %}" class="info">
-                    <div class="number">{{profile.following.count}}</div>
-                    <div class="label">Following</div>
-                </a>
-                {% endif %}
-
-                {% if profile.id %}
-                <a href="{% url 'vouched-by' profile.id %}" class="info">
-                    <div class="number vouch-count">{{vouch_count}}</div>
-                    <div class="label">Vouches</div>
-                </a>
-                {% endif %}
+            <div class="profile-info-bottom">
+                <div>
+                    {% if profile.age%}
+                    <i class="fa-regular fa-calendar"></i> Age: &nbsp;{{profile.age}}
+                    {%endif%}
+                    <i class="fa-solid fa-circle-info"></i>Content Creator @PRX
+                </div>
             </div>
         </div>
 
     </div>
+
     <div class="profile-info-tabs">
         {%if profile.user.username%}
         {% if profile.id %}

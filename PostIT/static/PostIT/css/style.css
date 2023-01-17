@@ -253,7 +253,6 @@ i:hover {
 }
 
 
-
 #main-nav li {
     text-align: center;
     position: relative;
@@ -542,6 +541,23 @@ i:hover {
     width: 100%;
 }
 
+.home-page-menus {
+    display: flex;
+    justify-content: center;
+}
+
+.home-page-menus .item {
+    padding: 10px;
+    margin: 10px;
+
+    padding-top: 0;
+    margin-top: 0;
+}
+
+.home-page-menus .selected-tab {
+    border-bottom: 2px solid var(--primary_color);
+}
+
 .post {
     text-align: start;
     background-color: var(--post_bg_color);
@@ -558,6 +574,8 @@ i:hover {
 .post:hover {
     box-shadow: 0 2px 4px 0 rgba(212, 110, 212, 0.2), 0 6px 20px 0 rgba(212, 110, 212, 0.2);
 }
+
+
 
 .add-post-post {
     display: flex;
@@ -599,6 +617,16 @@ p::-webkit-scrollbar {
     text-decoration: none;
     font-size: medium;
     color: white;
+}
+
+.post .post-body-section .post-type {
+    font-size: small;
+    font-weight: bold;
+    background-color: var(--primary_color);
+    padding: 0px 5px;
+    border-radius: 20px;
+    max-width: fit-content;
+    margin-bottom: 5px;
 }
 
 .post .post-tags {
@@ -962,8 +990,7 @@ h2::-webkit-scrollbar {
 }
 
 .gamer_profile_form select,
-.gamer_profile_form .multi-select-input-box
- {
+.gamer_profile_form .multi-select-input-box {
     background-color: var(--tertiary1_bg_color);
     margin: 5px;
     border-radius: 10px;
@@ -976,8 +1003,7 @@ h2::-webkit-scrollbar {
     cursor: pointer;
 }
 
-.gamer_profile_form .multi-select-input-box
-{
+.gamer_profile_form .multi-select-input-box {
     margin-left: 0;
 }
 
@@ -1058,7 +1084,19 @@ input[type="checkbox"]:checked::before {
 
 
 
+.matchmaking-main {
+    margin: 0 auto;
+    margin-top: 40px;
+    max-width: 900px;
+    background-color: var(--post_bg_color);
 
+}
+
+.matchmaking-main #matchmaking-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .gameprofile-wrapper {
     margin-top: 20px;
@@ -1235,6 +1273,13 @@ input[type="checkbox"]:checked::before {
     box-shadow: 0 2px 2px 0 rgba(212, 110, 212, 0.2), 0 1.5px 5px 0 rgba(212, 110, 212, 0.2);
 }
 
+.profile-info-holder .profile-bio {
+    padding: 20px;
+    text-align: left;
+    color: var(--text-secondary2-color);
+    font-weight: bold;
+}
+
 .profile-info-holder .profile-info {
     /* position: relative; */
     top: 5px;
@@ -1243,7 +1288,6 @@ input[type="checkbox"]:checked::before {
     padding: 0 50px;
     /* background-color: var(--secondary_bg_color); */
     border-radius: 10px;
-    height: 65px;
     /* margin-bottom: 50px; */
 
     position: relative;
@@ -1253,6 +1297,21 @@ input[type="checkbox"]:checked::before {
     /* box-shadow: 0 2px 2px 0 rgba(212, 110, 212, 0.2), 0 1.5px 5px 0 rgba(212, 110, 212, 0.2); */
     /* margin-left: 300px; */
 
+}
+
+.profile-info-holder .profile-text-info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.profile-info-holder .profile-text-info-container .profile-info-bottom {
+    padding-left: 10px;
+    text-align: left;
+    color: var(--text-secondary2-color);
+    font-weight: bold;
+    font-size: small;
 }
 
 .profile-info-holder .profile-pic img {
@@ -1268,10 +1327,10 @@ input[type="checkbox"]:checked::before {
 
 .profile-info-tabs {
     display: flex;
-    align-items: flex-start;
+
     justify-content: center;
     width: 100%;
-    margin: 0 auto;
+    margin: 0px auto;
     padding-top: 10px;
     padding-left: 10px;
     color: var(--text-secondary-color);
@@ -1311,7 +1370,7 @@ input[type="checkbox"]:checked::before {
 
 
 .profile-info-menu {
-    margin: auto 0;
+    margin-top: 10px;
     position: relative;
     display: flex;
     width: 100%;
@@ -1637,7 +1696,7 @@ input[type="checkbox"]:checked::before {
         display: none;
     }
 
-    
+
 
     .search-bar {
         width: 300px;

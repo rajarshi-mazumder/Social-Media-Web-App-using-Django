@@ -19,6 +19,17 @@ Page3 - Add post
                 {% csrf_token %}
                 {{ form.media }}
                 {{ form.as_p }}
+                {% if page == 'add-post-community' %}
+                <label for="community-post-type">Post Type</label>
+                <select id="community-post-type" name="community-post-type">
+                    <option value={{post_type}}>None</option>
+                    {% for post_type in community_post_types %}
+                    <option value="{{post_type}}">{{post_type}}</option>
+                    {% endfor %}
+
+
+                </select>
+                {% endif %}
                 <button type="submit">Post</button>
             </div>
         </form>
