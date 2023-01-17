@@ -14,4 +14,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RemoveField(
+            model_name='gameprofile',
+            name='age',
+        ),
     ]

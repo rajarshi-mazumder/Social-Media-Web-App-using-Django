@@ -14,4 +14,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+
+        migrations.AddField(
+            model_name='profile',
+            name='vouched_by',
+            field=models.ManyToManyField(
+                blank=True, default=None, related_name='vouched_by', to=settings.AUTH_USER_MODEL),
+        ),
+
     ]

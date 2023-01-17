@@ -13,4 +13,10 @@ class Migration(migrations.Migration):
         ('page3', '0010_gameprofile_achievements_gameprofile_additional_info_and_more'),
     ]
 
-    operations = []
+    operations = [
+
+        migrations.AlterField(
+            model_name='gameprofile',
+            name='peak_rank',
+            field=models.CharField(default='', max_length=50, null=True),
+        ), ]

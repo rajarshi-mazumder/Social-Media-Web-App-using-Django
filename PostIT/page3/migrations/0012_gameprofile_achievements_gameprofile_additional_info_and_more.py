@@ -14,4 +14,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.AlterField(
+            model_name='profile',
+            name='gender',
+            field=models.CharField(blank=True, choices=[('Male', 'Male'), ('Female', 'Female'), (
+                'Transgender', 'Transgender'), ('Other', 'Other')], default=None, max_length=255, null=True),
+        ),
     ]

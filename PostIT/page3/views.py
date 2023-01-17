@@ -1455,11 +1455,10 @@ def Matchmaking_Data(request, user):
         matched_profiles = Filter_Profiles(request)
 
         # context = {'profiles': proflies}
-        gamer_profiles = GameProfile.objects.filter(user=request.user)
+
         context = {
             'account_items_list': matched_profiles,
             'search_completed': True,
-            'gamer_profiles':gamer_profiles,
         }
         context.update(get_featured_communities(request))
         context.update(get_user_following_info(request))

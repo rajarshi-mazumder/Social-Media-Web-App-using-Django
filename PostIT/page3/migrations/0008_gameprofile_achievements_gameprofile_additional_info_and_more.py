@@ -14,4 +14,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.AddField(
+            model_name='gameprofile',
+            name='age',
+            field=models.IntegerField(null=True),
+        ),
     ]

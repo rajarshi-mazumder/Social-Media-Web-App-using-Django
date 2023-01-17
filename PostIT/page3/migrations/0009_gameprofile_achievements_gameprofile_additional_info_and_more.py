@@ -14,4 +14,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.AddField(
+            model_name='profile',
+            name='gender',
+            field=models.CharField(
+                blank=True, default=None, max_length=255, null=True),
+        ),
     ]
