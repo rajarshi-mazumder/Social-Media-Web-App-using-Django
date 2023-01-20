@@ -7,7 +7,6 @@ Page3 - Liked By
 {% block content %}
 {% load crispy_forms_tags %}
 
-
 {% include 'navigation/navbar-top.html' %}
 <div class="main-body">
 
@@ -25,8 +24,10 @@ Page3 - Liked By
         {% include 'navigation/sidebar.html' %}
     </div>
 </div>
-
-
+<nav id="main-bottom-nav">
+    {% include 'navigation/navbar-bottom.html' %}
+</nav>
+<script src="{% static 'PostIT/js/bottom_navbar.js'%}"></script>
 <!-- JS Scripts Here -->
 
 {% endblock content %}

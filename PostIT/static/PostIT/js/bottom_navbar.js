@@ -3,7 +3,7 @@ window.onload = function () {
 
     HideRightSidebar();
     $('.profile-img-navbar').click(ToggleRightSidebar)
-    $('.blocker').click(ToggleRightSidebar);
+    $('.sidebar_right_blocker').click(ToggleRightSidebar);
 
     $('.add-post-submenu').hide();
     $('.profile-submenu').hide();
@@ -21,13 +21,13 @@ function ToggleRightSidebar() {
 }
 function HideRightSidebar() {
     $('.sidebar-right-mobile').hide();
-    $('.blocker').hide();
+    $('.sidebar_right_blocker').hide();
     console.log(" HideRightSidebar!!", is_right_sidebar_displayed)
 
 }
 function ShowRightSidebar() {
     $('.sidebar-right-mobile').show();
-    $('.blocker').show();
+    $('.sidebar_right_blocker').show();
     console.log(" ShowRightSidebar!!", is_right_sidebar_displayed)
 
 }

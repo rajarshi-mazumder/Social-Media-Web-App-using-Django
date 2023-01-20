@@ -18,6 +18,16 @@
     --text-secondary-color: rgb(173, 173, 173);
     --text-secondary2-color: rgb(212, 211, 211);
     --text-secondary3-color: rgb(212, 212, 212);
+
+
+    /* Z Indices Start */
+    --search-bar-index: 100;
+    --search-bar-blocker-index: 90;
+    --bottom-navbar-index: 100;
+    --sidebar-left-index: 120;
+    --sidebar-right-index: 140;
+    --top-navbar-index:130;
+    /* Z Indices End */
 }
 
 a {
@@ -217,7 +227,6 @@ i:hover {
 #main-nav {
     display: flex;
     align-items: center;
-    justify-content: baseline;
     width: 100%;
     height: 50px;
     position: fixed;
@@ -225,7 +234,7 @@ i:hover {
     color: #fff;
     background-color: var(--post_bg_color);
     pointer-events: all;
-    z-index: 1000;
+    z-index: var(--top-navbar-index);
     box-shadow: 0 2px 2px 0 rgba(212, 110, 212, 0.2), 0 1.5px 5px 0 rgba(212, 110, 212, 0.2);
 
     /* padding-top: 30px;
@@ -245,7 +254,9 @@ i:hover {
     margin-left: auto;
     margin-right: 100px;
 }
-
+#main-nav .nav-right-mobile-ul{
+    display: none;
+}
 #main-nav ul {
     list-style: none;
     display: flex;
@@ -316,12 +327,7 @@ i:hover {
 
 }
 
-#main-nav .nav-search-bar {
-    /* background-color: red; */
-    height: 100%;
-    position: relative;
-    top: 0px;
-}
+
 
 #main-nav .nav-logo {
     position: relative;
@@ -366,7 +372,9 @@ i:hover {
     padding-right: 2px;
 }
 
-
+.fake-search-btn{
+    display: none;
+}
 
 .search-bar {
     width: 500px;
@@ -378,7 +386,9 @@ i:hover {
     color: #fff;
     padding-left: 20px;
 }
-
+.search-bar-blocker{
+    display: none;
+}
 .page-specific-search-bar {
     text-align: left !important;
     padding: 20px;
@@ -752,13 +762,12 @@ p::-webkit-scrollbar {
 .post-options-list.show {
     display: block;
     cursor: pointer;
-    z-index: 100;
 }
 
 
 .post-options-list-items {
     position: absolute;
-    left: -250px;
+    left: -280px;
     background: var(--secondary_bg_color);
     width: 300px;
     display: flex;
@@ -766,7 +775,7 @@ p::-webkit-scrollbar {
     padding: 5px;
     border-radius: 5px;
     box-shadow: 0 2px 4px 0 rgba(212, 110, 212, 0.2), 0 3px 10px 0 rgba(212, 110, 212, 0.2);
-
+    z-index: 100;
 }
 
 .post-options-list-items ul {
@@ -784,14 +793,14 @@ p::-webkit-scrollbar {
     text-decoration: none !important;
 }
 
-.blocker {
+.sidebar_right_blocker {
     position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
     content: ' ';
-    /* background: rgba(0, 0, 0, .5); */
+    background: rgba(0, 0, 0, .5);
 }
 
 .blocker-page {
@@ -1079,10 +1088,6 @@ input[type="checkbox"]:checked::before {
 
 
 /* Gamer profile form page end*/
-
-
-
-
 
 .matchmaking-main {
     margin: 0 auto;
@@ -1677,32 +1682,6 @@ input[type="checkbox"]:checked::before {
 
 
 @media (max-width:500px) {
-
-
-
-    .posts-timeline ul {
-        /* margin-block-start: 0;
-        margin-block-end: 0; */
-        padding-inline-start: 0;
-    }
-
-
-
-    .navbar-toggle {
-        display: block;
-    }
-
-    #main-nav .nav-right-ul {
-        display: none;
-    }
-
-
-
-    .search-bar {
-        width: 300px;
-    }
-
-
 }
 
 /*

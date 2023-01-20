@@ -61,7 +61,7 @@
 
 @media (max-width:700px) {}
 
-@media (max-width:500px) {
+@media (max-width:600px) {
     .form_contents {
         max-width: 100%;
     }

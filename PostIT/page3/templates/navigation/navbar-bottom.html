@@ -4,12 +4,12 @@
 
 
 
-<ul class="nav-bottom-add-post-ul" onload="Toggle_Add_Post_Options()">
+<ul class="nav-bottom-options-ul" onload="Toggle_Add_Post_Options()">
     {% if user.is_authenticated %}
     {% if user.profile.id %}
     <li class="nav-add-post-container bottom-nav-container">
-        <a><i class="fa-solid fa-plus"></i>
-            <div>Add Post</div>
+        <a class="bottom-nav-icons"><i class="fa-solid fa-plus nav-icon"></i>
+            <div class="bottom-nav-text">Add Post</div>
         </a>
         <ul class="add-post-submenu">
 
@@ -32,8 +32,8 @@
         </div>
     </li>
     <li class="profile-menu-container bottom-nav-container">
-        <a href="#"><i class="fa-solid fa-user"></i>
-            <div>Profile</div>
+        <a class="bottom-nav-icons"><i class="fa-solid fa-user nav-icon"></i>
+            <div class="bottom-nav-text">Profile</div>
         </a>
         <ul class="profile-submenu">
 
@@ -64,30 +64,21 @@
     {% endif %}
 
     <li class="bottom-nav-container">
-        <a href="#"><i class="fa-solid fa-envelope"></i>
-            <div>Messages</div>
+        <a class="bottom-nav-icons"><i class="fa-solid fa-envelope nav-icon"></i>
+            <div class="bottom-nav-text">Messages</div>
         </a>
     </li>
     <li class="bottom-nav-container">
-        <a href="{% url 'create-community' %}"><i class="fa-solid fa-users-between-lines"></i>
-            <div>Create Community</div>
+        <a href="{% url 'create-community' %}" class="bottom-nav-icons"><i class="fa-solid fa-users-between-lines nav-icon"></i>
+            <div class="menu-small-text bottom-nav-text">Create Community</div>
         </a>
     </li>
     <li class="bottom-nav-container">
-        <a href="{% url 'create-community' %}"><i class="fa-solid fa-bell"></i>
-            <div>Notifications</div>
+        <a href="{% url 'create-community' %}" class="bottom-nav-icons"><i class="fa-solid fa-bell nav-icon"></i>
+            <div class="bottom-nav-text">Notifications</div>
         </a>
     </li>
-    <li class="bottom-nav-container">
-
-        {% if user.profile.profile_pic.name %}
-        <img class="profile-img-navbar" src="{{ user.profile.profile_pic.url}}" width="200">
-        {% else %}
-
-        <img src="{% static 'PostIT/images/profilepic.jpg' %}" width="200">
-        {% endif %}
-
-    </li>
+    
 </ul>
 
 

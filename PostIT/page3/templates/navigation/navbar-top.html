@@ -21,15 +21,20 @@
         {% endif %} -->
 
 
-        <li class="nav-search-bar">
-            <form action="{% url 'search'  %}" method="POST" enctype="multipart/form-data" id="search-form">
-                {% csrf_token %}
-                <input class="search-bar" name="search_query" type="text" placeholder="Search PostIT ">
-                <button id="search_btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </form>
-        </li>
-
+        
+        
     </ul>
+    <li class="nav-search-bar">
+        <form action="{% url 'search'  %}" method="POST" enctype="multipart/form-data" id="search-form" class="search-form">
+            {% csrf_token %}
+            <input class="search-bar" name="search_query" type="text" placeholder="Search PostIT ">
+            <button id="search_btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </form>
+    </li>
+    <div class="fake-search-btn">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+    <div class="search-bar-blocker" id="search-bar-blocker"></div>
     <ul class="nav-right-ul">
         {% if user.is_authenticated %}
         {% if user.profile.id %}
@@ -109,7 +114,16 @@
         </li>
 
     </ul>
+    <li class="nav-right-mobile-ul profile-img-container">
 
+        {% if user.profile.profile_pic.name %}
+        <img class="profile-img-navbar" src="{{ user.profile.profile_pic.url}}" width="200">
+        {% else %}
+
+        <img src="{% static 'PostIT/images/profilepic.jpg' %}" width="200">
+        {% endif %}
+
+    </li>
 
 </nav>
 <div class="blocker-navbar" id="blocker-navbar"></div>

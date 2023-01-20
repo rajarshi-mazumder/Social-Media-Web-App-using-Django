@@ -7,9 +7,6 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width">
-        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-
         <!-- Bootstrap CSS -->
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -26,6 +23,7 @@
         <link rel="stylesheet" href="{% static 'PostIT/css/utilities/popups_style.css'%}">
         <link rel="stylesheet" href="{% static 'PostIT/css/matchmaking_style.css'%}">
         <link rel="stylesheet" href="{% static 'PostIT/css/navbar_style.css'%}">
+        <link rel="stylesheet" href="{% static 'PostIT/css/mobile_style.css'%}">
         <!-- Google fonts -->
 
         <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
@@ -64,11 +62,30 @@
     <script src="{% static 'PostIT/js/infinite.min.js'%}"></script>
 
     <script>
-        $(document).on('submit', '#search-form', function (e) {
-            console.log($('.seach_query').val())
-            $.ajax({
+        ($('.fake-search-btn').click(function ()
+        {
+            
+            {   
+                
+                $('.search-bar').css({'display': 'flex', 'width': 'clamp(100px,150px, 300px)',
+                                    'height':'40px', 'right':'20px', 'top':'-20px',
+                                    'opacity':'1'});
 
-            })
+                $('.search-form button').css('display', 'flex');
+                $('.fake-search-btn').css('display', 'none');   
+                $('.nav-logo').css('display', 'none');
+                $('#search-bar-blocker').css('display', 'flex');
+            }
+            
+        }))
+        $('#search-bar-blocker').click(function(){
+            $('.search-bar').css({'display': 'none', 'width': '0px',
+                                    'height':'40px', 'right':'20px', 'top':'-20px',
+                                    'opacity':'0'});
+            $('.search-form button').css('display', 'none');
+            $('.fake-search-btn').css('display', 'flex'); 
+            $('.nav-logo').css('display', 'flex');
+            $('#search-bar-blocker').css('display', 'none');
         })
     </script>
 

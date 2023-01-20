@@ -13,7 +13,7 @@
     background-color: var(--post_bg_color);
     border-radius: 10px;
     height: 100%;
-    z-index: 100;
+    z-index: var(--sidebar-left-index);
     /* size: 100%; */
 
 }
@@ -453,25 +453,26 @@
     position: fixed;
     top: 0;
     right: 0px;
-    z-index: 140;
+    z-index: 90;
+    
 }
 
 .sidebar-right-mobile {
 
     flex-direction: column;
-    width: 400px;
+    width: 300px;
     height: 100%;
     position: fixed;
     top: 0;
     right: 0px;
     margin-left: auto;
-    z-index: 150;
+    z-index: var(--sidebar-right-index);
     background-color: var(--tertiary1_bg_color);
     padding: 0 5px;
 }
 
 /* Mobile right  sidebar end */
-@media (max-width:500px) {
+@media (max-width:600px) {
     .sidebar {
         display: none;
     }
