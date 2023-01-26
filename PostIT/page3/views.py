@@ -2254,3 +2254,16 @@ def Unfollow(request, who_to_unfollow):
 
     return JsonResponse({'followers_list': followers_list})
 # Retrieve/ Update Followers Count End
+
+
+def Chat_home(request, user_to_chat_with):
+    logged_in_user_id= request.user.id
+    logged_in_user= User.objects.get(id= request.user.id)
+    user_to_chat_with_id= User.objects.get(id= user_to_chat_with).id
+    context={
+        'logged_in_user':logged_in_user,
+        'logged_in_user_id':logged_in_user_id,
+        'user_to_chat_with':user_to_chat_with,
+        'user_to_chat_with_id':user_to_chat_with_id
+    }
+    return render(request, 'chat/chat_home.html', context)

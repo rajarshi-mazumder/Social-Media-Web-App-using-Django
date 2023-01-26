@@ -108,4 +108,10 @@ urlpatterns = [
     path('get_mobile_sidebar_gamer_profile_stats/<str:user>',
          views.Mobile_Sidebar_Gamer_Profile_Data, name="get-mobile-sidebar-gamer-profile-data"),
     # Get mobile sidebar data end
+
+
+    # Chat views start
+    path('chat/<str:user_to_chat_with>',
+         views.Chat_home, name="chat"),
+    # Chat views end
 ]
