@@ -5,7 +5,7 @@
 
         {% if user.is_authenticated %}
 
-
+        <!-- <span id="like_count" type="hidden">{{ post.like_count}}</span> -->
         <div class="post-interact"></div>
         <button id="like-button" class="like-button" name="{{ post.like_count }}"
             value="{{ post.id }}">{{post.like_count}}<i class="fa-solid fa-heart"></i>
@@ -14,8 +14,6 @@
 
         <a class="reply-button" href="{% url 'upload_reply' post.pk %}" onclick="storeScroll()">
             {{post.reply_count}}<i class="fa-solid fa-comment"></i></a>
-
-
 
         {% endif %}
 

@@ -1,5 +1,17 @@
-<div class="results-title">
-    Search Results:
-</div>
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}
+Profiles Found
+{% endblock title %}
+{% block content %}
 
-{% include 'user/account_items_list.html' %}
+Yahoooooooooooo
+{%for p in profiles%}
+<div class="profile-card">
+    <img class="profile-pic" src="/media/{{p.profile_pic}}" width="100px">
+    <div>{{p.user}}</div>
+    <div class="bio">{{p.bio}}</div>
+</div>
+{%endfor%}
+
+{% endblock content %}

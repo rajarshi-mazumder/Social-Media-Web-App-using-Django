@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block title %}
-Page3 - Community Posts
+Page3 - Community
 {% endblock title %}
 
 {% block content %}
@@ -9,10 +9,10 @@ Page3 - Community Posts
 {% include 'community/community_header.html' %}
 
 <div class="main-body">
-    {% include 'navigation/sidebar-left.html' %}
+    <!-- {% include 'navigation/sidebar-left.html' %} -->
 
 
-    <div class="page-contents community-page-contents">
+    <div class="page-contents">
 
 
         <div class="posts-timeline">
@@ -21,10 +21,6 @@ Page3 - Community Posts
 
             {{user}}
             {{message}} -->
-            {% include 'community/community_profile_info_holder.html' %}
-
-
-
             {% if user.is_authenticated %}
 
 
@@ -43,8 +39,6 @@ Page3 - Community Posts
 
 
                 <div class="infinite-container" style="background-color: #131212;" id="myDIV">
-                    {% include 'post/addPost/add_post_post.html' %}
-
                     {% for post in objects %}
                     {% if not post.is_reply %}
                     <div class="infinite-item">
@@ -60,9 +54,10 @@ Page3 - Community Posts
             </ul>
         </div>
 
-        <div class="sidebar community-sidebar">
-
-            {% include 'community/community_page_sidebar.html' %}
+        <div class="sidebar">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit doloribus ipsa, vel suscipit
+            omnis quas cumque magnam deserunt accusamus neque tempora iusto, repellat cupiditate saepe totam sit natus,
+            alias fuga.
         </div>
     </div>
 </div>
@@ -79,13 +74,13 @@ Page3 - Community Posts
 
 
 
-        if (addPostCommunityOptions.style.display === "flex") {
+        if (addPostCommunityOptions.style.display === "block") {
             addPostCommunityOptions.style.display = "none"
             blockerPage.style.display = "none"
         }
         else {
-            addPostCommunityOptions.style.display = "flex"
-            blockerPage.style.display = "flex"
+            addPostCommunityOptions.style.display = "block"
+            blockerPage.style.display = "block"
             blockerPage.style.pointerEvents = "auto"
         }
     }
@@ -285,9 +280,6 @@ Page3 - Community Posts
 
 
 </script>
-
-
-
 
 <script src="{% static 'PostIT/js/togglePostOptions.js'%}"></script>
 {% endblock content %}

@@ -46,12 +46,9 @@ class Community(models.Model):
     community_admins = models.ManyToManyField(
         User, default=None, blank=True, related_name='community_admins')
 
-    post_date = models.DateField(auto_now_add=True, null=True)
-    post_datetime = models.DateTimeField(auto_now_add=True, null=True)
-    rules = ArrayField(models.CharField(
-        max_length=500, null=True, blank=True, default=""), blank=True, null=True, default=list)
-    post_types = ArrayField(models.CharField(
-        max_length=50, null=True, blank=True, default=""), blank=True, null=True, default=list)
+    post_date = models.DateField(auto_now_add=True)
+    post_datetime = models.DateTimeField(auto_now_add=True)
+
     # post = models.ManyToManyField(
     #     Post, default=None, blank=True, related_name='community_posts')
 
@@ -60,11 +57,6 @@ class Community(models.Model):
 
 
 class Profile(models.Model):
-    # This is User profile
-
-    gender_choices = [('Male', 'Male'), ('Female', 'Female'),
-                      ('Transgender', 'Transgender'), ('Other', 'Other')]
-
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
     profile_pic = models.ImageField(
@@ -75,16 +67,10 @@ class Profile(models.Model):
         User, default=None, blank=True, related_name='following')
     followers = models.ManyToManyField(
         User, default=None, blank=True, related_name='followers')
-    vouched_by = models.ManyToManyField(
-        User, default=None, blank=True, related_name='vouched_by')
     communities = models.ManyToManyField(
         Community, default=None, blank=True, related_name='communities')
     featured_communities = models.ManyToManyField(
         Community, default=None, blank=True, related_name='featuredCommunities')
-    is_private = models.BooleanField(null=True, blank=True, default=False)
-    age = models.IntegerField(null=True, blank=True, default=None)
-    gender = models.CharField(
-        max_length=255, null=True, choices=gender_choices, blank=True, default=None)
 
     def __str__(self):
         return str(self.user)
@@ -96,16 +82,16 @@ empty_list = []
 class Post(models.Model):
     title = models.CharField(max_length=255, blank=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-
+    body = RichTextField(blank=True, null=True)
     # body = models.TextField()
     reply_to = models.IntegerField(null=True, blank=True, default=-1)
     is_reply = models.BooleanField(null=True, default=False, blank=True)
     is_parent_a_reply = models.BooleanField(
         null=True, default=False, blank=True)
     reply_root = models.IntegerField(null=True, blank=True, default=-1)
-    post_date = models.DateField(auto_now_add=True, null=True)
-    post_datetime = models.DateTimeField(auto_now_add=True, null=True)
-    category = models.CharField(max_length=50, default='none', null=True)
+    post_date = models.DateField(auto_now_add=True)
+    post_datetime = models.DateTimeField(auto_now_add=True)
+    category = models.CharField(max_length=50, default='none')
     tags = models.CharField(
         max_length=255, default='', blank=True)
     likes = models.ManyToManyField(
@@ -117,19 +103,13 @@ class Post(models.Model):
     has_video = models.BooleanField(null=True, blank=True, default=False)
     user_profile = models.ForeignKey(
         Profile, on_delete=models.DO_NOTHING, default=None, null=True, blank=True,)
-    body = models.CharField(max_length=280, blank=True, null=True)
+    body = RichTextField(blank=True, null=True)
     community = models.ForeignKey(
         Community, on_delete=models.DO_NOTHING, default=None, null=True, blank=True)
     images_ids_list = ArrayField(models.IntegerField(
         null=True, blank=True, default=-1), blank=True, null=True, default=list)
     images_urls_list = ArrayField(models.CharField(
         max_length=500, null=True, blank=True, default=""), blank=True, null=True, default=list)
-    is_lft_lfp_post = models.BooleanField(null=True, default=False, blank=True)
-    vouches = models.ManyToManyField(
-        User, default=None, blank=True, related_name='vouches')
-    vouch_count = models.BigIntegerField(default='0')
-    post_type = models.CharField(
-        max_length=255, default='', blank=True)
 
     def set_Tag(self, lst):
         self.tags = json.dumps(lst)
@@ -203,187 +183,86 @@ LIKE_CHOICES = (
 
 
 class GameProfile(models.Model):
-    # This is User Game profile
     games_list = [('Valorant', 'Valorant'), ('Call of Duty', 'Call of Duty'),
-                  ('League of Legends', 'League of Legends'), ('Counter Strike: GO', 'Counter Strike: GO')]
+                  ('League of Legends', 'League of Legends'), ('Counter Shit: GO', 'Counter Shit: GO')]
 
-    class ValorantRegions(models.TextChoices):
-        APAC = 'APAC', 'APAC'
-        EMEA = 'EMEA', 'EMEA'
-        NA = 'NA', 'NA'
-        LATAM = 'LATAM', 'LATAM'
+    class ValorantServers(models.TextChoices):
+        APAC = 'APAC', 'Asia Pacific'
+        EMEA = 'EMEA', 'Europe'
+        NA = 'NA', 'North America(meaning shit)'
+        JA = 'JA', 'Japan'
 
-    class CODRegions(models.TextChoices):
-        APAC = 'APAC', 'APAC'
-        EMEA = 'EMEA', 'EMEA'
-        NA = 'NA', 'NA'
+    class CODServers(models.TextChoices):
+        APAC = 'APAC', 'Asia Pacific'
+        EMEA = 'EMEA', 'Europe'
+        NA = 'NA', 'North America(meaning shit)'
 
-    class LOLRegions(models.TextChoices):
-        APAC = 'APAC', 'APAC'
-        EMEA = 'EMEA', 'EMEA'
-        NA = 'NA', 'NA'
+    class LOLServers(models.TextChoices):
+        APAC = 'APAC', 'Asia Pacific'
+        EMEA = 'EMEA', 'Europe'
+        NA = 'NA', 'North America(meaning shit)'
 
-    class CSRegions(models.TextChoices):
-        APAC = 'APAC', 'APAC'
-        EMEA = 'EMEA', 'EMEA'
-        NA = 'NA', 'NA'
-        LATAM = 'LATAM', 'LATAM'
-
-    Valorant_Servers = {'APAC': ['Tokyo', 'Singapore', 'Mumbai', 'Seoul'],
-                        'EMEA': ['London', 'Paris', 'Kyiv', 'Barcelona'],
-                        'NA': ['San_Francisco', 'FLorida', 'Texas', 'Vancouver'],
-                        'LATAM': ['Buenos_Aires', 'Rio_de_Janeiro', 'Mexico_City', 'Havana'],
-                        }
-    COD_Servers = {'APAC': ['Tokyo', 'Singapore', 'Mumbai', 'Tehran'],
-                   'EMEA': ['London', 'Paris', 'Kyiv', 'Barcelona', 'Madrid', 'Rome'],
-                   'NA': ['San_Francisco', 'FLorida', 'Texas', 'Vancouver', 'Washington'],
-                   'LATAM': ['Buenos_Aires', 'Rio_de_Janeiro', 'Mexico_City', 'Santiago'],
-                   }
-    LOL_Servers = {'APAC': ['Osaka', 'Kyoto', 'Fukouka', 'Singapore', 'Delhi', 'Jerusalem'],
-                   'EMEA': ['London', 'Paris', 'Kyiv', 'Barcelona', 'Madrid', 'Rome'],
-                   'NA': ['San_Francisco', 'FLorida', 'Texas', 'Vancouver', 'Washington'],
-                   'LATAM': ['Buenos_Aires', 'Rio_de_Janeiro', 'Mexico_City', 'Montevideo'],
-                   }
-    CS_Servers = {'APAC': ['Seoul', 'Tokyo', 'Karachi', 'Singapore', 'Delhi', 'Mumbai'],
-                  'EMEA': ['London', 'Paris', 'Kyiv', 'Barcelona', 'Madrid', 'Brighton', 'Reading', 'Portsmouth'],
-                  'NA': ['San_Francisco', 'Chicago',  'FLorida', 'Texas', 'Vancouver', 'Washington'],
-                  'LATAM': ['Buenos_Aires', 'Cairo', 'Abuja', 'Rio_de_Janeiro', 'Mexico_City', 'Montevideo'],
-                  }
+    class CSServers(models.TextChoices):
+        EMEA = 'EMEA', 'Europe'
+        NA = 'NA', 'North America(meaning shit)'
 
     class ValorantRanks(models.TextChoices):
-        Iron = 'IRON', 'Iron'
-        Bronze = 'Bronze', 'Bronze'
-        Silver = 'Silver', 'Silver'
-        Gold = 'Gold', 'Gold'
+        Iron = 'IRON', 'Iron :((('
+        Bronze = 'Bronze', 'Bronze :(('
+        Silver = 'Silver', 'Silver :('
+        Gold = 'Gold', 'Gold :('
         Platinum = 'Platinum', 'Platinum '
-        Diamond = 'Diamond', 'Diamond'
-        Ascendant = 'Ascendant', 'Ascendant'
-        Immortal = 'Immortal', 'Immortal'
-        Radiant = 'Radiant', 'Radiant'
+        Diamond = 'Diamond', 'Diamond :) '
+        Asencdant = 'Asencdant', 'Asencdant :)) '
+        Immortal = 'Immortal', 'Immortal >_< '
+        Radiant = 'Radiant', 'Radiant :> '
 
     class LOLRanks(models.TextChoices):
-        Iron = 'IRON', 'Iron'
-        Bronze = 'Bronze', 'Bronze'
-        Silver = 'Silver', 'Silver'
-        Gold = 'Gold', 'Gold'
+        Iron = 'IRON', 'Iron :((('
+        Bronze = 'Bronze', 'Bronze :(('
+        Silver = 'Silver', 'Silver :('
+        Gold = 'Gold', 'Gold :('
         Platinum = 'Platinum', 'Platinum '
-        Diamond = 'Diamond', 'Diamond'
-        Master = 'Master', 'Master'
-        Grandmaster = 'Grandmaster', 'Grandmaster'
-        Challenger = 'Challenger', 'Challenger'
+        Diamond = 'Diamond', 'Diamond :) '
+        Master = 'Master', 'Master :)) '
+        Grandmaster = 'Grandmaster', 'Grandmaster >_< '
+        Challenger = 'Challenger', 'Challenger :> '
 
     class CODRanks(models.TextChoices):
-        Rookie = 'Rookie', 'Rookie'
-        Veteran = 'Veteran', 'Veteran'
-        Elite = 'Elite', 'Elite'
-        Pro = 'Pro', 'Pro'
-        Master = 'Master', 'Master'
-        Grandmaster = 'Grandmaster', 'Grandmaster'
-        Legendary = 'Legendary', 'Legendary'
+        Rookie = 'Rookie', 'Rookie :((('
+        Veteran = 'Veteran', 'Veteran :(('
+        Elite = 'Elite', 'Elite :('
+        Pro = 'Pro', 'Pro :('
+        Master = 'Master', 'Master '
+        Grandmaster = 'Grandmaster', 'Grandmaster :) '
+        Legendary = 'Legendary', 'Legendary :)) '
 
     class CSRanks(models.TextChoices):
 
-        Silver = 'Silver', 'Silver'
-        Gold = 'Gold', 'Gold'
-        Master_Guardian = 'Master Guardian', 'Master Guardian'
-        Distinguished_Master_Guardian = 'Distinguished Master Guardian', 'Distinguished Master Guardian'
-        Legendary = 'Legendary', 'Legendary'
-        Elite = 'Elite', 'Elite'
-
-    Valorant_Ranks_Order = {"Iron": 1, "Bronze": 2, "Silver": 3,
-                            "Gold": 4, "Platinum": 5, "Diamond": 6,
-                            "Ascendant": 7, "Immortal": 8, "Radiant": 9,
-                            "Max_Rank": 9, }
-
-    LOL_Ranks_Order = {"Iron": 1, "Bronze": 2, "Silver": 3,
-                       "Gold": 4, "Platinum": 5, "Diamond": 6,
-                       "Master": 7, "Grandmaster": 8, "Challenger": 9, "Max_Rank": 9, }
-
-    COD_Ranks_Order = {"Rookie": 1, "Veteran": 2, "Elite": 3,
-                       "Pro": 4, "Master": 5, "Grandmaster": 6,
-                       "Legendary": 7, "Max_Rank": 8}
-
-    CS_Ranks_Order = {"Silver": 1, "Gold": 2, "Master Guardian": 3,
-                      "Distinguished Master Guardian": 4,
-                      "Legendary": 5, "Elite": 6, "Max_Rank": 6, }
+        Silver = 'Silver', 'Silver :('
+        Gold = 'Gold', 'Gold :('
+        Master_Guardian = 'Master Guardian', 'Master Guardian '
+        Distinguished_Master_Guardian = 'Distinguished Master Guardian', 'Distinguished Master Guardian :) '
+        Legendary = 'Legendary', 'Legendary :)) '
+        Elite = 'Elite', 'Elite >_< '
 
     class User_Status(models.TextChoices):
         LFTeams = 'Looking for teams', 'Looking for teams'
         LFTalent = 'Looking for talent', 'Looking for talent'
         none = 'none', 'none'
 
-    # Adding or changing fields here requires changes in views.py
-    experience_fields = ['Team/ Org Name', 'Role/ Experience']
-
-    games_logo_list = {'League of Legends': '/media/images/logos/LoL_icon.svg.png',
-                       'Valorant': '/media/images/logos/Val_icon.png',
-                       'Call of Duty': '/media/images/logos/COD_icon.jpg',
-                       'Counter Strike: GO': '/media/images/logos/CSGO_icon.png',
-                       }
-    regions_list = [('Val', ValorantRegions.choices), ('COD', CODRegions.choices),
-                    ('LOL', LOLRegions.choices), ('CS', CSRegions.choices)]
+    servers_list = [('Val', ValorantServers.choices), ('COD', CODServers.choices),
+                    ('LOL', LOLServers.choices), ('CS', CSServers.choices)]
 
     ranks_list = [('Val', ValorantRanks.choices), ('COD', CODRanks.choices),
                   ('LOL', LOLRanks.choices), ('CS', CSRanks.choices)]
 
-    Valorant_additional_fields = [
-        'Preferred Agents', 'Best Maps', 'Tracker Link']
-    LOL_additional_fields = ['Agents', 'Abilities', 'Role', 'Hours Played']
-    COD_additional_fields = ['Guns', 'Maps', 'Role']
-    CS_GO_additional_fields = ['Guns', 'Maps', 'Role']
-
-    Valorant_Roles = ['Initiator', 'Duelist', 'Controller', 'Sentinel']
-    LOL_Roles = ['Top Lane', 'Mid Lane',
-                 'Attack Damage Carry', 'Jungler', 'Support']
-    COD_Roles = ['Objective', 'Slayer', 'Support', 'Anchor']
-    CS_GO_Roles = ['Entry Fragger', 'Support',
-                   'In Game Leader', 'Lurker', 'AWper']
-
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    age = models.IntegerField(null=True, blank=True, default=None)
-
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     game = models.CharField(max_length=50, choices=games_list)
-    region = models.CharField(max_length=50, choices=regions_list, null=True)
-
-    servers = ArrayField(models.CharField(
-        max_length=50, null=True, blank=True, default=""), blank=True, null=True, default=list)
-
+    server = models.CharField(max_length=50, choices=servers_list)
     rank = models.CharField(max_length=50, choices=ranks_list, default="")
-    peak_rank = models.CharField(max_length=50, null=True, default="")
     user_status = models.CharField(
         max_length=50, choices=User_Status.choices, default='none')
 
-    in_game_user_id = models.CharField(
-        max_length=400, default="", blank=True, null=True)
-    years_of_exp = models.IntegerField(default=0, blank=True)
-    roles_rating = ArrayField(models.IntegerField(
-        default=0, null=True), blank=True, null=True, default=list)
-    achievements = models.CharField(max_length=400, blank=True, default="")
-
-    experience = ArrayField(ArrayField(models.CharField(
-        max_length=300, null=True, blank=True), blank=True, null=True, default=list),
-        blank=True, null=True, default=list)
-
-    looking_for_friends = models.BooleanField(default=False)
-    time_available = models.CharField(max_length=300, blank=True, null=True)
-    communication_level = models.IntegerField(default=0, blank=True, null=True)
-
-    additional_info = ArrayField(ArrayField(models.CharField(
-        max_length=500, null=True, blank=True, default=""), blank=True, null=True, default=list),
-        blank=True, null=True, default=list)
-
-    remarks = models.CharField(
-        max_length=400, default="", blank=True, null=True)
-
     def __str__(self):
-        return str(self.user) + " | " + str(self.game) + " | " + str(self.region) + " | " + str(self.servers) + " | " + str(self.rank)
-
-
-class Main_Profile(models.Model):
-    # This is User main game profile
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
-    main_gamer_profile = models.OneToOneField(
-        GameProfile, on_delete=models.CASCADE,  default=None)
-
-    def __str__(self):
-        return str(self.user) + " | " + self.main_gamer_profile.game
+        return str(self.user) + " | " + str(self.game) + " | " + str(self.server) + " | " + str(self.rank)

@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block title %}
-Page3 - Replies
+Page3 - Add reply
 {% endblock title %}
 
 {% block content %}
@@ -13,14 +13,13 @@ Page3 - Replies
 
     {% include 'navigation/sidebar-left.html' %}
     <div class="page-contents">
-
+        <div class="sidebar" style="visibility: hidden !important;"></div>
         <div class="posts-timeline">
             {% include 'post/postElement/post_element_replies.html' %}
             <div id="replies-section">
                 {% include 'post/replies/replies_list.html' %}
             </div>
         </div>
-        {% include 'navigation/sidebar.html' %}
     </div>
 </div>
 
