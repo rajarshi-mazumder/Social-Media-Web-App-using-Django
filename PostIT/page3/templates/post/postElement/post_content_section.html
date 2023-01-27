@@ -1,25 +1,38 @@
 {% load static %}
 <div class="post-category-section">
     <!-- <i class="fa-solid fa-globe"></i> -->
-    <i class="fa-solid fa-puzzle-piece"></i>
+    <!-- <i class="fa-solid fa-puzzle-piece"></i> -->
     <!-- <span class="material-icons post-topic-icon">&#xf1c8;</span> -->
-    <a class="post-category">
-        {{post.category}}</a>
-    {{post.id}}
+    <!-- <a class="post-category">
+        {{post.category}}</a> -->
+
 </div>
 
 <section class="post-header-section">
     <div class="profile-pic">
-        {%if post.user_profile.profile_pic.name %}
-        <a href="{%url 'posts-by-user' post.author%}"><img src="{{ post.user_profile.profile_pic.url }}"
+        {%if post.author.profile.profile_pic.name %}
+        <a href="{%url 'user-profile-stats' post.author%}"><img src="{{ post.author.profile.profile_pic.url }}"
                 width="500"></a>
         {% endif %}
         <!-- <img src="{{ post.user_profile.profile_pic.url }}" width="500"> -->
     </div>
 
-    <span class="post-profile-section">{{post.author}} <span class="date">
-            {{post.post_date}}
-        </span> </span>
+    <span class="post-profile-section">
+        <div class="row-1">
+            <a href="{%url 'user-profile-stats' post.author%}">
+                {{post.author}}
+            </a>
+            {% if post.is_lft_lfp_post %}
+            <a href="{% url 'vouched-by' post.author.profile.id %}" class="vouch-info"><i class="fa-solid fa-award"></i>
+                {{post.author.profile.vouched_by.count}}
+                {{post.author.profile.id}}
+            </a>
+            {% endif %}
+        </div>
+        <span class="date">
+            {{post.post_date}}<small> post id:{{post.id}}</small>
+        </span>
+    </span>
 
     <span class="post-options-button" value="{{post.id}}">
 
@@ -51,10 +64,17 @@
 
 </section>
 
-<a class="post-body-section" onclick="storeScroll()" href="{% url 'upload_reply' post.pk %}">
+<a class="post-body-section" id="post-body-section" onclick="storeScroll()" href="{% url 'upload_reply' post.pk %}">
     {% if replyingToIsReply %}
     <p>@{{replyingToAuthor}} </p>
-    {% endif %}{{post.body|safe}}
+    {% endif %}
+
+    {% if post.post_type %}
+    <div class="post-type">
+        {{post.post_type}}
+    </div>
+    {% endif %}
+    {{post.body|linebreaksbr}}
 </a>
 
 <div class="post-tags">
@@ -86,7 +106,7 @@
     {% for url in post.images_urls_list %}
     <!-- http://127.0.0.1:8000/media/{{url }}<br /> -->
     <!-- {% static media_url %} -->
-    <img src="http://127.0.0.1:8000/media/{{url }}" alt="Image">
+    <img src="/media/{{url }}" alt="Image">
     <!-- <img src="{% static url %}" alt="My image"> -->
 
     {% endfor %}

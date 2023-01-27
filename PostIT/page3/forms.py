@@ -6,8 +6,9 @@ from .models import Post, Category, ImageFiles, GameProfile, Community, User
 from django import forms
 
 
-# choices = [('VALORANT', 'VALORANT'), ('CSGO', 'CSGO'), ('COD', 'COD')]
-choices = Category.objects.all().values_list('name', 'name')
+choices = [('VALORANT', 'VALORANT'), ('CSGO', 'CSGO'), ('COD', 'COD')]
+# tags = [('tags', 'tags')]
+# choices = Category.objects.all().values_list('name', 'name')
 tags = Category.objects.all().values_list('tags', 'tags')
 choice_list = []
 
@@ -19,7 +20,7 @@ class PostForm(ModelForm):
     class Meta:
         model = Post
         # fields = '__all__'
-        fields = ('title', 'body', 'category', 'tags')
+        fields = ('body', 'category', 'tags', 'is_lft_lfp_post')
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
             # 'author': forms.TextInput(attrs={'class': 'form-control', 'value': '', 'id': 'author-name', 'type': 'hidden'}),
@@ -34,11 +35,11 @@ class PostImageForm(ModelForm):
     class Meta:
         model = Post
         # fields = '__all__'
-        fields = ('title', 'body', 'category', 'tags')
+        fields = ('body', 'category', 'tags', 'is_lft_lfp_post')
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
             'category': forms.Select(choices=choice_list, attrs={'class': 'form-control'}),
-            'body': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Write something here...'}),
+            'body': forms.Textarea(attrs={'class': 'form-control', 'id': 'form-body', 'placeholder': 'Write something here...'}),
             'tags': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'eg- #LFT, #Valo, #Valorant'})
         }
 
@@ -47,7 +48,7 @@ class PostVideoForm(ModelForm):
     class Meta:
         model = Post
         # fields = '__all__'
-        fields = ('title', 'body', 'category', 'video', 'tags')
+        fields = ('body', 'category', 'video', 'tags', 'is_lft_lfp_post')
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
             # 'author': forms.TextInput(attrs={'class': 'form-control', 'value': '', 'id': 'author-name', 'type': 'hidden'}),
@@ -104,7 +105,7 @@ class GameProfileForm(ModelForm):
     class Meta:
         model = GameProfile
         # fields = '__all__'
-        fields = ('game', 'server', 'rank')
+        fields = ('game', 'region', 'rank')
         # widgets = {
         #     'game': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Valorant'}),
         #     # 'author': forms.TextInput(attrs={'class': 'form-control', 'value': '', 'id': 'author-name', 'type': 'hidden'}),
@@ -117,12 +118,13 @@ class GameProfileForm(ModelForm):
 class MatchmakingForm(ModelForm):
     class Meta:
         model = GameProfile
-        fields = ('game', 'server', 'rank')
+        fields = ('game', 'region', 'rank')
 
 
 # Community
 
-# all_users = User.objects.all().values_list('username', 'username')
+all_users = User.objects.all().values_list('username', 'username')
+# all_users = []
 # users_list = []
 
 # for item in all_users:
@@ -133,9 +135,23 @@ class CreateCommunityForm(ModelForm):
     class Meta:
         model = Community
         fields = ('name', 'bio', 'profile_pic')
-        # widgets = {
-        #     'community_admins': forms.Select(choices=all_users, attrs={'class': 'form-control'}),
-        # }
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Add a bio...'}),
+            # 'community_admins': forms.Select(choices=all_users, attrs={'class': 'form-control'}),
+        }
+
+
+class EditCommunityForm(ModelForm):
+
+    class Meta:
+        model = Community
+        fields = ('name', 'profile_pic', 'bio',
+                  'community_header_pic', 'post_types'
+                  )
+        widgets = {
+            'community_admins': forms.Select(choices=all_users, attrs={'class': 'form-control'}),
+        }
 
 
 class JoinCommunity(ModelForm):
