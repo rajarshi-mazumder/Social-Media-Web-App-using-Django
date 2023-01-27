@@ -1,0 +1,22 @@
+
+P1
+
+Show liked by list
+Show Followers list
+Show Following list
+Show Vouched by list
+Show Communuty Members tab
+Show all communities page
+
+P2
+Fix Profile [age CSS
+
+P3
+Create Community page css
+Join Community Button Right Shift
+
+
+P4
+Search results fix
+Matchmaking fix
+Make follow btn update followers using AJAX

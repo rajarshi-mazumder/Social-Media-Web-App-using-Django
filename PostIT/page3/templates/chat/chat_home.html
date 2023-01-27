@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/2a747f0a17.js" crossorigin="anonymous"></script>
+
+    <body>
+        <div id="wrapper">
+            <div id="menu">
+                <p>Welcome to chat app
+                <div class="logged_in_user">
+                    {{logged_in_user_id}}
+                </div>
+                <div class="user_to_chat_with">
+                    {{user_to_chat_with_id}}
+                </div>
+                </p>
+            </div>
+
+            <div id="chatbox">
+                <ul id="messages">
+
+                </ul>
+            </div>
+
+            <input type="text" name="" id="message" class="usermsg" size="63" placeholder="Text Message"
+                autocomplete="off">
+            <button type="sumbit" name="" class="button" id="submit_btn">Send <i
+                    class="fa-solid fa-paper-plane"></i></button>
+
+
+        </div>
+    </body>
+
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDz3w1IY8oS9mWxPPMRZTgBJH5Jj2BQY-M",
+            authDomain: "fir-startapp-caf04.firebaseapp.com",
+            projectId: "fir-startapp-caf04",
+            storageBucket: "fir-startapp-caf04.appspot.com",
+            messagingSenderId: "789830257393",
+            appId: "1:789830257393:web:1a59db1a7ab51afa897750"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        import {
+            getDatabase, ref, push, set, query, orderByChild, limitToFirst, limitToLast,
+            onChildAdded, onChildChanged, onChildRemoved
+        } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
+
+        const db = getDatabase();
+        let logged_in_user = $('.logged_in_user').text().trim()
+        let user_to_chat_with = $('.user_to_chat_with').text().trim()
+
+
+        var chatRoomName = "";
+
+        if (logged_in_user > user_to_chat_with)
+            chatRoomName = `${logged_in_user}_${user_to_chat_with}`
+        else chatRoomName = `${user_to_chat_with}_${logged_in_user}`
+
+        var last_message_id = 0;
+
+        const chatRoom_ref = ref(db, `DM_Chat/${chatRoomName}`);
+
+        const messages_query = query(ref(db, `DM_Chat/${chatRoomName}`), orderByChild("message_id"), limitToLast(2));
+
+        onChildAdded(messages_query, (data) => {
+            last_message_id = data.val().message_id;
+            console.log(data.val())
+
+            $('#messages').append(`
+                            <ul>${data.val().sender}</ul>
+                            <ul>${data.val().message}</ul>
+        `)
+        });
+
+        function InsertData() {
+            let message = document.getElementById("message").value;
+
+            console.log("Last message id ", last_message_id)
+            const chatRoom_ref = ref(db, `DM_Chat/${chatRoomName}`);
+            const newMessage = push(chatRoom_ref);
+            set(newMessage, {
+                "message_id": last_message_id + 1,
+                "sender": logged_in_user,
+                "message": message,
+
+            });
+
+        }
+
+
+
+
+
+        document.getElementById("submit_btn").addEventListener('click', InsertData);
+    </script>
+
+</html>

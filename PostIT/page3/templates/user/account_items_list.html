@@ -1,0 +1,75 @@
+{% load static %}
+{% for user in account_items_list %}
+<div class="account-list-item">
+
+    <div class="profile-pic">
+        <a href="{%url 'user-profile-stats' user %}">
+            {% if user.profile.profile_pic.name %}
+            <img src="{{ user.profile.profile_pic.url}}">
+            {% else %}
+
+            <img src="{% static 'PostIT/images/profilepic.jpg' %}">
+            {% endif %}
+        </a>
+    </div>
+    <div class="info">
+        <div class="username">
+            <a href="{%url 'user-profile-stats' user %}">@{{user.username}}</a>
+        </div>
+        <div class="bio">
+            {{user.profile.bio}}
+        </div>
+    </div>
+
+    {% if user in users_currently_following %}
+    <button class="interact-button button-1" value="{{user.id}}">
+        Following
+    </button>
+    {% else %}
+    <button class="interact-button button-1" value="{{user.id}}">
+        Follow
+    </button>
+    {% endif %}
+
+</div>
+{% endfor %}
+
+<script>
+    function updateInteractButtonText(btn) {
+        if (following_status) {
+
+            btn[0].innerHTML = "Following"
+        }
+        else {
+            btn[0].innerHTML = "Follow"
+        }
+
+        console.log(btn[0].innerHTML)
+    }
+
+
+    $(document).on('click', '.interact-button', function (e) {
+        e.preventDefault();
+        console.log("Trying to follow: ")
+        var this_ = $(this)
+        userid = this_.attr("value").valueOf()
+
+        // var somevar = this_.attr()
+        $.ajax({
+            type: 'POST',
+            url: '{% url "follow-user" %}',
+            data: {
+                userid: userid,
+                action: 'post',
+            },
+            success: function (json) {
+                following_status = json['result'];
+                console.log(json)
+                updateInteractButtonText(this_, following_status)
+            },
+            error: function (xhr, errmsg, err) {
+
+            }
+        });
+    })
+</script>

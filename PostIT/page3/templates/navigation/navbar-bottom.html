@@ -1,0 +1,132 @@
+{% load static %}
+
+
+
+
+
+<ul class="nav-bottom-options-ul" onload="Toggle_Add_Post_Options()">
+    {% if user.is_authenticated %}
+    {% if user.profile.id %}
+    <li class="nav-add-post-container bottom-nav-container">
+        <a class="bottom-nav-icons"><i class="fa-solid fa-plus nav-icon"></i>
+            <div class="bottom-nav-text">Add Post</div>
+        </a>
+        <ul class="add-post-submenu">
+
+            <li class="submenu-item">
+                <a href="{% url 'add-post' %}"><i class="fa-solid fa-feather"></i>
+                    <div>Text</div>
+                </a>
+            </li>
+            <li class="submenu-item">
+                <a href="{% url 'add-image-post' %}"><i class="fa-solid fa-image"></i>
+                    <div>Image Post</div>
+                </a>
+            </li>
+            <li class="submenu-item">
+                <a href="{% url 'add-video-post' %}"><i class="fa-solid fa-video"></i>
+                    <div>Video Post</div>
+                </a>
+            </li>
+        </ul>
+        </div>
+    </li>
+    <li class="profile-menu-container bottom-nav-container">
+        <a class="bottom-nav-icons"><i class="fa-solid fa-user nav-icon"></i>
+            <div class="bottom-nav-text">Profile</div>
+        </a>
+        <ul class="profile-submenu">
+
+            <li class="submenu-item">
+                <a href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+            </li>
+            <li class="submenu-item">
+                <a href="{% url 'profile-page' user.profile.id %}"><i class="fa-solid fa-address-card"></i>View
+                    Profile</a>
+            </li>
+            <li class="submenu-item">
+                <a href="{% url 'edit-user-profile-page' user.profile.id %}"><i
+                        class="fa-solid fa-pen-to-square"></i>Edit Profile</a>
+            </li>
+        </ul>
+    </li>
+    {% else %}
+    <li class="bottom-nav-container" a href="{% url 'add-profile' %}"><i class="fa-solid fa-user-plus"></i><br />Add
+        profile</a></li>
+    {% endif %}
+
+    {% else %}
+    <li class="bottom-nav-container"><a href="{% url 'register' %}"><i
+                class="fa-solid fa-arrow-up-right-from-square"></i><br />Register</a></li>
+
+    <li class="bottom-nav-container"><a href="{% url 'login-user' %}"><i
+                class="fa-solid fa-right-to-bracket"></i><br />Login</a></li>
+    {% endif %}
+
+    <li class="bottom-nav-container">
+        <a class="bottom-nav-icons"><i class="fa-solid fa-envelope nav-icon"></i>
+            <div class="bottom-nav-text">Messages</div>
+        </a>
+    </li>
+    <li class="bottom-nav-container">
+        <a href="{% url 'create-community' %}" class="bottom-nav-icons"><i
+                class="fa-solid fa-users-between-lines nav-icon"></i>
+            <div class="menu-small-text bottom-nav-text">Create Community</div>
+        </a>
+    </li>
+    <li class="bottom-nav-container">
+        <a href="{% url 'create-community' %}" class="bottom-nav-icons"><i class="fa-solid fa-bell nav-icon"></i>
+            <div class="bottom-nav-text">Notifications</div>
+        </a>
+    </li>
+
+</ul>
+
+
+
+<!-- <div class="blocker-navbar" id="blocker-navbar"></div> -->
+
+
+<script>
+
+    $(document).on('click', '.nav-add-post-container', Toggle_Add_Post_Options)
+    $(document).on('click', '.profile-menu-container', Toggle_Profile_Menu_Options)
+
+    function Toggle_Add_Post_Options() {
+        $('.add-post-submenu').toggle();
+    }
+    function Toggle_Profile_Menu_Options() {
+        $('.profile-submenu').toggle();
+    }
+</script>
+<!-- <script>
+    function addPostOptionsToggle() {
+
+        var addPostOptions = document.getElementById("add-post-options")
+        var blockerPage = document.getElementById("blocker-navbar")
+
+
+
+        if (addPostOptions.style.display === "flex") {
+            addPostOptions.style.display = "none"
+            blockerPage.style.display = "none"
+        }
+        else {
+            addPostOptions.style.display = "flex"
+            blockerPage.style.display = "flex"
+            blockerPage.style.pointerEvents = "auto"
+        }
+    }
+
+    $(document).on('click', '#blocker-navbar', function (e) {
+
+        var addPostOptions = document.getElementById("add-post-options")
+        var blockerPage = document.getElementById("blocker-navbar")
+
+        addPostOptions.style.display = "none"
+        blockerPage.style.display = "none"
+
+        blockerPage.style.pointerEvents = "none"
+
+    });
+</script> -->

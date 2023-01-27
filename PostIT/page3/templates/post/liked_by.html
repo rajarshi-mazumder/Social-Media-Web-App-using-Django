@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}
+Page3 - Liked By
+{% endblock title %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+{% include 'navigation/navbar-top.html' %}
+<div class="main-body">
+
+    {% include 'navigation/sidebar-left.html' %}
+
+    <div class="page-contents">
+
+        <div class="posts-timeline">
+            <div class="page-title">Likes</div>
+            <br />
+            {% include 'user/account_items_list.html' %}
+
+
+        </div>
+        {% include 'navigation/sidebar.html' %}
+    </div>
+</div>
+
+<nav id="main-bottom-nav">
+    {% include 'navigation/navbar-bottom.html' %}
+</nav>
+<!-- JS Scripts Here -->
+<script src="{% static 'PostIT/js/bottom_navbar.js'%}"></script>
+
+{% endblock content %}

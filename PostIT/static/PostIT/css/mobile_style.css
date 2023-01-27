@@ -1,0 +1,310 @@
+@media (max-width: 600px) {
+
+
+    /* Nav bar Top Start */
+
+    #main-nav {
+        height: 60px;
+        position: fixed;
+    }
+
+    #main-nav .navbar-toggle i {
+        font-size: 20px;
+        padding-left: 0;
+    }
+
+    #main-nav .nav-logo img {
+        width: 70px;
+    }
+
+    .posts-timeline ul {
+        /* margin-block-start: 0;
+            margin-block-end: 0; */
+        padding-inline-start: 0;
+    }
+
+
+
+    .navbar-toggle {
+        display: block;
+    }
+
+    #main-nav .nav-left-ul {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    #main-nav .nav-right-ul {
+        display: none;
+    }
+
+
+
+    .nav-search-bar .search-bar {
+        width: 170px;
+        height: 40px;
+        font-size: 12px;
+    }
+
+    #search_btn i {
+        font-size: 20px;
+        padding-left: 10px;
+    }
+
+    #main-nav .nav-right-mobile-ul {
+        display: flex;
+        margin-left: auto;
+    }
+
+    #main-nav .nav-right-mobile-ul img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 50%;
+
+    }
+
+    /* Nav bar Top End */
+    /* Bottom Navbar Start */
+
+    #main-bottom-nav {
+        height: 60px;
+    }
+
+    #main-bottom-nav .nav-bottom-options-ul .nav-icon {
+        font-size: 15px;
+    }
+
+    #main-bottom-nav .bottom-nav-container {
+        height: 50px;
+    }
+
+    #main-bottom-nav .nav-bottom-options-ul {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        white-space: nowrap;
+
+    }
+
+    #main-bottom-nav .bottom-nav-container .bottom-nav-icons {
+        gap: 5px;
+        position: relative;
+    }
+
+    #main-bottom-nav .bottom-nav-container .bottom-nav-icons .nav-icon {
+        position: absolute;
+        top: 15px;
+        font-size: 20px;
+    }
+
+    #main-bottom-nav .bottom-nav-container .bottom-nav-text {
+        font-size: 10px;
+        margin-top: 40px;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    #main-bottom-nav .profile-img-container {
+        margin-left: auto;
+    }
+
+    .nav-bottom-options-ul {
+        padding: 0;
+    }
+
+    .bottom-nav-container .profile-img-navbar {
+        margin-left: 0;
+    }
+
+    /* Bottom Navbar End */
+    /* Home Page Menus Start */
+
+    .home-page-menus i {
+        font-size: 20px;
+    }
+
+    /* Home Page Menus End */
+    /* Add Post Section Start */
+
+    .add-post-community-button span {
+        margin-top: 5px;
+    }
+
+    .add-post-community-button span div {
+        font-size: 15px;
+    }
+
+    .add-post-post .side-icon i {
+        font-size: 20px;
+    }
+
+    /* Add Post Section End */
+
+    .post {
+        width: 100%;
+    }
+
+    /* Page Contents Start */
+    .page-contents {
+        margin-top: 10px;
+    }
+
+    /* Page Contents End */
+}
+
+
+
+@media (max-width: 470px) {
+
+    /* Top Navbar Start */
+    .nav-search-bar {
+        position: relative;
+        width: 100%;
+    }
+
+    .search-form {
+        position: relative;
+        display: flex;
+        /* right: 0px;
+            top: -15px; */
+    }
+
+    .search-form .search-bar {
+        position: absolute;
+        width: 0px;
+        opacity: 0;
+        z-index: var(--search-bar-index);
+    }
+
+    .search-form button {
+
+        display: none;
+        position: absolute;
+        right: -20px;
+        top: -10px;
+        z-index: var(--search-bar-index);
+    }
+
+    .fake-search-btn {
+        width: 100%;
+        display: block;
+        font-size: 20px;
+        position: relative;
+    }
+
+    .fake-search-btn i {
+        position: absolute;
+        right: 0px;
+        top: -10px;
+    }
+
+    .search-bar-blocker {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: var(--search-blocker-bar-index);
+    }
+
+    /* Top Navbar End */
+
+    /* Bottom Navbar Start */
+
+    #main-bottom-nav .nav-bottom-options-ul {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+        white-space: nowrap;
+    }
+
+    #main-bottom-nav .nav-bottom-options-ul .nav-icon {
+        font-size: 8px;
+    }
+
+    #main-bottom-nav .bottom-nav-container {
+        height: 60px;
+    }
+
+    #main-bottom-nav .bottom-nav-container .bottom-nav-icons {
+        gap: 5px;
+        position: relative;
+    }
+
+    #main-bottom-nav .bottom-nav-container .bottom-nav-icons .nav-icon {
+        position: absolute;
+        top: 15px;
+        font-size: 20px;
+    }
+
+    #main-bottom-nav .bottom-nav-container .bottom-nav-text {
+        font-size: 10px;
+        margin-top: 40px;
+    }
+
+    #main-bottom-nav .profile-img-container {
+        margin-left: auto;
+    }
+
+    .bottom-nav-container .menu-small-text {
+        font-size: 5px;
+    }
+
+    /* Bottom Navbar End */
+}
+
+@media (max-width: 375px) {
+    /* Top Navbar Start */
+
+
+    /* Top Navbar End */
+
+    /* Bottom Navbar Start */
+
+    .bottom-nav-container .menu-small-text {
+        font-size: 5px;
+    }
+
+    #main-bottom-nav .bottom-nav-container {
+        height: 60px;
+    }
+
+    #main-bottom-nav .bottom-nav-container .bottom-nav-icons {
+        gap: 5px;
+        position: relative;
+    }
+
+    #main-bottom-nav .bottom-nav-container .bottom-nav-icons .nav-icon {
+        position: absolute;
+        top: 15px;
+        font-size: 20px;
+    }
+
+    #main-bottom-nav .bottom-nav-container .bottom-nav-text {
+        font-size: 8px;
+        margin-top: 40px;
+    }
+
+    /* Bottom Navbar End */
+}
+
+@media (max-width: 300px) {
+    #main-bottom-nav .nav-bottom-options-ul {
+        grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
+    }
+
+    #main-bottom-nav .bottom-nav-container .bottom-nav-icons .nav-icon {
+        position: absolute;
+        top: 15px;
+        font-size: 18px;
+    }
+
+    #main-bottom-nav .bottom-nav-container .bottom-nav-text {
+        font-size: 7px;
+        margin-top: 40px;
+    }
+}

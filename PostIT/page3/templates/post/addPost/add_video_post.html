@@ -1,0 +1,42 @@
+{% extends 'base/base.html' %}
+{% block title %}
+Page3 - Add Video Post
+{% endblock title %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+{% if user.is_authenticated %}
+{% include 'navigation/navbar-top.html' %}
+<div class="main-body">
+    {% include 'navigation/sidebar-left.html' %}
+    <form action="" method="POST" id="add_post_form" enctype="multipart/form-data">
+        <div class=" form_contents">
+            <div class="form_label">
+                Add a post
+            </div>
+            {% csrf_token %}
+            {{ form.media }}
+            {{ form.as_p }}
+
+            {% if page == 'add-post-community' %}
+            <label for="community-post-type">Post Type</label>
+            <select id="community-post-type" name="community-post-type">
+                <option value={{post_type}}>None</option>
+                {% for post_type in community_post_types %}
+                <option value="{{post_type}}">{{post_type}}</option>
+                {% endfor %}
+
+
+            </select>
+            {% endif %}
+
+            <button type="submit">Post</button>
+        </div>
+    </form>
+
+</div>
+
+{% else %}
+Login first!
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,128 @@
+{% load static %}
+
+<div class="profile-info-holder">
+    <div class="profile-info">
+        <div class="profile-pic">
+            {% if community.profile_pic.name %}
+            <img src="{{ community.profile_pic.url}}">
+            {% else %}
+            <img src=" {% static 'PostIT/images/profilepic.jpg' %}">
+            {% endif %}
+
+
+        </div>
+        <div class="profile-text-info-container">
+            <div class="profile-info-menu">
+                <div class="profile-info-menu-left">
+                    <div class="community-name">
+                        <h5><b>{{ community.name }}</b></h5>
+                    </div>
+                    <div>
+                        <!-- <button class="profile-interct-button">Joined</button> -->
+                        {% if community in user_joined_communities%}
+                        <button id="join-community-button" class="button-1" value="{{community.id}}">Joined</button>
+                        {% else %}
+                        <button id="join-community-button" class="button-1" value="{{community.id}}">Join</button>
+                        {% endif %}
+
+                        {%if user == community.created_by %}
+                        <a href="{% url 'edit-community' community.id %}">
+                            <button class="button-1">Edit</button>
+                        </a>
+                        {% elif user in community.community_admins.all%}
+                        <a href="{% url 'edit-community' community.id %}">
+                            <button class="button-1">Edit</button>
+                        </a>
+                        {% endif%}
+
+
+                    </div>
+                </div>
+                <div class="profile-info-menu-right">
+
+                    <a href="{% url 'community-members' community.id %}" class="info">
+                        <div class="number">{{community.members.count}}</div>
+                        <div class="label">Members</div>
+                    </a>
+                    <div class="info">
+                        <div class="number">3.2k</div>
+                        <div class="label">Online</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="profile-info-bottom">
+                <div>
+                    <i class="fa-solid fa-circle-info"></i>{{community.bio}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="profile-info-tabs">
+        {% if page == 'community_posts_page'%}
+        <a href="{% url 'community-page' community.id %}" class="item selected-tab">
+            Posts
+        </a>
+        {% else %}
+        <a href="{% url 'community-page' community.id %}" class="item">
+            Posts
+        </a>
+        {% endif %}
+
+
+        {% if page == 'community_members_page'%}
+        <a href="{% url 'community-members' community.id %}" class="item selected-tab">Members</a>
+        {% else %}
+        <a href="{% url 'community-members' community.id %}" class="item">Members</a>
+        {% endif %}
+
+
+        <div class="item">Rules</div>
+        <div class="item">Discord</div>
+
+    </div>
+</div>
+
+<script>
+    function updateCommunityButtonText(btn, buttonText) {
+        //btn.element.innerHTML = "LIKED BY" + " " + no_of_likes + "lkl"
+        //btn.text("LIKED BY" + " " + no_of_likes + " <h1>JLO</h1>")
+        //elem = "<i class='fa-solid fa-heart'></i>"
+        btn[0].innerHTML = "<b>" + buttonText + "</b>"
+        console.log(btn[0].innerHTML)
+    }
+
+    $(document).on('click', '#join-community-button', function (e) {
+        e.preventDefault();
+
+        var this_ = $(this)
+        community_id = this_.attr("value").valueOf()
+
+        // var somevar = this_.attr()
+        $.ajax({
+            type: 'POST',
+            url: '{% url "join_community" %}',
+            data: {
+                community_id: community_id,
+                // postid: $('#like-button').val(),
+                action: 'post',
+                // postid: '{{ post.pk }}',
+            },
+            success: function (json) {
+
+                // this.getElementById("like-button").innerHTML = json['result']
+                // document.getElementsByTagName('{{post.id}}').innerHTML = json['result']
+
+                // document.getElementById("like_count").innerHTML = json['result'];
+                // no_of_likes = this_.attr("name").valueOf();
+                buttonText = json['buttonText'];
+                console.log(json)
+                updateCommunityButtonText(this_, buttonText)
+            },
+            error: function (xhr, errmsg, err) {
+
+            }
+        });
+    })
+
+</script>
