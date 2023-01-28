@@ -2,21 +2,21 @@
 
 <div class="profile-info-holder">
     <div class="profile-info">
-        <div class="profile-pic">
-            {% if community.profile_pic.name %}
-            <img src="{{ community.profile_pic.url}}">
-            {% else %}
-            <img src=" {% static 'PostIT/images/profilepic.jpg' %}">
-            {% endif %}
+        <div class="profile-info-top">
+            <div class="profile-pic">
+                {% if community.profile_pic.name %}
+                <img src="{{ community.profile_pic.url}}">
+                {% else %}
+                <img src=" {% static 'PostIT/images/profilepic.jpg' %}">
+                {% endif %}
 
-
-        </div>
-        <div class="profile-text-info-container">
+            </div>
+            <div class="profile-display-name-desktop community-name">
+                <h5><b>{{ community.name }}</b></h5>
+            </div>
             <div class="profile-info-menu">
-                <div class="profile-info-menu-left">
-                    <div class="community-name">
-                        <h5><b>{{ community.name }}</b></h5>
-                    </div>
+                <div class="profile-info-menu-contents">
+                    
                     <div>
                         <!-- <button class="profile-interct-button">Joined</button> -->
                         {% if community in user_joined_communities%}
@@ -38,24 +38,32 @@
 
                     </div>
                 </div>
-                <div class="profile-info-menu-right">
-
-                    <a href="{% url 'community-members' community.id %}" class="info">
-                        <div class="number">{{community.members.count}}</div>
-                        <div class="label">Members</div>
-                    </a>
-                    <div class="info">
-                        <div class="number">3.2k</div>
-                        <div class="label">Online</div>
-                    </div>
-
-                </div>
+                
             </div>
-            <div class="profile-info-bottom">
-                <div>
-                    <i class="fa-solid fa-circle-info"></i>{{community.bio}}
+        </div>
+        <div class="profile-display-name-mobile community-name">
+            <h5><b>{{ community.name }}</b></h5>
+        </div>
+        <div class="profile-info-data">
+            <div class="profile-data-display">
+
+                <a href="{% url 'community-members' community.id %}" class="info">
+                    <div class="number">{{community.members.count}}</div>
+                    <div class="label">Members</div>
+                </a>
+                <div class="info">
+                    <div class="number">3.2k</div>
+                    <div class="label">Online</div>
                 </div>
+
             </div>
+        </div>
+        
+    </div>
+    <div class="profile-additional-info">
+        <i class="fa-solid fa-circle-info"></i>
+        <div>
+            {{community.bio}}
         </div>
     </div>
     <div class="profile-info-tabs">

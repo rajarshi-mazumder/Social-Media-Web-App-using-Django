@@ -87,6 +87,20 @@ Page3 - Profile
     </div>
 </div>
 
+
+{% if user.is_authenticated %}
+<div class="sidebar_right_blocker"></div>
+<div class="sidebar-right-mobile">
+    {% include 'navigation/sidebar-right-mobile.html' %}
+</div>
+
+{% endif %}
+
+<nav id="main-bottom-nav">
+    {% include 'navigation/navbar-bottom.html' %}
+</nav>
+<script src="{% static 'PostIT/js/bottom_navbar.js'%}"></script>
+
 <script src="{% static 'PostIT/js/jquery.waypoints.min.js' %}"></script>
 <script src="{% static 'PostIT/js/infinite.min.js'%}"></script>
 
@@ -135,6 +149,7 @@ Page3 - Profile
         selected_gamer_profile = $('.main_game').text();
         get_selected_game_stats();
         Toggle_Main_Dropdown_Display();
+        Default_Bottom_Navabar_State();
     };
 
     $('.gamer_profiles_all_stats_dropdown-btn').click(function () {

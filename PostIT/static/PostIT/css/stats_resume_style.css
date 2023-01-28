@@ -16,7 +16,6 @@
 
 .gamer_profile_all_stats_section .overview-section {
     /* border-right: 1px solid var(--border-color); */
-    padding: 20px;
     background-color: var(--secondary_bg_color);
     border-radius: 10px;
 }
@@ -32,7 +31,6 @@
 .gamer_profile_all_stats_section .mid-section {
     width: 100%;
     display: flex;
-    padding: 20px;
     background-color: var(--secondary_bg_color);
     border-radius: 10px;
 }

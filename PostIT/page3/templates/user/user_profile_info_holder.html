@@ -3,33 +3,25 @@
 <div class="profile-info-holder">
     <div class="profile_page_logged_in_user" style="display: none;">{{user.username}}</div>
     <div class="profile-info">
-        <div class="profile-pic">
-            {% if profile.profile_pic.name %}
-            <img src="{{ profile.profile_pic.url}}">
-            {% else %}
-            <img src=" {% static 'PostIT/images/profilepic.jpg' %}">
-            {% endif %}
+        <div class="profile-info-top">
+        
+            <div class="profile-pic">
+                {% if profile.profile_pic.name %}
+                <img src="{{ profile.profile_pic.url}}">
+                {% else %}
+                <img src=" {% static 'PostIT/images/profilepic.jpg' %}">
+                {% endif %}
 
 
-        </div>
-        <div class=" profile-text-info-container">
+            </div>
+            <div class="profile-display-name-desktop name">
+                <h5><b>{{ profile.user.username }}</b></h5>
+            </div>
             <div class="profile-info-menu">
-                <div class="profile-info-menu-left">
-                    <div class="name">
-                        <h5><b>{{ profile.user.username }}</b></h5>
-                    </div>
-                    <div>
-                        <!-- <button class="profile-interct-button follow_btn">Follow</button> -->
+                <div class="profile-info-menu-contents">
+                    
+                    <div>              
                         <button class="profile-interct-button button-1 follow_btn">Follow</button>
-
-                        <!-- <button class="vouch-user-button button-3" value="{{profile.user.id}}">
-                        {% if vouched_for_user %}
-                        Vouched <i class='fa-solid fa-check'></i>
-                        {% else %}
-                        Vouch
-                        {% endif %}
-                    </button> -->
-
                         {% if vouched_for_user %}
 
                         <button class="vouch-user-button button-4" value="{{profile.user.id}}">Vouched <i
@@ -38,52 +30,59 @@
                         {% else %}
                         <button class="vouch-user-button button-3" value="{{profile.user.id}}">Vouch </button>
                         {% endif %}
+                        <button class=" button-3" href="{% url 'chat' profile.user.id%}">Message</button>
                     </div>
                 </div>
-                <div class="profile-info-menu-right">
-
-                    {% if profile.id %}
-                    <a href="{% url 'followers' profile.id %}" class="info">
-                        <div class="number followers_count">{{profile.followers.count}}</div>
-                        <div class="label">Followers</div>
-                    </a>
-                    {% endif %}
-
-                    {% if profile.id %}
-                    <a href="{% url 'following' profile.id %}" class="info">
-                        <div class="number">{{profile.following.count}}</div>
-                        <div class="label">Following</div>
-                    </a>
-                    {% endif %}
-
-                    {% if profile.id %}
-                    <a href="{% url 'vouched-by' profile.id %}" class="info">
-                        <div class="number vouch-count">{{vouch_count}}</div>
-                        <div class="label">Vouches</div>
-                    </a>
-                    <a href="{% url 'chat' profile.user.id%}">DM</a>
-                    {% endif %}
-                    <a class="info"
-                        href="https://rchat-app1.herokuapp.com/login-from-postit/{{request.user.username}}/room3"
-                        target="_blank" rel="noopener noreferrer">
-                        <div class="number">{{profile.user.username}}:{{profile.user.id}}</div>
-                        <div class="number">{{request.user.username}}:{{request.user.id}}</div>
-                        <div class="label">DM</div>
-                    </a>
-                </div>
-            </div>
-            <div class="profile-info-bottom">
-                <div>
-                    {% if profile.age%}
-                    <i class="fa-regular fa-calendar"></i> Age: &nbsp;{{profile.age}}
-                    {%endif%}
-                    <i class="fa-solid fa-circle-info"></i>Content Creator @PRX
-                </div>
+                
             </div>
         </div>
+        <div class="profile-display-name-mobile name">
+            <h5><b>{{ profile.user.username }}</b></h5>
+        </div>
+        <div class="profile-info-data">       
+            <div class="profile-data-display">
 
+                {% if profile.id %}
+                <a href="{% url 'followers' profile.id %}" class="info">
+                    <div class="number followers_count">{{profile.followers.count}}</div>
+                    <div class="label">Followers</div>
+                </a>
+                {% endif %}
+
+                {% if profile.id %}
+                <a href="{% url 'following' profile.id %}" class="info">
+                    <div class="number">{{profile.following.count}}</div>
+                    <div class="label">Following</div>
+                </a>
+                {% endif %}
+
+                {% if profile.id %}
+                <a href="{% url 'vouched-by' profile.id %}" class="info">
+                    <div class="number vouch-count">{{vouch_count}}</div>
+                    <div class="label">Vouches</div>
+                </a>
+                
+                {% endif %}
+                
+            </div>
+           
+        </div>
+        
     </div>
-
+    
+    <div class="profile-additional-info">
+                
+        {% if profile.age%}
+        <i class="fa-regular fa-calendar"></i>
+        <div class="profile-age">
+            Age: &nbsp;{{profile.age}}
+        </div>
+        {%endif%}
+        
+        <div class="profile-bio">
+            {{profile.bio}}
+        </div>
+    </div>
     <div class="profile-info-tabs">
         {%if profile.user.username%}
         {% if profile.id %}
@@ -210,7 +209,6 @@
 <script>
     function updateVouchButtonText(btn, no_of_vouches, vouched_for_user) {
         if (vouched_for_user) {
-            elem1 = "<i class='fa-solid fa-check'></i>"
             elem = "Vouched <i class='fa-solid fa-check'></i>"
             btn[0].className = "vouch-user-button button-4"
         }
