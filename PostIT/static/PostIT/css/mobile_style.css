@@ -156,10 +156,12 @@
 
     /* Post Section Start */
     .post .post-body-section {
-        font-size: 14px;
+        font-size: 13px;
     }
 
-    .post .post-profile-section {}
+    .post .post-profile-section {
+        font-size: 13px;
+    }
 
     /* Post Section End */
 
