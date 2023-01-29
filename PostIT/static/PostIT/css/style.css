@@ -1276,43 +1276,49 @@ input[type="checkbox"]:checked::before {
 
 
 /* Profile info start */
+
 .profile-info-holder {
     background-color: var(--secondary_bg_color);
     border-radius: 10px;
     margin-bottom: 20px;
-    
+
 }
 
 .profile-info-holder:hover {
     box-shadow: 0 2px 2px 0 rgba(212, 110, 212, 0.2), 0 1.5px 5px 0 rgba(212, 110, 212, 0.2);
 }
 
-/* ------------- */
 .profile-info-holder .profile-bio {
-    
     text-align: left;
     color: var(--text-secondary2-color);
     font-weight: bold;
 }
-/* ***************** */
+
 .profile-info-holder .profile-info {
     display: flex;
     justify-content: space-between;
     border-radius: 10px;
+    /* margin-bottom: 50px; */
+
     position: relative;
+
     width: 100%;
+
 }
+
 .profile-info-holder .profile-text-info-container {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
 }
-.profile-info-holder .profile-info .profile-info-top{
+
+.profile-info-holder .profile-info .profile-info-top {
     display: flex;
     align-items: center;
 }
-.profile-info-holder .profile-additional-info{
+
+.profile-info-holder .profile-additional-info {
     text-align: left;
     padding: 5px 10px;
     display: flex;
@@ -1321,16 +1327,19 @@ input[type="checkbox"]:checked::before {
     width: fit-content;
 
 }
-.profile-info-holder .profile-additional-info i{
+
+.profile-info-holder .profile-additional-info i {
     padding: 0;
     margin: 0;
     margin-top: 5px;
     margin-right: 10px;
 }
-.profile-info-holder .profile-additional-info .profile-age{
-    white-space: nowrap; 
+
+.profile-info-holder .profile-additional-info .profile-age {
+    white-space: nowrap;
     margin-right: 10px;
 }
+
 .profile-info-holder .profile-text-info-container .profile-info-bottom {
     padding-left: 10px;
     text-align: left;
@@ -1338,20 +1347,19 @@ input[type="checkbox"]:checked::before {
     font-weight: bold;
     font-size: small;
 }
+
 .profile-display-name-mobile {
     display: none;
     text-align: left;
     padding-left: 20px;
 }
-.profile-display-name-desktop{
+
+.profile-display-name-desktop {
     display: flex;
     white-space: nowrap;
     padding: 0 10px;
 }
-/* **************** */
 
-
-/* ------------ */
 .profile-info-tabs {
     display: flex;
 
@@ -1699,6 +1707,121 @@ input[type="checkbox"]:checked::before {
 
 }
 
+
+/* Chat section start */
+.chat-section {
+    display: flex;
+    justify-content: space-around;
+}
+
+.chat-section .chat-contacts {
+    max-width: 400px;
+    border-radius: 10px;
+    background-color: var(--secondary_bg_color);
+}
+
+.chat-section .chat-contacts .header {
+    font-size: medium;
+    margin: 20px;
+    text-align: center;
+    color: var(--text-secondary-color);
+    font-weight: bold;
+}
+
+.chat-section .chat-contacts .profile-pic {
+    padding: 5px !important;
+}
+
+.chat-section .chat-contacts .profile-pic img {
+    width: 40px;
+    height: 40px;
+}
+
+.chat-account-list-item {
+    /* background-color: aqua; */
+    border-radius: 50px;
+    display: grid;
+    grid-template-columns: 0.5fr 4fr;
+    grid-gap: 5px;
+    margin: 10px;
+    cursor: pointer;
+    /* padding: 0 1px; */
+    width: 93%;
+    align-items: start;
+}
+
+.chat-account-list-item:hover {
+    cursor: pointer;
+    background-color: var(--tertiary1_bg_color) !important;
+}
+
+
+.chat-account-list-item .profile-pic img {
+    height: 70px;
+    width: 70px;
+    object-fit: cover;
+    border-radius: 50%;
+
+}
+
+.chat-account-list-item .info {
+    width: 100%;
+    margin-top: 15px;
+    /* background-color: pink; */
+    /* padding-top: 15px; */
+    /* position: relative; */
+}
+
+.chat-account-list-item .info .username {
+    /* background-color: blue; */
+    position: relative;
+
+    text-align: left;
+    /* margin-left: -90px; */
+    font-size: small;
+    color: var(--text-secondary-color);
+    font-weight: bold;
+}
+
+.chat-account-list-item .info .has-unread-message {
+    color: var(--text-primary-color) !important;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.chat-account-list-item .info .has-unread-message .unread-message-indicator {
+    margin-left: auto;
+    text-align: right;
+    font-size: small;
+    background-color: var(--primary_color);
+    border: 1px solid var(--text-primary-color);
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    margin-top: 5px;
+    margin-right: 1rem;
+    /* padding-right: 1rem; */
+}
+
+
+
+.chat-account-list-item .info .bio {
+    color: var(--text-secondary-color);
+    font-weight: bold;
+    place-items: center;
+    padding-bottom: 10px;
+    text-align: left;
+    /* max-width: 70%; */
+}
+
+.chat-account-list-item .interact-button {
+    margin-left: auto;
+    margin-top: 30px;
+
+}
+
+/* Chat section end */
 
 /* Account list items end */
 

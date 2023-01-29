@@ -158,41 +158,49 @@
     .post .post-body-section {
         font-size: 14px;
     }
-    .post .post-profile-section {
-        
-    }
+
+    .post .post-profile-section {}
+
     /* Post Section End */
 
-    .profile-info-holder .profile-info{
+    .profile-info-holder .profile-info {
         flex-direction: column;
     }
-    .user-page-profile-info{
+
+    .user-page-profile-info {
         width: 100%;
     }
-    .profile-display-name-mobile{
+
+    .profile-display-name-mobile {
         display: flex;
-        
+
     }
-    .profile-display-name-mobile h5{
+
+    .profile-display-name-mobile h5 {
         font-size: 16px
     }
-    .profile-display-name-desktop{
+
+    .profile-display-name-desktop {
         display: none;
     }
+
     .profile-info-holder .profile-bio {
         font-size: 14px;
     }
+
     .profile-info-holder .profile-age {
         font-size: 14px;
     }
+
     .profile-stats {
         width: 100%;
     }
-    
+
     .profile-info-holder .profile-additional-info i {
         margin-top: 3px;
     }
-    .gamer_profile_all_stats_section .divided_section{
+
+    .gamer_profile_all_stats_section .divided_section {
         display: block;
     }
 }

@@ -391,8 +391,8 @@ class Main_Profile(models.Model):
 
 class Notifications(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
-    unread_messages = ArrayField(models.CharField(
-        max_length=1000, null=True, blank=True, default=""), blank=True, null=True, default=list)
+    unread_messages = models.ManyToManyField(
+        User, default=None, blank=True, related_name='unread_messages')
 
     def __str__(self) -> str:
-        return str(len(self.unread_messages))
+        return str(self.user) + ":" + str(self.unread_messages.all().count()) + " notification(s)"

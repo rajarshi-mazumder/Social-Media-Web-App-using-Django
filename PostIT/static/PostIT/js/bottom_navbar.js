@@ -3,7 +3,7 @@ window.onload = function () {
 
     Default_Bottom_Navabar_State();
 }
-function Default_Bottom_Navabar_State(){
+function Default_Bottom_Navabar_State() {
     HideRightSidebar();
     $('.profile-img-navbar').click(ToggleRightSidebar)
     $('.sidebar_right_blocker').click(ToggleRightSidebar);

@@ -4,7 +4,7 @@
     <div class="profile_page_logged_in_user" style="display: none;">{{user.username}}</div>
     <div class="profile-info">
         <div class="profile-info-top">
-        
+
             <div class="profile-pic">
                 {% if profile.profile_pic.name %}
                 <img src="{{ profile.profile_pic.url}}">
@@ -19,8 +19,8 @@
             </div>
             <div class="profile-info-menu">
                 <div class="profile-info-menu-contents">
-                    
-                    <div>              
+
+                    <div>
                         <button class="profile-interct-button button-1 follow_btn">Follow</button>
                         {% if vouched_for_user %}
 
@@ -30,16 +30,16 @@
                         {% else %}
                         <button class="vouch-user-button button-3" value="{{profile.user.id}}">Vouch </button>
                         {% endif %}
-                        <button class=" button-3" href="{% url 'chat' profile.user.id%}">Message</button>
+                        <button class=" button-3" onclick="location.href=`/chat/{{profile.user.id}}`">Message</button>
                     </div>
                 </div>
-                
+
             </div>
         </div>
         <div class="profile-display-name-mobile name">
             <h5><b>{{ profile.user.username }}</b></h5>
         </div>
-        <div class="profile-info-data">       
+        <div class="profile-info-data">
             <div class="profile-data-display">
 
                 {% if profile.id %}
@@ -61,24 +61,24 @@
                     <div class="number vouch-count">{{vouch_count}}</div>
                     <div class="label">Vouches</div>
                 </a>
-                
+
                 {% endif %}
-                
+
             </div>
-           
+
         </div>
-        
+
     </div>
-    
+
     <div class="profile-additional-info">
-                
+
         {% if profile.age%}
         <i class="fa-regular fa-calendar"></i>
         <div class="profile-age">
             Age: &nbsp;{{profile.age}}
         </div>
         {%endif%}
-        
+
         <div class="profile-bio">
             {{profile.bio}}
         </div>

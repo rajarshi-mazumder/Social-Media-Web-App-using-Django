@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse, HttpResponseNotAllowed
 from django.views.generic import ListView, DetailView, UpdateView
 from matplotlib.style import context
-from . models import Community, GameProfile, Post, Replies, ImageFiles, Profile, Tags, Main_Profile
+from . models import Community, GameProfile, Post, Replies, ImageFiles, Profile, Tags, Main_Profile, Notifications
 from . forms import EditPostForm, EditVideoPostForm, ImageForm, PostForm, PostImageForm, PostVideoForm, EditImagePostForm, GameProfileForm, MatchmakingForm, CreateCommunityForm, EditCommunityForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -2260,10 +2260,97 @@ def Chat_home(request, user_to_chat_with):
     logged_in_user_id = request.user.id
     logged_in_user = User.objects.get(id=request.user.id)
     user_to_chat_with_id = User.objects.get(id=user_to_chat_with).id
+    user_to_chat_with_username = User.objects.get(
+        id=user_to_chat_with).username
+
+    chat_contacts = User.objects.all()
+
     context = {
         'logged_in_user': logged_in_user,
         'logged_in_user_id': logged_in_user_id,
         'user_to_chat_with': user_to_chat_with,
-        'user_to_chat_with_id': user_to_chat_with_id
+        'user_to_chat_with_id': user_to_chat_with_id,
+        'user_to_chat_with_username': user_to_chat_with_username,
+        'account_items_list': chat_contacts,
     }
     return render(request, 'chat/chat_home.html', context)
+
+
+@csrf_exempt
+def add_unread_message_notification(request):
+    result = 'Working '
+    if request.POST.get('action') == 'post':
+
+        receiver = request.POST.get('receiver')
+        result = receiver
+        print("Hello WOrld ", result)
+        try:
+            receiver_user = User.objects.get(username=receiver)
+            print(receiver_user)
+
+            receiver_data = Notifications.objects.filter(
+                user=receiver_user)
+            print("viper count", receiver_data.count())
+
+            if receiver_data.count() <= 0:
+
+                new_user_notif_object = Notifications.objects.create(
+                    user=receiver_user)
+                new_user_notif_object.unread_messages.add(request.user)
+
+                new_user_notif_object.save()
+
+            else:
+                print("klkl", receiver_data[0].unread_messages.all())
+                print(receiver_data[0].unread_messages.filter(
+                    id=request.user.id).exists())
+                if not receiver_data[0].unread_messages.filter(id=request.user.id).exists():
+                    receiver_data[0].unread_messages.add(request.user)
+                    receiver_data[0].save()
+
+        except:
+            receiver_data = None
+
+        result = "success"
+        return JsonResponse({'result': result, })
+
+
+@csrf_exempt
+def remove_unread_message_notification(request):
+    if request.POST.get('action') == 'post':
+        receiver = request.POST.get('receiver')
+        result = receiver
+        print("Bye WOrld ", result)
+        try:
+
+            logged_in_user_notif_data = Notifications.objects.filter(
+                user=request.user)
+
+            if logged_in_user_notif_data.count() <= 0:
+                new_user_notif_object = Notifications.objects.create(
+                    user=request.user)
+                new_user_notif_object.save()
+
+            else:
+                print("logged_in_user_notif_data ", logged_in_user_notif_data)
+                message_from_user = User.objects.get(username=receiver)
+                print("message_from_user ", message_from_user)
+                print("all notifs ",
+                      logged_in_user_notif_data[0].unread_messages.all())
+
+                if logged_in_user_notif_data[0].unread_messages.filter(id=message_from_user.id):
+                    print("notif from jett", logged_in_user_notif_data[0].unread_messages.filter(
+                        id=message_from_user.id))
+                    logged_in_user_notif_data[0].unread_messages.remove(
+                        message_from_user)
+                    logged_in_user_notif_data[0].save()
+                    print("notif from jett", logged_in_user_notif_data[0].unread_messages.filter(
+                        id=message_from_user.id))
+                else:
+                    print("lll", logged_in_user_notif_data)
+
+        except:
+            print("went into except block")
+
+        result = "success"
+        return JsonResponse({'result': result, })
