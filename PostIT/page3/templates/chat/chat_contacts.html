@@ -1,6 +1,7 @@
 {% load static %}
-{% for user in account_items_list %}
-<div class="chat-account-list-item" onclick="location.href=`/chat/{{user.id}}`">
+{% for user in request.user.profile.chat_contacts.all %}
+<div id="chat-account-list-item" class="chat-account-list-item" onclick="location.href=`/chat/{{user.id}}`"
+    value="{{user.id}}">
 
     <div class="profile-pic">
         <a href="{%url 'user-profile-stats' user %}">
@@ -13,18 +14,41 @@
         </a>
     </div>
     <div class="info">
-        {% if user.username == 'admin' %}
+        {% if user.id in contacts_with_unread_messages %}
         <div class="username has-unread-message">
             <a href="{%url 'user-profile-stats' user %}">{{user.username}}</a>
             <div class="unread-message-indicator">
 
             </div>
         </div>
+        <div class="last-message unread-message">
+
+            {% for key, value in unread_messages_dict.items %}
+
+            {% if user.id|slugify == key %}
+            {{value}}
+            {% endif %}
+
+
+            {% endfor %}
+        </div>
         {% else %}
         <div class="username">
             <a href="{%url 'user-profile-stats' user %}">{{user.username}}</a>
         </div>
+        <div class="last-message">
+
+            {% for key, value in unread_messages_dict.items %}
+
+            {% if user.id|slugify == key %}
+            {{value}}
+            {% endif %}
+
+
+            {% endfor %}
+        </div>
         {% endif %}
+
     </div>
 
 

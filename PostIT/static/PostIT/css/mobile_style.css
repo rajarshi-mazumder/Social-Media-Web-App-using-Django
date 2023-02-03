@@ -203,6 +203,21 @@
     .gamer_profile_all_stats_section .divided_section {
         display: block;
     }
+
+
+
+
+
+
+    /* chat starts */
+
+    .chat-section .chat-messages {
+        width: 80%;
+    }
+
+
+
+    /* chat ends */
 }
 
 

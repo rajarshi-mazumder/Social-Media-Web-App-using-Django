@@ -137,6 +137,7 @@ def add_profile(request):
             # form.save()
             instance = form.save(commit=False)
             instance.user = request.user
+            instance.last_chat_messages = [{'a': 'a'}, ]
             instance.save()
             return redirect('home-page')
         else:

@@ -30,7 +30,8 @@
                         {% else %}
                         <button class="vouch-user-button button-3" value="{{profile.user.id}}">Vouch </button>
                         {% endif %}
-                        <button class=" button-3" onclick="location.href=`/chat/{{profile.user.id}}`">Message</button>
+                        <button id="message-button" class=" button-3 message-button" value="{{profile.user.id}}"
+                            onclick="location.href=`/chat/{{profile.user.id}}`">Message</button>
                     </div>
                 </div>
 
@@ -245,6 +246,30 @@
                 vouched_for_user = json['vouched_for_user'];
                 console.log(json)
                 updateVouchButtonText(this_, no_of_vouches, vouched_for_user)
+            },
+            error: function (xhr, errmsg, err) {
+
+            }
+        });
+    })
+</script>
+
+<script>
+    $(document).on('click', '.message-button', function (e) {
+        e.preventDefault();
+
+        var this_ = $(this)
+        userid = this_.attr("value").valueOf()
+        // var somevar = this_.attr()
+        $.ajax({
+            type: 'POST',
+            url: '{% url "add-chat-contact" %}',
+            data: {
+                userid: userid,
+                action: 'post',
+            },
+            success: function (json) {
+                no_of_vouches = json['result'];
             },
             error: function (xhr, errmsg, err) {
 

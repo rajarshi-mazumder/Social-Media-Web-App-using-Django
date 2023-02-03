@@ -65,6 +65,9 @@ class Profile(models.Model):
     gender_choices = [('Male', 'Male'), ('Female', 'Female'),
                       ('Transgender', 'Transgender'), ('Other', 'Other')]
 
+    def temp_dict():
+        return {'null': 'null_value'}
+
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
     profile_pic = models.ImageField(
@@ -85,6 +88,14 @@ class Profile(models.Model):
     age = models.IntegerField(null=True, blank=True, default=None)
     gender = models.CharField(
         max_length=255, null=True, choices=gender_choices, blank=True, default=None)
+    chat_contacts = models.ManyToManyField(
+        User, default=None, blank=True, related_name='contacts')
+    last_received_messages = ArrayField(models.JSONField(
+        max_length=30, null=True, blank=True, default=dict), blank=True, null=True, default=list)
+    last_chat_messages = ArrayField(models.JSONField(
+        max_length=30, null=True, blank=True, default=temp_dict), blank=True, null=True, default=list)
+    last_chat_with = models.CharField(
+        max_length=10, null=True, blank=True, default=None)
 
     def __str__(self):
         return str(self.user)

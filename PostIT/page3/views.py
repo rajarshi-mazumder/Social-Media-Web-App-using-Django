@@ -2256,14 +2256,46 @@ def Unfollow(request, who_to_unfollow):
 # Retrieve/ Update Followers Count End
 
 
-def Chat_home(request, user_to_chat_with):
+def has_numbers(inputString):
+    return any(char.isdigit() for char in inputString)
+
+
+def chat_with_user(request, user_to_chat_with):
     logged_in_user_id = request.user.id
     logged_in_user = User.objects.get(id=request.user.id)
-    user_to_chat_with_id = User.objects.get(id=user_to_chat_with).id
-    user_to_chat_with_username = User.objects.get(
-        id=user_to_chat_with).username
+    receiver = User.objects.get(id=user_to_chat_with)
+    user_to_chat_with_id = receiver.id
 
-    chat_contacts = User.objects.all()
+    user_to_chat_with_username = receiver.username
+    # chat_contacts = request.user.profile.chat_contacts.all()
+    # chat_contacts = User.objects.all()
+    unread_messages_dict = {}
+    last_chat_messages = ""
+    try:
+        last_chat_messages = logged_in_user.profile.last_chat_messages[0]
+        print("last_chat_messages: ", last_chat_messages)
+        for key in last_chat_messages:
+            if has_numbers(key):
+                keys_to_append = key.split('_')
+                for i in keys_to_append:
+                    unread_messages_dict.update({i: last_chat_messages[key]})
+        print("unread_messages_dict: ", unread_messages_dict)
+
+    except:
+        pass
+
+    contacts_with_unread_messages = []
+    # add contacts having unread messages
+
+    try:
+        contacts_with_unread_messages_qs = logged_in_user.notifications.unread_messages.all()
+
+        for contact in contacts_with_unread_messages_qs:
+            contacts_with_unread_messages.append(contact.id)
+        print("contacts_with_unread_messagesqs: ",
+              contacts_with_unread_messages)
+    except:
+        pass
 
     context = {
         'logged_in_user': logged_in_user,
@@ -2271,8 +2303,87 @@ def Chat_home(request, user_to_chat_with):
         'user_to_chat_with': user_to_chat_with,
         'user_to_chat_with_id': user_to_chat_with_id,
         'user_to_chat_with_username': user_to_chat_with_username,
-        'account_items_list': chat_contacts,
+        'last_chat_messages': last_chat_messages,
+        # 'account_items_list': chat_contacts,
+        'receiver': receiver,
+        'contacts_with_unread_messages': contacts_with_unread_messages,
+        'unread_messages_dict': unread_messages_dict,
     }
+
+    logged_in_user_profile = logged_in_user.profile
+    logged_in_user_profile.last_chat_with = user_to_chat_with_username
+    logged_in_user_profile.save()
+
+    return render(request, 'chat/chat_home.html', context)
+
+
+@csrf_exempt
+def chat_general_page(request):
+    logged_in_user_id = request.user.id
+    logged_in_user = User.objects.get(id=request.user.id)
+
+    unread_messages_dict = {}
+    last_chat_messages = ""
+    try:
+        last_chat_messages = logged_in_user.profile.last_chat_messages[0]
+        print("last_chat_messages: ", last_chat_messages)
+        for key in last_chat_messages:
+            if has_numbers(key):
+                keys_to_append = key.split('_')
+                for i in keys_to_append:
+                    unread_messages_dict.update({i: last_chat_messages[key]})
+        print("unread_messages_dict: ", unread_messages_dict)
+
+    except:
+        pass
+
+    contacts_with_unread_messages = []
+
+    try:
+        contacts_with_unread_messages_qs = logged_in_user.notifications.unread_messages.all()
+
+        for contact in contacts_with_unread_messages_qs:
+            contacts_with_unread_messages.append(contact.id)
+        print("contacts_with_unread_messagesqs: ",
+              contacts_with_unread_messages)
+    except:
+        pass
+
+    last_chat_with = None
+    try:
+        if logged_in_user.profile.last_chat_with:
+            receiver = User.objects.get(
+                username=logged_in_user.profile.last_chat_with)
+            user_to_chat_with = receiver
+            user_to_chat_with_id = receiver.id
+
+            user_to_chat_with_username = receiver.username
+            context = {
+                'logged_in_user': logged_in_user,
+                'logged_in_user_id': logged_in_user_id,
+                'user_to_chat_with': user_to_chat_with,
+                'user_to_chat_with_id': user_to_chat_with_id,
+                'user_to_chat_with_username': user_to_chat_with_username,
+                'last_chat_messages': last_chat_messages,
+                # 'account_items_list': chat_contacts,
+                'receiver': receiver,
+                'contacts_with_unread_messages': contacts_with_unread_messages,
+                'unread_messages_dict': unread_messages_dict,
+            }
+            return render(request, 'chat/chat_home.html', context)
+
+    except:
+        pass
+
+    context = {
+        'logged_in_user': logged_in_user,
+        'logged_in_user_id': logged_in_user_id,
+        'last_chat_messages': last_chat_messages,
+        # 'account_items_list': chat_contacts,
+        'contacts_with_unread_messages': contacts_with_unread_messages,
+        'unread_messages_dict': unread_messages_dict,
+    }
+
     return render(request, 'chat/chat_home.html', context)
 
 
@@ -2282,6 +2393,8 @@ def add_unread_message_notification(request):
     if request.POST.get('action') == 'post':
 
         receiver = request.POST.get('receiver')
+        message = request.POST.get('message')[0:29]
+        print("Message: ", message)
         result = receiver
         print("Hello WOrld ", result)
         try:
@@ -2312,7 +2425,50 @@ def add_unread_message_notification(request):
             receiver_data = None
 
         result = "success"
+        update_last_message(
+            request, receiver_user=receiver_user, message=message)
         return JsonResponse({'result': result, })
+
+
+def update_last_message(request, receiver_user, message):
+    print("HEREEEEE")
+    receiver_id = receiver_user.id
+    logged_in_user_id = request.user.id
+    key = ""
+    if(receiver_id < logged_in_user_id):
+        key = str(receiver_id) + "_" + str(logged_in_user_id)
+    else:
+        key = str(logged_in_user_id) + "_" + str(receiver_id)
+
+    # update last sent message for logged in user
+    try:
+        logged_in_user_profile = request.user.profile
+        print(logged_in_user_profile.last_chat_messages)
+        if(logged_in_user_profile.last_chat_messages):
+            print("Not null")
+            print(logged_in_user_profile.last_chat_messages)
+        else:
+            pass
+            # logged_in_user_profile.last_received_messages = [{}]
+            # logged_in_user_profile.save()
+
+        logged_in_user_profile.last_chat_messages[0][key] = "You: "+message[:30]
+        logged_in_user_profile.save()
+
+    except:
+        print("In except lvock!!!")
+
+    # update last sent message for receiver
+    try:
+        receiver_user_profile = receiver_user.profile
+        if(receiver_user_profile.last_chat_messages):
+            print("Not null", receiver_user_profile)
+            print(receiver_user_profile.last_chat_messages)
+        receiver_user_profile.last_chat_messages[0][key] = message[:30]
+        receiver_user_profile.save()
+
+    except:
+        pass
 
 
 @csrf_exempt
@@ -2354,3 +2510,27 @@ def remove_unread_message_notification(request):
 
         result = "success"
         return JsonResponse({'result': result, })
+
+
+@csrf_exempt
+def add_chat_contact(request):
+    if request.POST.get('action') == 'post':
+        print("JJKJKJK", request.POST)
+        result = ''
+
+        id = request.POST.get('userid')
+        print("ooooooooo ", id)
+        if(id != 'favicon.png'):
+            id = int(id)
+            print("ID TO DM: ", id)
+            user = get_object_or_404(User, id=id)
+            try:
+                if request.user.profile.chat_contacts.filter(id=id).exists():
+                    pass
+                else:
+                    request.user.profile.chat_contacts.add(user)
+                    request.user.profile.save()
+            except:
+                pass
+
+            return JsonResponse({'result': result, })

@@ -1,0 +1,301 @@
+/* Chat section start */
+.chat-section {
+    display: flex;
+    gap: 10px;
+    justify-content: space-around;
+    height: 85vh;
+}
+
+.chat-section .chat-contacts {
+    max-width: 400px;
+    border-radius: 10px;
+    background-color: var(--secondary_bg_color);
+}
+
+.chat-section .chat-contacts .header {
+    font-size: medium;
+    margin: 20px;
+    text-align: center;
+    color: var(--text-secondary-color);
+    font-weight: bold;
+}
+
+.chat-section .chat-contacts .profile-pic {
+    padding: 5px !important;
+}
+
+.chat-section .chat-contacts .profile-pic img {
+    width: 40px;
+    height: 40px;
+}
+
+
+.chat-section .chat-messages {
+    background-color: var(--secondary_bg_color);
+    border-radius: 10px;
+    padding: 10px;
+    width: 80%;
+    position: relative;
+
+}
+
+.chat-section .chat-messages .no-chats-message {
+    /* font-size: large; */
+    margin-top: 40%;
+    color: var(--text-secondary-color);
+    font-style: italic;
+}
+
+
+.chat-section .chat-messages .receiver-info-holder {
+    display: flex;
+}
+
+.chat-section .chat-messages .receiver-info-holder .profile-img img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 5px !important;
+}
+
+.chat-section .chat-messages .receiver-info-holder .username {
+    margin-top: 11px;
+    font-weight: bold;
+    font-size: medium;
+    padding-left: 5px;
+}
+
+
+.chat-section .chat-messages .chatbox {
+    /* background-color: aqua; */
+    height: 90%;
+    display: grid;
+    grid-template-rows: 9.5fr 0.5fr;
+}
+
+.chat-section .chat-messages .chatbox .messages-holder {
+    /* background-color: pink; */
+
+    overflow-y: scroll;
+    height: 100%;
+}
+
+.chat-section .chat-messages .chatbox .this-user-message {
+    background-color: var(--tertiary2_bg_color);
+    color: var(--text-secondary3-color);
+    width: fit-content;
+    max-width: 75%;
+    margin-left: auto;
+    text-align: left;
+    padding: 10px 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 15px;
+    /* font-weight: 500; */
+    font-size: small;
+    font-weight: bold;
+
+    /* font-size: 0.85rem; */
+    /* font-family: 'Poppins', sans-serif; */
+}
+
+.chat-section .chat-messages .chatbox .other-user-message {
+    background-color: var(--secondary1_color);
+    color: var(--text-secondary3-color);
+    width: fit-content;
+    max-width: 75%;
+    margin-right: auto;
+    text-align: left;
+    padding: 10px 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 15px;
+    /* font-weight: 100; */
+    font-size: small;
+    font-weight: bold;
+
+    /* font-size: 0.85rem; */
+
+    /* font-family: 'Poppins', sans-serif; */
+
+}
+
+.chat-section .chat-messages .chatbox .has-newline {
+
+    white-space: pre-line;
+    padding: 0 10px;
+}
+
+.chat-section .chat-messages .chatbox .this-user-message .datetime {
+    font-size: x-small;
+    text-align: right;
+    color: var(--text-secondary-color);
+}
+
+.chat-section .chat-messages .chatbox .other-user-message .datetime {
+    font-size: x-small;
+    color: var(--text-secondary-color);
+}
+
+
+.chat-section .messages-sender-section {
+
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    background-color: var(--tertiary1_bg_color);
+    border-radius: 10px;
+}
+
+.chat-section .messages-sender-section input {
+    width: 100%;
+    height: 40px;
+    border-radius: 25px;
+    padding: 10px;
+    background-color: var(--tertiary2_bg_color);
+    color: var(--text-secondary3-color);
+    border: none;
+    font-size: small;
+    font-weight: bold;
+}
+
+.chat-section .messages-sender-section textarea {
+    width: 100%;
+    height: 40px;
+    border-radius: 25px;
+    padding: 10px;
+    background-color: var(--tertiary2_bg_color);
+    color: var(--text-secondary3-color);
+    border: none;
+    font-size: small;
+    font-weight: bold;
+}
+
+.chat-section .messages-sender-section button {
+    background-color: var(--secondary1_color);
+    margin-left: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.chat-section .messages-sender-section button i {
+    color: var(--text-secondary3-color);
+}
+
+.chat-account-list-item {
+    /* background-color: aqua; */
+    border-radius: 50px;
+    display: grid;
+    grid-template-columns: 0.5fr 4fr;
+    grid-gap: 5px;
+    margin: 10px;
+    cursor: pointer;
+    /* padding: 0 1px; */
+    width: 93%;
+    align-items: start;
+}
+
+.chat-account-list-item:hover {
+    cursor: pointer;
+    background-color: var(--tertiary1_bg_color) !important;
+}
+
+.chat-section .active-contact {
+    background-color: var(--tertiary1_bg_color) !important;
+}
+
+.chat-account-list-item .profile-pic img {
+    height: 70px;
+    width: 70px;
+    object-fit: cover;
+    border-radius: 50%;
+    /* margin-left: 5px; */
+    /* margin-top: 5px; */
+
+}
+
+.chat-account-list-item .info {
+    width: 100%;
+    margin-top: 7px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* background-color: pink; */
+    /* padding-top: 15px; */
+    /* position: relative; */
+}
+
+.chat-account-list-item .info .username {
+    /* background-color: blue; */
+    position: relative;
+
+    text-align: left;
+    /* margin-left: -90px; */
+    font-size: small;
+    color: var(--text-secondary2-color);
+    font-weight: bold;
+}
+
+.chat-account-list-item .last-message {
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    /* background-color: aqua !important; */
+    color: var(--text-secondary-color);
+    font-size: smaller;
+    font-weight: bold;
+    width: fit-content;
+    max-width: 80%;
+    text-overflow: ellipsis;
+}
+
+.chat-account-list-item .unread-message {
+    text-align: left;
+    /* background-color: aqua !important; */
+    color: var(--primary_color);
+    font-size: smaller;
+    font-weight: bold;
+}
+
+.chat-account-list-item .info .has-unread-message {
+    color: var(--text-primary-color) !important;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.chat-account-list-item .info .has-unread-message .unread-message-indicator {
+    margin-left: auto;
+    text-align: right;
+    font-size: small;
+    background-color: var(--primary_color);
+    border: 1px solid var(--text-primary-color);
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    margin-top: 5px;
+    margin-right: 1rem;
+    /* padding-right: 1rem; */
+}
+
+
+
+.chat-account-list-item .info .bio {
+    color: var(--text-secondary-color);
+    font-weight: bold;
+    place-items: center;
+    padding-bottom: 10px;
+    text-align: left;
+    /* max-width: 70%; */
+}
+
+.chat-account-list-item .interact-button {
+    margin-left: auto;
+    margin-top: 30px;
+
+}
+
+
+/* Chat section end */

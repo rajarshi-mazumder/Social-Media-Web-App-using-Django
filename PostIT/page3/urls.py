@@ -111,7 +111,10 @@ urlpatterns = [
 
     # Chat views start
     path('chat/<str:user_to_chat_with>',
-         views.Chat_home, name="chat"),
+         views.chat_with_user, name="chat"),
+    path('chat-messages',
+         views.chat_general_page, name="chat-general"),
+    path('add-chat-contact', views.add_chat_contact, name="add-chat-contact"),
     path('add-unread-message-notification',
          views.add_unread_message_notification, name='add-unread-message-notification'),
     path('remove-unread-message-notification',
