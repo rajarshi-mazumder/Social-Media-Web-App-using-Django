@@ -1,5 +1,34 @@
 @media (max-width: 600px) {
 
+    .chat-page-nav {
+        display: none !important;
+    }
+
+    .chat-section-wrapper {
+        margin-top: 0px !important;
+    }
+
+    .chat-section .chat-user-page-contacts {
+        display: none;
+    }
+
+    .chat-section .chat-general-page-messages {
+        display: none;
+    }
+
+    .chat-section .chat-general-page-contacts {
+        height: 100vh;
+        width: 100% !important;
+    }
+
+    .chat-section .chat-user-page-messages {
+        height: 100vh;
+        width: 100% !important;
+    }
+
+    .go-back {
+        display: flex !important;
+    }
 
     /* Nav bar Top Start */
 
@@ -66,7 +95,7 @@
     }
 
     /* Nav bar Top End */
-    
+
     /* Bottom Navbar Start */
 
     #main-bottom-nav {
@@ -107,9 +136,11 @@
         white-space: nowrap;
         overflow: hidden;
     }
+
     #main-bottom-nav .bottom-nav-container .profile-submenu {
         align-items: flex-start;
     }
+
     #main-bottom-nav .profile-img-container {
         margin-left: auto;
     }
@@ -122,12 +153,11 @@
         margin-left: 0;
     }
 
-    .profile-submenu{
+    .profile-submenu {
         justify-content: flex-start;
     }
 
     /* Bottom Navbar End */
-
     /* Home Page Menus Start */
 
     .home-page-menus i {
@@ -135,7 +165,6 @@
     }
 
     /* Home Page Menus End */
-
     /* Add Post Section Start */
 
     .add-post-community-button span {
@@ -200,7 +229,7 @@
     }
 
     .profile-info-holder .profile-age {
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .profile-stats {
@@ -211,6 +240,7 @@
         margin-top: 3px;
         font-size: 13px;
     }
+
     .profile-info-tabs {
         font-size: 13px;
     }
@@ -219,17 +249,20 @@
     .gamer_profile_all_stats_section .divided_section {
         display: block;
     }
+
     .gamer_profile_all_stats_section .game-logo {
         width: 100px;
         height: 100px;
     }
-    
+
     .gamer_profile_all_stats_section .game_stat .label {
         font-size: 12px;
     }
+
     .gamer_profile_all_stats_section .game_stat .value {
         font-size: 13px;
     }
+
     /* Gamer Profile Stats End */
 
     /* Sidebar Right Start */
@@ -237,68 +270,60 @@
         font-size: 13px;
         height: 36px;
     }
-    
-    .communities-section-sidebar a{
+
+    .communities-section-sidebar a {
         display: block;
         width: 100%;
     }
 
-    .create-account-prompt{
-        position: fixed;
-        top: 300px;
-        right: 10%;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        color: var(--text-secondary-color);
-        background-color: var(--post_bg_color);
-        height: 100px;
-        width: 300px;
-        text-align: center;
-        border-radius: 10px;
-        padding-top: 20px;
-        z-index: 200;
+    .gamer_profile_all_stats_section .divided_section {
+        display: block;
     }
-    .create-account-prompt div{
-        z-index: 200;
-    }
-    .create-account-blocker-mobile-sidebar{
-        position: fixed;
-        top: 0px;
-        width: 100%;
-        height: 100%;
-        z-index: 180;
-    }
-    /* Sidebar Right End */
 
     /* Post Start */
-    .posts-timeline{
+    .posts-timeline {
         margin-top: 60px;
     }
-    .home-page-posts-timeline{
+
+    .home-page-posts-timeline {
         margin-top: 85px;
     }
+
     .post .like-button {
         font-size: 13px;
         padding: 0 15px;
     }
+
     .post .reply-button {
         font-size: 13px;
         padding: 0 15px;
     }
-    .post .post-interaction-items{
+
+    .post .post-interaction-items {
         font-size: 13px;
     }
-    .post-stats a{
+
+    .post-stats a {
         font-size: 13px;
     }
+
     /* Post End */
 
 
 
 
-    
+    /* chat starts */
+
+    .chat-section .chat-messages {
+        width: 80%;
+    }
+
+
+
+    /* chat ends */
 }
+
+
 
 @media (max-width: 470px) {
 

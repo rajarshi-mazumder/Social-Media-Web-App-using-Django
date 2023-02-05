@@ -11,14 +11,14 @@ Page3 - Register
 <div class="registration-container">
     <div class="page-title">
         Sign Up
-     </div>
+    </div>
     <form action="" method="POST">
         {% csrf_token %}
         {{ form|crispy }}
         <button class="button-4" type="submit">Register</button>
     </form>
     <div class="register-section">
-       Already have an account? Log in here!
+        Already have an account? Log in here!
         <button class="button-4" onclick="location.href=`{% url 'login-user'%}`">Log in</button>
     </div>
 </div>

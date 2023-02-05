@@ -12,7 +12,7 @@
     {% endif %}
 
 
-    {% if page != 'create-gamer-profile'  %}
+    {% if page != 'create-gamer-profile' %}
     <button class="page-link" onclick="location.href=`{% url 'create-gamer-profile' user.username %}`">
         <a href="{% url 'create-gamer-profile' user.username %}">
 
@@ -50,19 +50,19 @@
         </a>
     </button>
     <button class="page-link" onclick="location.href='/users/login_user'">
-        <a >
+        <a>
 
             Create New Gamer Profile
         </a>
     </button>
     <button class="page-link" onclick="location.href='/users/login_user'">
-        <a >
+        <a>
 
             Edit New Gamer Profile
         </a>
     </button>
     <button class="page-link" onclick="location.href='/users/login_user'">
-        <a >
+        <a>
 
             Matchmaking
         </a>
@@ -72,12 +72,7 @@
     <!-- User Profile Page -->
     {%if page == 'user_profile_page' or page == 'user_posts_page' or page == 'user_communities_page' %}
 
-    <button class="page-link" onclick="location.href=`{% url 'create-gamer-profile' user.username %}`">
-        <a href="{% url 'create-gamer-profile' user.username %}">
 
-            Create New Gamer Profile
-        </a>
-    </button>
 
     {%if gamer_profiles %}
     <button class="page-link" onclick="location.href=`{% url 'edit-gamer-profile' user.username %}`">

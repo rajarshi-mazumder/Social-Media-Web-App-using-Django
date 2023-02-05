@@ -1322,7 +1322,6 @@ def create_game_profile(request, user):
     return render(request, 'gamerProfile/create_gamer_profile.html', context)
 
 @login_required(login_url='/users/login_user')
-
 def edit_gamer_profile(request, user):
     form = GameProfileForm()
     post_form = PostForm()
@@ -2315,7 +2314,7 @@ def chat_with_user(request, user_to_chat_with):
     logged_in_user_profile.last_chat_with = user_to_chat_with_username
     logged_in_user_profile.save()
 
-    return render(request, 'chat/chat_home.html', context)
+    return render(request, 'chat/chat_user.html', context)
 
 
 @csrf_exempt

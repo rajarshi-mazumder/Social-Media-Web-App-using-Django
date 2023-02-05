@@ -95,9 +95,9 @@ WSGI_APPLICATION = 'PostIT.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postit_db_2',
+        'NAME': 'postit',
         'USER': 'postgres',
-        'PASSWORD': 'Liomessi10',
+        'PASSWORD': 'Madrid2018',
         'HOST': 'localhost',
         'PORT': '5432',
     }

@@ -1,0 +1,448 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}
+Page3 - Chat
+{% endblock title %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+{% include 'navigation/navbar-top.html' %}
+<div class="main-body" id="wrapper">
+    {% include 'navigation/sidebar-left.html' %}
+    <div class="page-contents">
+        <div class="posts-timeline chat-section-wrapper">
+
+            <div class="chat-section">
+                <div class="chat-contacts chat-user-page-contacts">
+                    <div class="header">
+                        Messages
+                        <hr>
+                    </div>
+
+                    {% include 'chat/chat_contacts.html' %}
+                </div>
+                <div class="chat-messages chat-user-page-messages">
+                    {% if user_to_chat_with %}
+
+                    <div id="header" class="chat-header">
+                        <a href="{% url 'chat-general' %}">
+                            <i class="fa-solid fa-arrow-left go-back"></i>
+                        </a>
+                        <div class="logged_in_user" style="display: none;" value="{{logged_in_user_id}}">
+                            {{logged_in_user_id}}
+                        </div>
+                        <div class="user_to_chat_with" style="display: none;">
+                            {{user_to_chat_with_id}}
+                        </div>
+                        <div id="sender-username" value="{{logged_in_user}}" style="display: none;">
+                            Sender: {{logged_in_user}}
+                        </div>
+                        <div id="receiver-username" value="{{user_to_chat_with_username}}" style="display: none;">
+                            Reciever: {{user_to_chat_with_username}}
+                        </div>
+
+                        <div class="receiver-info-holder">
+                            <div class="profile-img">
+                                {% if receiver.profile.profile_pic.name %}
+                                <img src="{{ receiver.profile.profile_pic.url}}">
+                                {% else %}
+                                <img src=" {% static 'PostIT/images/profilepic.jpg' %}">
+                                {% endif %}
+                            </div>
+                            <div class="username">{{user_to_chat_with_username}}</div>
+                        </div>
+                        <hr>
+
+                    </div>
+
+                    <div class="chatbox" id="chatbox">
+                        <div class="messages-holder" id="messages-holder">
+                            <ul class="messages" id="messages">
+
+                            </ul>
+                        </div>
+                        <div class="messages-sender-section">
+                            <!-- <input type="text" name="" id="message" class="usermsg" size="63" placeholder="Text Message"
+                                autocomplete="off"> -->
+                            <textarea name="" id="message" class="usermsg" placeholder="Message"></textarea>
+                            <button type="sumbit" name="" class="button" id="submit_btn"><i
+                                    class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="no-chats-message">
+                        <h3>No active conversations!</h3>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script type="module">
+    var has_page_loaded = false;
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDz3w1IY8oS9mWxPPMRZTgBJH5Jj2BQY-M",
+        authDomain: "fir-startapp-caf04.firebaseapp.com",
+        projectId: "fir-startapp-caf04",
+        storageBucket: "fir-startapp-caf04.appspot.com",
+        messagingSenderId: "789830257393",
+        appId: "1:789830257393:web:1a59db1a7ab51afa897750"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    import {
+        getDatabase, ref, push, set, query, orderByChild, limitToFirst, limitToLast,
+        onChildAdded, onChildChanged, onChildRemoved
+    } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
+
+    const db = getDatabase();
+    let logged_in_user = $('.logged_in_user').text().trim()
+    let user_to_chat_with = $('.user_to_chat_with').text().trim()
+
+
+    var chatRoomName = "";
+
+    if (logged_in_user > user_to_chat_with)
+        chatRoomName = `${logged_in_user}_${user_to_chat_with}`
+    else chatRoomName = `${user_to_chat_with}_${logged_in_user}`
+
+    var last_message_id = 0;
+    var unread_messages_removed = false;
+
+    const chatRoom_ref = ref(db, `DM_Chat/${chatRoomName}`);
+
+    const messages_query = query(ref(db, `DM_Chat/${chatRoomName}`), orderByChild("message_id"), limitToLast(10));
+    var objDiv = document.getElementById("messages-holder");
+    onChildAdded(messages_query, (data) => {
+        last_message_id = data.val().message_id;
+        console.log(data.val())
+        console.log(unread_messages_removed)
+        if (data.val().sender == logged_in_user) {
+            var dateTime = dateTimeToPrint(data.val().timestamp)
+            console.log("message:::: " + data.val().message)
+
+            if (data.val().has_newline == false) {
+
+
+
+                $('#messages').append(`
+                            
+                            <div class="this-user-message">
+                                ${data.val().message}
+                                <div class="datetime">${dateTime}</div>
+                            </div>
+                                    `)
+            }
+            else {
+                $('#messages').append(`
+                            
+                            <div class="this-user-message has-newline">
+                                ${data.val().message}
+                                <div class="datetime">${dateTime}</div>
+                            </div>
+                                    `)
+            }
+        }
+        else {
+
+            var dateTime = dateTimeToPrint(data.val().timestamp)
+            console.log("message:::: " + data.val().message)
+            if (data.val().has_newline == false) {
+
+
+                $('#messages').append(`
+                            
+                            <div class="other-user-message">
+                                ${data.val().message}
+                                <div class="datetime"> ${dateTime}</div>
+                            </div>
+                                    `)
+            }
+            else {
+                $('#messages').append(`
+                            
+                            <div class="other-user-message has-newline">
+                                ${data.val().message}
+                                <div class="datetime"> ${dateTime}</div>
+                            </div>
+                                    `)
+            }
+        }
+
+
+        // $('#messages').append(`
+        //                   <li>${data.val().sender}</li>
+        //                 <li class="this-user-message">${data.val().message}</li>
+        //`)
+
+        console.log(objDiv.scrollHeight)
+        objDiv.scrollTop = objDiv.scrollHeight;
+        console.log("Sender: " + data.val().sender)
+        console.log("logged in user: ", logged_in_user)
+
+
+        if (data.val().sender === logged_in_user) {
+            console.log("sender is logged in user")
+        }
+        else if (has_page_loaded) {
+
+            remove_unread_message(event)
+            console.log("Calling unread event")
+            console.log("sender is not logged in user")
+        }
+
+    });
+
+    function InsertData() {
+        let message = document.getElementById("message").value;
+
+        console.log("Last message id ", last_message_id)
+        const chatRoom_ref = ref(db, `DM_Chat/${chatRoomName}`);
+        const newMessage = push(chatRoom_ref);
+        const now = new Date().toString();
+        console.log("message: " + message)
+        message = message.trim();
+
+        //check newline is present in string
+        let pattern = /\n/;
+        let result = message.search(pattern);
+        var has_newline = false;
+        if (result >= 0) {
+            has_newline = true
+        }
+
+        console.log(result)
+        set(newMessage, {
+            "message_id": last_message_id + 1,
+            "sender": logged_in_user,
+            "message": message,
+            "timestamp": now,
+            "has_newline": has_newline,
+
+
+
+        });
+
+        add_unread_message(event, message)
+        clear_textarea(event)
+        //Find who this logged in user sent message to
+        //Then add the logged in user to the unread messages list
+
+
+
+    }
+
+
+    window.onload = (event) => {
+        console.log("page is fully loaded");
+        has_page_loaded = true;
+        Default_Bottom_Navabar_State();
+        console.log("page is fully loaded!!!!!!!!");
+        var contact_items = document.querySelectorAll('[id="chat-account-list-item"]');
+        console.log(document.querySelectorAll('[id="chat-account-list-item"]'))
+        let user_to_chat_with = $('.user_to_chat_with').text().trim();
+
+
+        console.log('user_to_chat_with' + user_to_chat_with)
+        contact_items.forEach(element => {
+            console.log(element)
+            var value = element.getAttribute('value')
+            console.log("Value:" + element.getAttribute('value'))
+            if (value == user_to_chat_with) {
+                console.log("This is active chat")
+                element.classList.add("active-contact")
+            }
+            else {
+                element.classList.remove('active-contact')
+            }
+
+        })
+
+        //remove_unread_message(event)
+    };
+
+
+
+    document.getElementById("submit_btn").addEventListener('click', InsertData);
+
+
+
+
+</script>
+
+<script>
+
+    function add_unread_message(e, message) {
+        e.preventDefault();
+
+
+        receiver = document.getElementById('receiver-username').getAttribute('value')
+
+        // var somevar = this_.attr()
+        $.ajax({
+            type: 'POST',
+            url: '{% url "add-unread-message-notification" %}',
+            data: {
+                receiver: receiver,
+                action: 'post',
+                message: message,
+            },
+            success: function (json) {
+                //no_of_vouches = json['result'];
+                console.log("hereee")
+                console.log(json)
+
+            },
+            error: function (xhr, errmsg, err) {
+
+            }
+        });
+    }
+</script>
+<script>
+    function remove_unread_message(e) {
+        e.preventDefault()
+        receiver = document.getElementById('receiver-username').getAttribute('value')
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "remove-unread-message-notification" %}',
+            data: {
+                receiver: receiver,
+                action: 'post',
+            },
+            success: function (json) {
+                //no_of_vouches = json['result'];
+                console.log(json)
+
+            },
+            error: function (xhr, errmsg, err) {
+
+            }
+        });
+    }
+</script>
+
+<script>
+    function dateTimeToPrint(dateTime) {
+        let dayOfWeek = dateTime.split(" ")[0]
+        console.log(dayOfWeek)
+        let month = dateTime.split(" ")[1]
+        console.log(month)
+        let dayOfMonth = dateTime.split(" ")[2]
+        let year = dateTime.split(" ")[3]
+        let timeOfDay = dateTime.split(" ")[4]
+        timeOfDay = timeOfDay.slice(0, -3);
+        timeOfDay = convertTo12HourClock(timeOfDay);
+
+        dateToPrint = dayOfWeek + " " + month + " " + dayOfMonth + " " + year + " " + timeOfDay;
+
+        const dateTimeNow = new Date();
+        yearNow = dateTimeNow.getFullYear()
+        monthNow = dateTimeNow.getMonth();
+        dayOfMonthNow = dateTimeNow.getDate();
+        dayOfWeekNow = dateTimeNow.getDay();
+        console.log(" yearNow: " + yearNow + " monthNow: " + monthNow + " dayOfMonthNow: " + dayOfMonthNow + " dayOfWeekNow: " + dayOfWeekNow)
+
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+        const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri",
+            "Sat"];
+        const weekdayIndex = {
+            "Sun": 0, "Mon": 1, "Tue": 2, "Wed": 3, "Thu": 4, "Fri": 5, "Sat": 6
+        }
+
+        if (yearNow.toString() == year) {
+            console.log("same year")
+            if (monthNames[monthNow] == month) {
+                console.log("same month")
+                console.log(dayOfMonthNow + ", " + dayOfMonth)
+                if (parseInt(dayOfMonthNow) == parseInt(dayOfMonth)) {
+                    console.log("same day")
+                    console.log("template 4:15pm")
+                    dateToPrint = timeOfDay;
+                }
+                else {
+                    console.log("This one: " + dayOfWeekNow, dayOfWeek)
+                    var val = 0
+                    for (key in weekdayIndex) {
+                        if (dayOfWeek == key) {
+                            val = weekdayIndex[key]
+                        }
+
+                    }
+                    console.log("diff day: " + Math.abs(dayOfWeekNow - val))
+                    if (Math.abs(dayOfWeekNow - val) == 1 || Math.abs(dayOfWeekNow - val) >= 6) {
+                        console.log("diff day: " + Math.abs(dayOfWeekNow - val))
+                        console.log("template yesterday 6:07pm")
+                        dateToPrint = "Yesterday " + timeOfDay;
+                    }
+                    else {
+                        console.log("diff day")
+                        console.log("template Sat 5:55pm")
+                        dateToPrint = dayOfWeek + " " + timeOfDay;
+                    }
+                }
+            }
+            else {
+                dateToPrint = dayOfMonth + " " + month + " " + timeOfDay;
+                console.log("template Jan 29 5:01pm")
+            }
+
+        }
+        else {
+            dateToPrint = dayOfMonth + " " + month + " " + year + " " + "|" + timeOfDay;
+            console.log("diff year")
+        }
+
+        return dateToPrint;
+
+    }
+</script>
+<script>
+    function convertTo12HourClock(time) {
+        time = time.toString().match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+        console.log("TIME: " + time)
+        if (time.length > 1) { // If time format correct
+            time = time.slice(1); // Remove full string match value
+            time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+            time[0] = +time[0] % 12 || 12; // Adjust hours
+        }
+        return time.join(''); // return adjusted time or original string
+    }
+</script>
+<script>
+    $("#message").keyup(function (event) {
+        if (event.keyCode === 13 && !event.shiftKey) {
+            $("#submit_btn").click();
+        }
+    });
+</script>
+
+<script src="{% static 'PostIT/js/bottom_navbar.js'%}"></script>
+<script>
+    function clear_textarea(event) {
+
+        let message_box = document.getElementById("message").value = "";
+    }
+</script>
+
+<script>
+    $("#main-nav").addClass("chat-page-nav");
+</script>
+
+{% endblock content %}

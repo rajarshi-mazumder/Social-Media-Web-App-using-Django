@@ -1,4 +1,16 @@
 /* Chat section start */
+.chat-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.go-back {
+    display: none !important;
+}
+
 .chat-section {
     display: flex;
     gap: 10px;
@@ -7,9 +19,10 @@
 }
 
 .chat-section .chat-contacts {
-    max-width: 400px;
+    /* max-width: 400px; */
     border-radius: 10px;
     background-color: var(--secondary_bg_color);
+
 }
 
 .chat-section .chat-contacts .header {

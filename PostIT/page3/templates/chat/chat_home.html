@@ -11,18 +11,21 @@ Page3 - Chat
 <div class="main-body" id="wrapper">
     {% include 'navigation/sidebar-left.html' %}
     <div class="page-contents">
-        <div class="posts-timeline">
+        <div class="posts-timeline chat-section-wrapper">
 
             <div class="chat-section">
-                <div class="chat-contacts">
-                    <div class="header">
-                        Messages
-                        <hr>
+                <div class="chat-contacts chat-general-page-contacts">
+                    <div class="header chat-header">
+                        <a href="{% url 'home-page' %}">
+                            <i class="fa-solid fa-arrow-left go-back"></i>
+                        </a>
+                        <div class="label">Messages</div>
                     </div>
+
 
                     {% include 'chat/chat_contacts.html' %}
                 </div>
-                <div class="chat-messages">
+                <div class="chat-messages chat-general-page-messages">
                     {% if user_to_chat_with %}
 
                     <div id="header">
@@ -80,9 +83,12 @@ Page3 - Chat
 
     </div>
 </div>
+
 <nav id="main-bottom-nav">
     {% include 'navigation/navbar-bottom.html' %}
 </nav>
+
+<script src="{% static 'PostIT/js/bottom_navbar.js'%}"></script>
 
 <script type="module">
     var has_page_loaded = false;
@@ -441,4 +447,7 @@ Page3 - Chat
     }
 </script>
 
+<script>
+    $("#main-nav").addClass("chat-page-nav");
+</script>
 {% endblock content %}

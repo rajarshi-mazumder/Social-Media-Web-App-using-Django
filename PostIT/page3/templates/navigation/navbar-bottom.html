@@ -64,19 +64,21 @@
     {% else %}
     <li class="bottom-nav-container"><a class="bottom-nav-icons" href="{% url 'register' %}"><i
                 class="fa-solid fa-arrow-up-right-from-square nav-icon"></i>
-                <div class="bottom-nav-text">Register</div></a></li>
+            <div class="bottom-nav-text">Register</div>
+        </a></li>
 
     <li class="bottom-nav-container"><a class="bottom-nav-icons" href="{% url 'login-user' %}"><i
                 class="fa-solid fa-right-to-bracket nav-icon"></i>
-                <div class="bottom-nav-text">Login</div></a></li>
+            <div class="bottom-nav-text">Login</div>
+        </a></li>
     {% endif %}
 
     <li class="bottom-nav-container">
-        <a class="bottom-nav-icons"><i class="fa-solid fa-envelope nav-icon"></i>
+        <a href="{% url 'chat-general' %}" class="bottom-nav-icons"><i class="fa-solid fa-envelope nav-icon"></i>
             <div class="bottom-nav-text">Messages</div>
         </a>
     </li>
-    
+
     <li class="bottom-nav-container">
         <a href="{% url 'create-community' %}" class="bottom-nav-icons"><i class="fa-solid fa-bell nav-icon"></i>
             <div class="bottom-nav-text">Notifications</div>

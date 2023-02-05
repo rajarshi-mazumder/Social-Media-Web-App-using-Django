@@ -10,6 +10,7 @@ function Default_Bottom_Navabar_State() {
 
     $('.add-post-submenu').hide();
     $('.profile-submenu').hide();
+    console.log("Conte!!")
 }
 function ToggleRightSidebar() {
     if (is_right_sidebar_displayed) {
