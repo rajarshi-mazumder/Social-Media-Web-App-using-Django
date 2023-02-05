@@ -66,6 +66,8 @@
     margin-right: 5px;
     font-weight: bold;
     cursor: pointer;
+    color: white;
+    border: none;
 }
 
 .button-custom-width {

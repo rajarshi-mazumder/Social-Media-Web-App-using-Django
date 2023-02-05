@@ -6,7 +6,6 @@ Page3 - Login
 
 {% block content %}
 {% load crispy_forms_tags %}
-Login page
 {% if messages %}
 
 {% for message in messages %}
@@ -18,18 +17,29 @@ Login page
 {% endfor %}
 
 {% endif %}
-<form action="" method="POST">
-    {% csrf_token %}
-    <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">username</label>
-        <input type="text" class="form-control" name="username" aria-describedby="emailHelp">
-        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+{% include 'navigation/navbar-top.html' %}
+<div class="registration-container">
+    <div class="page-title">
+       Login
     </div>
-    <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" name="password">
-    </div>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">username</label>
+            <input type="text" class="form-control" name="username" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" class="form-control" name="password">
+        </div>
 
-    <input type="submit" value="Submit" class="btn btn-primary">
-</form>
+        <input class="button-4" type="submit" value="Submit" class="btn btn-primary">
+    </form>
+    <div class="register-section">
+        Don't have an account? Sign up here!
+        It only takes a minute!
+        <button class="button-4" onclick="location.href=`{% url 'register'%}`">Register</button>
+    </div>
+</div>
 {% endblock content %}

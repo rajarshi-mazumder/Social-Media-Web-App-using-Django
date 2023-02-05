@@ -1,0 +1,33 @@
+.registration-container{
+    background-color:  var(--post_bg_color);
+    padding: 10px 20px;
+    color: white;
+    border-radius: 10px;
+    margin: 10% auto;
+    width: 30%;
+    
+}
+ .text-muted, .form-text{
+    color: var(--text-secondary-color) !important;
+}
+.registration-container .page-title{
+    color: white;
+    font-weight: bolder;
+    text-align: left;
+    margin: 0;
+    margin-bottom: 20px;
+}
+.register-section{
+    color: white;
+}
+@media (max-width: 1200px) {
+    .registration-container{
+        width: 50%;
+    }
+}
+@media (max-width: 600px) {
+    .registration-container{
+        width: 100%;
+        margin: 60px auto;
+    }
+}

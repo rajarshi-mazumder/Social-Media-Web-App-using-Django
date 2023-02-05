@@ -1171,7 +1171,7 @@ def start_following(request, who_to_follow):
 
     return JsonResponse({'followers_list': followers_list})
 
-
+@login_required(login_url='/users/login_user')
 def create_game_profile(request, user):
     form = GameProfileForm()
     post_form = PostForm()
@@ -1321,6 +1321,7 @@ def create_game_profile(request, user):
 
     return render(request, 'gamerProfile/create_gamer_profile.html', context)
 
+@login_required(login_url='/users/login_user')
 
 def edit_gamer_profile(request, user):
     form = GameProfileForm()

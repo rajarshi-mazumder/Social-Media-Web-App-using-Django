@@ -12,7 +12,7 @@
         Profile
     </div>
 
-    {%if gamer_profiles%}
+    
 
     {%include 'gamerProfile/mobile_specific/gamer_profile_section_sidebar_mobile.html' %}
 
@@ -20,11 +20,11 @@
     <div class="mobile_sidebar_gamer_profile_stats_section">
         {%include 'gamerProfile/mobile_specific/mobile_sidebar_gamer_profile_stats.html' %}
     </div>
-    {%endif%}
+ 
 
-    {% if user.is_authenticated%}
+    
     {%include 'navigation/sidebar_page_links.html' %}
-    {%endif%}
+    
 
 </div>
 

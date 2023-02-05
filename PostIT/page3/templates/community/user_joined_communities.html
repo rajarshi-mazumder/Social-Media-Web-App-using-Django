@@ -59,9 +59,19 @@ Page3 - User Communities
     </div>
 </div>
 
+<div class="sidebar_right_blocker"></div>
+<div class="sidebar-right-mobile">
+    {% include 'navigation/sidebar-right-mobile.html' %}
+</div>
+
+<nav id="main-bottom-nav">
+    {% include 'navigation/navbar-bottom.html' %}
+</nav>
+
 <script src="{% static 'PostIT/js/jquery.waypoints.min.js' %}"></script>
 <script src="{% static 'PostIT/js/infinite.min.js'%}"></script>
 
+<script src="{% static 'PostIT/js/bottom_navbar.js'%}"></script>
 
 
 

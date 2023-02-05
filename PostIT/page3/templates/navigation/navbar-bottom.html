@@ -31,6 +31,12 @@
         </ul>
         </div>
     </li>
+    <li class="bottom-nav-container">
+        <a href="{% url 'create-community' %}" class="bottom-nav-icons"><i
+                class="fa-solid fa-users-between-lines nav-icon"></i>
+            <div class="menu-small-text bottom-nav-text">Create Community</div>
+        </a>
+    </li>
     <li class="profile-menu-container bottom-nav-container">
         <a class="bottom-nav-icons"><i class="fa-solid fa-user nav-icon"></i>
             <div class="bottom-nav-text">Profile</div>
@@ -56,11 +62,13 @@
     {% endif %}
 
     {% else %}
-    <li class="bottom-nav-container"><a href="{% url 'register' %}"><i
-                class="fa-solid fa-arrow-up-right-from-square"></i><br />Register</a></li>
+    <li class="bottom-nav-container"><a class="bottom-nav-icons" href="{% url 'register' %}"><i
+                class="fa-solid fa-arrow-up-right-from-square nav-icon"></i>
+                <div class="bottom-nav-text">Register</div></a></li>
 
-    <li class="bottom-nav-container"><a href="{% url 'login-user' %}"><i
-                class="fa-solid fa-right-to-bracket"></i><br />Login</a></li>
+    <li class="bottom-nav-container"><a class="bottom-nav-icons" href="{% url 'login-user' %}"><i
+                class="fa-solid fa-right-to-bracket nav-icon"></i>
+                <div class="bottom-nav-text">Login</div></a></li>
     {% endif %}
 
     <li class="bottom-nav-container">
@@ -68,12 +76,7 @@
             <div class="bottom-nav-text">Messages</div>
         </a>
     </li>
-    <li class="bottom-nav-container">
-        <a href="{% url 'create-community' %}" class="bottom-nav-icons"><i
-                class="fa-solid fa-users-between-lines nav-icon"></i>
-            <div class="menu-small-text bottom-nav-text">Create Community</div>
-        </a>
-    </li>
+    
     <li class="bottom-nav-container">
         <a href="{% url 'create-community' %}" class="bottom-nav-icons"><i class="fa-solid fa-bell nav-icon"></i>
             <div class="bottom-nav-text">Notifications</div>

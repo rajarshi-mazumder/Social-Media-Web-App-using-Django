@@ -48,7 +48,7 @@
     }
 
     #search_btn i {
-        font-size: 20px;
+        font-size: 15px;
         padding-left: 10px;
     }
 
@@ -66,6 +66,7 @@
     }
 
     /* Nav bar Top End */
+    
     /* Bottom Navbar Start */
 
     #main-bottom-nav {
@@ -106,7 +107,9 @@
         white-space: nowrap;
         overflow: hidden;
     }
-
+    #main-bottom-nav .bottom-nav-container .profile-submenu {
+        align-items: flex-start;
+    }
     #main-bottom-nav .profile-img-container {
         margin-left: auto;
     }
@@ -119,14 +122,20 @@
         margin-left: 0;
     }
 
+    .profile-submenu{
+        justify-content: flex-start;
+    }
+
     /* Bottom Navbar End */
+
     /* Home Page Menus Start */
 
     .home-page-menus i {
-        font-size: 20px;
+        font-size: 14px;
     }
 
     /* Home Page Menus End */
+
     /* Add Post Section Start */
 
     .add-post-community-button span {
@@ -156,10 +165,12 @@
 
     /* Post Section Start */
     .post .post-body-section {
-        font-size: 14px;
+        font-size: 13px;
     }
 
-    .post .post-profile-section {}
+    .post .post-profile-section {
+        font-size: 13px;
+    }
 
     /* Post Section End */
 
@@ -185,11 +196,11 @@
     }
 
     .profile-info-holder .profile-bio {
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .profile-info-holder .profile-age {
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .profile-stats {
@@ -198,29 +209,96 @@
 
     .profile-info-holder .profile-additional-info i {
         margin-top: 3px;
+        font-size: 13px;
+    }
+    .profile-info-tabs {
+        font-size: 13px;
     }
 
+    /* Gamer Profile Stats Start */
     .gamer_profile_all_stats_section .divided_section {
         display: block;
     }
+    .gamer_profile_all_stats_section .game-logo {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .gamer_profile_all_stats_section .game_stat .label {
+        font-size: 12px;
+    }
+    .gamer_profile_all_stats_section .game_stat .value {
+        font-size: 13px;
+    }
+    /* Gamer Profile Stats End */
 
-
-
-
-
-
-    /* chat starts */
-
-    .chat-section .chat-messages {
-        width: 80%;
+    /* Sidebar Right Start */
+    .sidebar-page-links .page-link {
+        font-size: 13px;
+        height: 36px;
+    }
+    
+    .communities-section-sidebar a{
+        display: block;
+        width: 100%;
     }
 
+    .create-account-prompt{
+        position: fixed;
+        top: 300px;
+        right: 10%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        color: var(--text-secondary-color);
+        background-color: var(--post_bg_color);
+        height: 100px;
+        width: 300px;
+        text-align: center;
+        border-radius: 10px;
+        padding-top: 20px;
+        z-index: 200;
+    }
+    .create-account-prompt div{
+        z-index: 200;
+    }
+    .create-account-blocker-mobile-sidebar{
+        position: fixed;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 180;
+    }
+    /* Sidebar Right End */
+
+    /* Post Start */
+    .posts-timeline{
+        margin-top: 60px;
+    }
+    .home-page-posts-timeline{
+        margin-top: 85px;
+    }
+    .post .like-button {
+        font-size: 13px;
+        padding: 0 15px;
+    }
+    .post .reply-button {
+        font-size: 13px;
+        padding: 0 15px;
+    }
+    .post .post-interaction-items{
+        font-size: 13px;
+    }
+    .post-stats a{
+        font-size: 13px;
+    }
+    /* Post End */
 
 
-    /* chat ends */
+
+
+    
 }
-
-
 
 @media (max-width: 470px) {
 
@@ -264,6 +342,7 @@
         position: absolute;
         right: 0px;
         top: -10px;
+        font-size: 15px;
     }
 
     .search-bar-blocker {
@@ -302,8 +381,8 @@
 
     #main-bottom-nav .bottom-nav-container .bottom-nav-icons .nav-icon {
         position: absolute;
-        top: 15px;
-        font-size: 20px;
+        top: 20px;
+        font-size: 16px;
     }
 
     #main-bottom-nav .bottom-nav-container .bottom-nav-text {
@@ -345,8 +424,8 @@
 
     #main-bottom-nav .bottom-nav-container .bottom-nav-icons .nav-icon {
         position: absolute;
-        top: 15px;
-        font-size: 20px;
+        top: 20px;
+        font-size: 16px;
     }
 
     #main-bottom-nav .bottom-nav-container .bottom-nav-text {
@@ -364,8 +443,8 @@
 
     #main-bottom-nav .bottom-nav-container .bottom-nav-icons .nav-icon {
         position: absolute;
-        top: 15px;
-        font-size: 18px;
+        top: 20px;
+        font-size: 16px;
     }
 
     #main-bottom-nav .bottom-nav-container .bottom-nav-text {
