@@ -102,6 +102,7 @@
     margin-left: auto;
     text-align: left;
     padding: 10px 10px;
+    padding-left: 20px;
     margin-top: 5px;
     margin-bottom: 5px;
     border-radius: 15px;
@@ -111,6 +112,10 @@
 
     /* font-size: 0.85rem; */
     /* font-family: 'Poppins', sans-serif; */
+
+    display: flex;
+    gap: 10px;
+    position: relative;
 }
 
 .chat-section .chat-messages .chatbox .other-user-message {
@@ -131,9 +136,31 @@
     /* font-size: 0.85rem; */
 
     /* font-family: 'Poppins', sans-serif; */
+    display: flex;
+    gap: 10px;
+    position: relative;
 
 }
-
+.chat-section .chat-messages .chatbox .this-user-message .message-options-container{
+    position: absolute;
+    left: -18px;
+    top: clamp(10px, 50%, 60% );
+}
+.chat-section .chat-messages .chatbox .this-user-message .message-options-container i{
+    background-color: var(--secondary1_color);
+    padding-top: 8px;
+    padding-right: 22px;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    color: var(--text-secondary2-color);
+}
+.chat-section .chat-messages .chatbox .this-user-message .message-options-container{
+    display: none;
+}
+.chat-section .chat-messages .chatbox .this-user-message:hover > .message-options-container{
+    display: flex;
+}
 .chat-section .chat-messages .chatbox .has-newline {
 
     white-space: pre-line;
@@ -310,5 +337,7 @@
 
 }
 
-
+grammarly-extension{
+    top: 10px !important;
+}
 /* Chat section end */
