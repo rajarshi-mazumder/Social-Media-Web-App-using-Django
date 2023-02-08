@@ -104,7 +104,7 @@ Page3 - Chat
     const app = initializeApp(firebaseConfig);
 
     import {
-        getDatabase, ref, push, get, set, query,child, orderByChild, limitToFirst, limitToLast,
+        getDatabase, ref, push, get, set, query, child, orderByChild, limitToFirst, limitToLast,
         onChildAdded, onChildChanged, onChildRemoved, remove
     } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
 
@@ -127,103 +127,14 @@ Page3 - Chat
     const messages_query = query(ref(db, `DM_Chat/${chatRoomName}`), orderByChild("message_id"), limitToLast(10));
     var objDiv = document.getElementById("messages-holder");
     onChildAdded(messages_query, (data) => {
-        last_message_id = data.val().message_id;
-        console.log(data.val())
-        console.log(unread_messages_removed)
-        if (data.val().sender == logged_in_user) {
-            var dateTime = dateTimeToPrint(data.val().timestamp)
-            console.log("message:::: " + data.val().message)
-
-            if (data.val().has_newline == false) {
-
-
-
-                $('#messages').append(`
-                            
-                            <div class="this-user-message" id="message_id_${data.val().message_id}">
-                                <div class="message-details">
-                                    ${data.val().message}
-                                    <div class="datetime">${dateTime}</div>
-                                </div>
-                                <div class="message-options-container">
-                                    <button id="${data.val().message_id}" class="delete-msg"><i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                                    `)
-            }
-            else {
-                $('#messages').append(`
-                            
-                            <div class="this-user-message has-newline" id="message_id_${data.val().message_id}">
-                                <div class="message-details">
-                                    ${data.val().message}
-                                    <div class="datetime">${dateTime}</div>
-                                </div>
-                                <div class="message-options-container">
-                                    <button id="${data.val().message_id}" class="delete-msg"><i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                                    `)
-            }
-        }
-        else {
-
-            var dateTime = dateTimeToPrint(data.val().timestamp)
-            console.log("message:::: " + data.val().message)
-            if (data.val().has_newline == false) {
-
-
-                $('#messages').append(`
-                            
-                            <div class="other-user-message" id="message_id_${data.val().message_id}">
-                                ${data.val().message}
-                                <div class="datetime"> ${dateTime}</div>
-                            </div>
-                                    `)
-            }
-            else {
-                $('#messages').append(`
-                            
-                            <div class="other-user-message has-newline" id="message_id_${data.val().message_id}">
-                                ${data.val().message}
-                                <div class="datetime"> ${dateTime}</div>
-                            </div>
-                                    `)
-            }
-        }
-
-
-        // $('#messages').append(`
-        //                   <li>${data.val().sender}</li>
-        //                 <li class="this-user-message">${data.val().message}</li>
-        //`)
-
-        console.log(objDiv.scrollHeight)
-        objDiv.scrollTop = objDiv.scrollHeight;
-        console.log("Sender: " + data.val().sender)
-        console.log("logged in user: ", logged_in_user)
-
-
-        if (data.val().sender === logged_in_user) {
-            console.log("sender is logged in user")
-        }
-        else if (has_page_loaded) {
-
-            remove_unread_message(event)
-            console.log("Calling unread event")
-            console.log("sender is not logged in user")
-        }
-
+        appendmessages(data);
     });
+    const messages_query_to_delete = query(ref(db, `DM_Chat/${chatRoomName}`), orderByChild("message_id"));
 
-    onChildRemoved(messages_query, (data)=>{
+    onChildRemoved(messages_query_to_delete, (data) => {
         console.log("message_id_to_delete", data.val().message_id)
         document.getElementById(`message_id_${data.val().message_id}`).remove();
-        // $(`message_id_${data.val().message_id}`).remove();
     });
-
     function InsertData() {
         let message = document.getElementById("message").value;
 
@@ -263,10 +174,108 @@ Page3 - Chat
 
     }
 
+    function appendmessages(data) {
+        const dateeeeeeee = new Date();
+        console.log("On child added called at", dateeeeeeee);
+
+
+        if (last_message_id < data.val().message_id) {
+            last_message_id = data.val().message_id;
+            console.log(data.val())
+            console.log(unread_messages_removed)
+            if (data.val().sender == logged_in_user) {
+                var dateTime = dateTimeToPrint(data.val().timestamp)
+                console.log("message:::: " + data.val().message)
+
+                if (data.val().has_newline == false) {
+
+
+
+                    $('#messages').append(`
+                            
+                            <div class="this-user-message" id="message_id_${data.val().message_id}">
+                                <div class="message-details">
+                                    ${data.val().message}
+                                    <div class="datetime">${dateTime}</div>
+                                </div>
+                                <div class="message-options-container">
+                                    <button id="${data.val().message_id}" class="delete-msg"><i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                                    `)
+                }
+                else {
+                    $('#messages').append(`
+                            
+                            <div class="this-user-message has-newline" id="message_id_${data.val().message_id}">
+                                <div class="message-details">
+                                    ${data.val().message}
+                                    <div class="datetime">${dateTime}</div>
+                                </div>
+                                <div class="message-options-container">
+                                    <button id="${data.val().message_id}" class="delete-msg"><i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                                    `)
+                }
+            }
+            else {
+
+                var dateTime = dateTimeToPrint(data.val().timestamp)
+                console.log("message:::: " + data.val().message)
+                if (data.val().has_newline == false) {
+
+
+                    $('#messages').append(`
+                            
+                            <div class="other-user-message" id="message_id_${data.val().message_id}">
+                                ${data.val().message}
+                                <div class="datetime"> ${dateTime}</div>
+                            </div>
+                                    `)
+                }
+                else {
+                    $('#messages').append(`
+                            
+                            <div class="other-user-message has-newline" id="message_id_${data.val().message_id}">
+                                ${data.val().message}
+                                <div class="datetime"> ${dateTime}</div>
+                            </div>
+                                    `)
+                }
+            }
+
+
+            // $('#messages').append(`
+            //                   <li>${data.val().sender}</li>
+            //                 <li class="this-user-message">${data.val().message}</li>
+            //`)
+
+            console.log(objDiv.scrollHeight)
+            objDiv.scrollTop = objDiv.scrollHeight;
+            console.log("Sender: " + data.val().sender)
+            console.log("logged in user: ", logged_in_user)
+
+
+            if (data.val().sender === logged_in_user) {
+                console.log("sender is logged in user")
+            }
+            else if (has_page_loaded) {
+
+                remove_unread_message(event)
+                console.log("Calling unread event")
+                console.log("sender is not logged in user")
+            }
+        }
+
+    }
 
     window.onload = (event) => {
-        console.log("page is fully loaded");
-        has_page_loaded = true;
+
+        setTimeout(PageFullyLoadedState, 5000);
+
         Default_Bottom_Navabar_State();
         console.log("page is fully loaded!!!!!!!!");
         var contact_items = document.querySelectorAll('[id="chat-account-list-item"]');
@@ -288,48 +297,51 @@ Page3 - Chat
             }
 
         })
-
-        //remove_unread_message(event)
         scrollSmoothToBottom();
+        //remove_unread_message(event)
     };
 
-
+    function PageFullyLoadedState() {
+        console.log("page is fully loaded");
+        has_page_loaded = true;
+    }
 
     document.getElementById("submit_btn").addEventListener('click', InsertData);
 
 
-    $("#messages").on("click", '.delete-msg', function(event){
-            var m_id= event.currentTarget.id
-            DeleteMessage($(this), m_id)
-        })
-    function DeleteMessage(thisObj, m_id){
+
+    $("#messages").on("click", '.delete-msg', function (event) {
+        var m_id = event.currentTarget.id
+        DeleteMessage($(this), m_id)
+    })
+    function DeleteMessage(thisObj, m_id) {
         const chatRoom_ref = ref(db, `DM_Chat/${chatRoomName}`);
-        
-            console.log(chatRoomName, m_id)
-            
-            const dbRef = ref(getDatabase());
-            get(child(dbRef, `DM_Chat/${chatRoomName}`)).then((snapshot) => {
-                const keys= Object.keys(snapshot.val());
-                keys.forEach((key, index)=>{
-                    
-                    if(snapshot.val()[key]['message_id']== m_id)
-                    {
-                        console.log("Message to delete: ",snapshot.val()[key]['message'])
-                        const message_ref = ref(db,`DM_Chat/${chatRoomName}/${key}`)
-                        remove(message_ref)
-                    }
-                })
-                message_id_to_delete= m_id
+
+        console.log(chatRoomName, m_id)
+
+        const dbRef = ref(getDatabase());
+        get(child(dbRef, `DM_Chat/${chatRoomName}`)).then((snapshot) => {
+            const keys = Object.keys(snapshot.val());
+            keys.forEach((key, index) => {
+
+                if (snapshot.val()[key]['message_id'] == m_id) {
+                    console.log("Message to delete: ", snapshot.val()[key]['message'])
+                    const message_ref = ref(db, `DM_Chat/${chatRoomName}/${key}`)
+                    remove(message_ref)
+                }
             })
-        }
+
+        })
+        //
+    }
 
 
 
-        const scrollSmoothToBottom = () => {
+    const scrollSmoothToBottom = () => {
         $(scrollingElement).animate({
             scrollTop: document.body.scrollHeight,
         }, 500);
-}
+    }
 </script>
 
 <script>

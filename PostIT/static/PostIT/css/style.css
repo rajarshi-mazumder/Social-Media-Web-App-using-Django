@@ -243,6 +243,15 @@ i:hover {
     padding-bottom: 15px; */
 }
 
+#main-nav .nav-icon-special a {
+    display: flex;
+    flex-direction: column;
+}
+
+#main-nav .nav-icon-special a i {
+    font-size: 20px;
+}
+
 #main-nav .nav-fixed-elements {
     /* position: absolute; */
     position: relative;

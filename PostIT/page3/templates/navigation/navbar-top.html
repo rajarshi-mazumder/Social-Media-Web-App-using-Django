@@ -103,8 +103,10 @@
         <li><a href="{% url 'login-user' %}"><i class="fa-solid fa-right-to-bracket"></i><br />Login</a></li>
         {% endif %}
 
-        <li>
-            <a href="{% url 'chat-general' %}"><i class="fa-solid fa-envelope"></i> <br />Messages</a>
+        <li class="nav-icon-special">
+            <a href="{% url 'chat-general' %}"><i class="material-symbols-outlined">
+                    chat_bubble
+                </i> Messages</a>
         </li>
         <li>
             <a href="{% url 'create-community' %}"><i class="fa-solid fa-users-between-lines"></i><br />Create

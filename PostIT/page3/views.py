@@ -1171,6 +1171,7 @@ def start_following(request, who_to_follow):
 
     return JsonResponse({'followers_list': followers_list})
 
+
 @login_required(login_url='/users/login_user')
 def create_game_profile(request, user):
     form = GameProfileForm()
@@ -1320,6 +1321,7 @@ def create_game_profile(request, user):
     }
 
     return render(request, 'gamerProfile/create_gamer_profile.html', context)
+
 
 @login_required(login_url='/users/login_user')
 def edit_gamer_profile(request, user):
@@ -2385,6 +2387,36 @@ def chat_general_page(request):
     }
 
     return render(request, 'chat/chat_home.html', context)
+
+
+@csrf_exempt
+def chat_add_new(request):
+
+    if request.method == 'POST':
+        og_search_query = request.POST['search_query']
+        search_query = request.POST['search_query'].lower().replace(' ', '')
+
+        accounts_list = []
+        all_users = User.objects.all()
+        for user in all_users:
+            if search_query in user.username.lower():
+                accounts_list.append(user)
+
+        context = {
+            'accounts_list': accounts_list,
+        }
+        context.update(get_featured_communities(request))
+        context.update(get_user_following_info(request))
+        context.update(get_gamer_profile_info_sidebar(request))
+        return render(request, 'chat/chat_add_new.html', context=context)
+
+    context = {
+        # 'accounts_list': accounts_list,
+    }
+    context.update(get_featured_communities(request))
+    context.update(get_user_following_info(request))
+    context.update(get_gamer_profile_info_sidebar(request))
+    return render(request, 'chat/chat_add_new.html', context=context)
 
 
 @csrf_exempt

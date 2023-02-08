@@ -1,0 +1,105 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block content%}
+{% include 'navigation/navbar-top.html' %}
+
+<body class="main-body">
+    {% include 'navigation/sidebar-left.html' %}
+    <div class="page-contents">
+
+        <br />
+
+        <div class="posts-timeline">
+            <div class="new-chat-top-section">
+                <div class="page-title">New Chat</div>
+                <form action="{% url 'add-chat-new-contact'  %}" method="POST" enctype="multipart/form-data"
+                    id="search-form" class="chat-search-form">
+                    {% csrf_token %}
+                    <input class="chat-search-bar" name="search_query" type="text" placeholder="Search for people ">
+                    <button id="search_btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+            </div>
+            {% for user in accounts_list %}
+
+
+
+            <div class="account-list-item chat-search-item" onclick="location.href=`/chat/{{user.id}}`"
+                value="{{user.id}}">
+
+                <div class="profile-pic">
+                    <a href="{%url 'user-profile-stats' user %}">
+                        {% if user.profile.profile_pic.name %}
+                        <img src="{{ user.profile.profile_pic.url}}">
+                        {% else %}
+
+                        <img src="{% static 'PostIT/images/profilepic.jpg' %}">
+                        {% endif %}
+                    </a>
+                </div>
+                <div class="info">
+                    <div class="username">
+                        <a href="{%url 'user-profile-stats' user %}">@{{user.username}}</a>
+                    </div>
+                    <div class="bio">
+                        {{user.profile.bio}}
+                    </div>
+                </div>
+
+
+
+            </div>
+            {% endfor %}
+        </div>
+        {% include 'navigation/sidebar.html' %}
+    </div>
+
+</body>
+
+<nav id="main-bottom-nav">
+    {% include 'navigation/navbar-bottom.html' %}
+</nav>
+
+<script src="{% static 'PostIT/js/bottom_navbar.js'%}"></script>
+
+<script>
+    function updateInteractButtonText(btn) {
+        if (following_status) {
+
+            btn[0].innerHTML = "Following"
+        }
+        else {
+            btn[0].innerHTML = "Follow"
+        }
+
+        console.log(btn[0].innerHTML)
+    }
+
+
+    $(document).on('click', '.interact-button', function (e) {
+        e.preventDefault();
+        console.log("Trying to follow: ")
+        var this_ = $(this)
+        userid = this_.attr("value").valueOf()
+
+        // var somevar = this_.attr()
+        $.ajax({
+            type: 'POST',
+            url: '{% url "follow-user" %}',
+            data: {
+                userid: userid,
+                action: 'post',
+            },
+            success: function (json) {
+                following_status = json['result'];
+                console.log(json)
+                updateInteractButtonText(this_, following_status)
+            },
+            error: function (xhr, errmsg, err) {
+
+            }
+        });
+    })
+</script>
+
+{% endblock content %}
