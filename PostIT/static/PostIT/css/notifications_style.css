@@ -24,6 +24,7 @@
 .notification-account-item .notif-info .desc {
     white-space: nowrap;
     text-align: left;
+    margin-left: 10px;
 }
 
 .notification-account-item .button-1 {
