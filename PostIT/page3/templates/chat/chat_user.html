@@ -36,7 +36,7 @@ Page3 - Chat
                             {{user_to_chat_with_id}}
                         </div>
                         <div id="sender-username" value="{{logged_in_user}}" style="display: none;">
-                         {{logged_in_user}}
+                            {{logged_in_user}}
                         </div>
                         <div id="receiver-username" value="{{user_to_chat_with_username}}" style="display: none;">
                             Reciever: {{user_to_chat_with_username}}
@@ -358,7 +358,7 @@ Page3 - Chat
             url: '{% url "add-unread-message-notification" %}',
             data: {
                 receiver: receiver,
-                sender:sender,
+                sender: sender,
                 action: 'post',
                 message: message,
             },

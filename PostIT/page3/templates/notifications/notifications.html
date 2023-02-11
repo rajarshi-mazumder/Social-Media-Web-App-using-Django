@@ -29,23 +29,23 @@ Page3 - User Communities
                     {% for post in unviewed_likes %}
                     {% if not post.is_reply %}
                     <div class="account-list-item notification-account-item">
-                        
+
                         <div class="notif-info">
                             <div class="post-body">
                                 {% if post.body|length > 30 %}
                                 <a>{{ post.body|slice:"0:29"}} ...</a>
                                 {%else%}
-                                <a >{{post.body}}</a>
+                                <a>{{post.body}}</a>
                                 {%endif%}
                             </div>
                             <div class="desc">
-                               Your post received likes
+                                Your post received likes
                             </div>
                         </div>
-                    
-                        
+
+
                         <button class="button-1" onclick="location.href=`{% url 'upload_reply' post.pk %}`">
-                            Open Post 
+                            Open Post
                         </button>
                     </div>
 
@@ -64,7 +64,7 @@ Page3 - User Communities
                         {% if user.profile.profile_pic.name %}
                         <img src="{{ user.profile.profile_pic.url}}">
                         {% else %}
-            
+
                         <img src="{% static 'PostIT/images/profilepic.jpg' %}">
                         {% endif %}
                     </a>
@@ -77,13 +77,13 @@ Page3 - User Communities
                         messaged you
                     </div>
                 </div>
-            
-                
+
+
                 <button class="button-1" onclick="location.href=`/chat/{{user.id}}`">
                     Open chat
                 </button>
-  
-            
+
+
             </div>
             {%endfor%}
         </div>

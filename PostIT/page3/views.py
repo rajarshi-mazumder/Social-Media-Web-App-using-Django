@@ -21,8 +21,10 @@ from .serializers import PostSerializer
 from django.core import serializers
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+
 from django.core.mail import send_mail
-import smtplib, ssl
+import smtplib
+import ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -828,6 +830,7 @@ def like(request):
             result = post.like_count
             post.save()
             add_like_notification(request=request)
+
         return JsonResponse({'result': result, })
 
 
@@ -2287,7 +2290,8 @@ def chat_with_user(request, user_to_chat_with):
                 if has_numbers(key):
                     keys_to_append = key.split('_')
                     for i in keys_to_append:
-                        unread_messages_dict.update({i: last_chat_messages[key]})
+                        unread_messages_dict.update(
+                            {i: last_chat_messages[key]})
             print("unread_messages_dict: ", unread_messages_dict)
 
         except:
@@ -2302,7 +2306,7 @@ def chat_with_user(request, user_to_chat_with):
             for contact in contacts_with_unread_messages_qs:
                 contacts_with_unread_messages.append(contact.id)
             print("contacts_with_unread_messagesqs: ",
-                contacts_with_unread_messages)
+                  contacts_with_unread_messages)
         except:
             pass
 
@@ -2425,6 +2429,7 @@ def chat_add_new(request):
     context.update(get_gamer_profile_info_sidebar(request))
     return render(request, 'chat/chat_add_new.html', context=context)
 
+
 def send_email_fcn(request):
     # sender_email = "bottle.noreply@gmail.com"
     # receiver_email = "raj1156mazumder@gmail.com"
@@ -2435,9 +2440,9 @@ def send_email_fcn(request):
     port = 587  # For starttls
     smtp_server = "smtp.gmail.com"
     email_from = "bottle.noreply@gmail.com"
-    email_to =str( User.objects.get(username= receiver).email)
+    email_to = str(User.objects.get(username=receiver).email)
     password = "nezdewlvazpdzerh"
-    
+
     html = f'''
     <html>
         <body style="background-color:#333;
@@ -2469,6 +2474,7 @@ def send_email_fcn(request):
             server.login(email_from, password)
             server.sendmail(email_from, email_to, email_string)
 
+
 @csrf_exempt
 def add_unread_message_notification(request):
     result = 'Working '
@@ -2476,7 +2482,7 @@ def add_unread_message_notification(request):
 
         receiver = request.POST.get('receiver')
         message = request.POST.get('message')[0:29]
-        print("Die for you" ,request.POST.get('sender'))
+        print("Die for you", request.POST.get('sender'))
         result = receiver
         print("Hello WOrld ", result)
         try:
@@ -2509,12 +2515,7 @@ def add_unread_message_notification(request):
         result = "success"
         update_last_message(
             request, receiver_user=receiver_user, message=message)
-        # send_mail(("Test Subject"), "Notification from HHonest", "bottle.noreply@gmail.com", ["rajmazumder1145@gmail.com"])
         send_email_fcn(request)
-        
-
-
-
 
         return JsonResponse({'result': result, })
 
@@ -2565,7 +2566,7 @@ def remove_unread_message_notification(request):
     if request.POST.get('action') == 'post':
         receiver = request.POST.get('receiver')
         result = receiver
-        print("Cycle repeateddd ", result)
+        print("Bye WOrld ", result)
         try:
 
             logged_in_user_notif_data = Notifications.objects.filter(
@@ -2624,41 +2625,41 @@ def add_chat_contact(request):
 
             return JsonResponse({'result': result, })
 
+
 def add_like_notification(request):
-    postid= request.POST['postid']
-    post= Post.objects.filter(id=postid)
+    postid = request.POST['postid']
+    post = Post.objects.filter(id=postid)
     if post.exists():
-        user_to_notify= post[0].author
-        notification_obj= Notifications.objects.filter(user=user_to_notify)
+        user_to_notify = post[0].author
+        notification_obj = Notifications.objects.filter(user=user_to_notify)
 
         if notification_obj.exists():
-            notification= notification_obj[0]
+            notification = notification_obj[0]
             notification.unviewed_likes.add(post[0])
             notification.save()
             print(notification)
         else:
-            notification= Notifications.objects.create(user=user_to_notify)
+            notification = Notifications.objects.create(user=user_to_notify)
             notification.unviewed_likes.add(post[0])
             notification.save()
     return JsonResponse({'result': "added like notification", })
 
+
 def notifications(request, user):
-    
-    unviewed_likes=[]
+
+    unviewed_likes = []
     user = User.objects.get(username=user)
     profile = Profile.objects.filter(user=user)[0]
-    
-    user_notifications= Notifications.objects.filter(user= request.user)
+
+    user_notifications = Notifications.objects.filter(user=request.user)
     if user_notifications.exists():
-        unviewed_likes=user_notifications[0].unviewed_likes
-        unread_messages= user_notifications[0].unread_messages
-    context={"unviewed_likes":unviewed_likes.all(),
-             "unread_messages":unread_messages.all(),
-             'profile_owner': user,
-             'profile': profile,
-             'page':"notifications"}
+        unviewed_likes = user_notifications[0].unviewed_likes
+        unread_messages = user_notifications[0].unread_messages
+    context = {"unviewed_likes": unviewed_likes.all(),
+               "unread_messages": unread_messages.all(),
+               'profile_owner': user,
+               'profile': profile,
+               'page': "notifications"}
     print("notifications", unviewed_likes.all())
 
     return render(request, 'notifications/notifications.html', context=context)
-
-    
