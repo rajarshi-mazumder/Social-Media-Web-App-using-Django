@@ -45,7 +45,9 @@
     #main-nav .nav-logo img {
         width: 70px;
     }
-
+    .posts-timeline{
+        margin-bottom: 80px;
+    }
     .posts-timeline ul {
         /* margin-block-start: 0;
             margin-block-end: 0; */
@@ -331,6 +333,12 @@
 
 
     /* chat ends */
+
+    /* Notifications Start */
+    .notification-account-item{
+        width: 100%;
+    }
+    /* Notifications End */
 }
 
 

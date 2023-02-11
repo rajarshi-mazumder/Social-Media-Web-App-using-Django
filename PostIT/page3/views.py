@@ -21,7 +21,10 @@ from .serializers import PostSerializer
 from django.core import serializers
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
+from django.core.mail import send_mail
+import smtplib, ssl
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 # Utility functions import
 from .utilityFunctions import get_featured_communities, \
@@ -824,6 +827,7 @@ def like(request):
             post.like_count += 1
             result = post.like_count
             post.save()
+            add_like_notification(request=request)
         return JsonResponse({'result': result, })
 
 
@@ -1995,6 +1999,7 @@ def show_user_joined_communities(request, user_id):
 
         context = {
             'profile': profile,
+            'profile_owner': user,
             'user_joined_communities': user_joined_communities,
             'this_user_joined_communities': this_user_joined_communities,
             'page': 'user_communities_page',
@@ -2263,60 +2268,62 @@ def has_numbers(inputString):
 
 
 def chat_with_user(request, user_to_chat_with):
-    logged_in_user_id = request.user.id
-    logged_in_user = User.objects.get(id=request.user.id)
-    receiver = User.objects.get(id=user_to_chat_with)
-    user_to_chat_with_id = receiver.id
 
-    user_to_chat_with_username = receiver.username
-    # chat_contacts = request.user.profile.chat_contacts.all()
-    # chat_contacts = User.objects.all()
-    unread_messages_dict = {}
-    last_chat_messages = ""
-    try:
-        last_chat_messages = logged_in_user.profile.last_chat_messages[0]
-        print("last_chat_messages: ", last_chat_messages)
-        for key in last_chat_messages:
-            if has_numbers(key):
-                keys_to_append = key.split('_')
-                for i in keys_to_append:
-                    unread_messages_dict.update({i: last_chat_messages[key]})
-        print("unread_messages_dict: ", unread_messages_dict)
+    if(user_to_chat_with != "favicon.png"):
+        logged_in_user_id = request.user.id
+        logged_in_user = User.objects.get(id=request.user.id)
+        receiver = User.objects.get(id=user_to_chat_with)
+        user_to_chat_with_id = receiver.id
 
-    except:
-        pass
+        user_to_chat_with_username = receiver.username
+        # chat_contacts = request.user.profile.chat_contacts.all()
+        # chat_contacts = User.objects.all()
+        unread_messages_dict = {}
+        last_chat_messages = ""
+        try:
+            last_chat_messages = logged_in_user.profile.last_chat_messages[0]
+            print("last_chat_messages: ", last_chat_messages)
+            for key in last_chat_messages:
+                if has_numbers(key):
+                    keys_to_append = key.split('_')
+                    for i in keys_to_append:
+                        unread_messages_dict.update({i: last_chat_messages[key]})
+            print("unread_messages_dict: ", unread_messages_dict)
 
-    contacts_with_unread_messages = []
-    # add contacts having unread messages
+        except:
+            pass
 
-    try:
-        contacts_with_unread_messages_qs = logged_in_user.notifications.unread_messages.all()
+        contacts_with_unread_messages = []
+        # add contacts having unread messages
 
-        for contact in contacts_with_unread_messages_qs:
-            contacts_with_unread_messages.append(contact.id)
-        print("contacts_with_unread_messagesqs: ",
-              contacts_with_unread_messages)
-    except:
-        pass
+        try:
+            contacts_with_unread_messages_qs = logged_in_user.notifications.unread_messages.all()
 
-    context = {
-        'logged_in_user': logged_in_user,
-        'logged_in_user_id': logged_in_user_id,
-        'user_to_chat_with': user_to_chat_with,
-        'user_to_chat_with_id': user_to_chat_with_id,
-        'user_to_chat_with_username': user_to_chat_with_username,
-        'last_chat_messages': last_chat_messages,
-        # 'account_items_list': chat_contacts,
-        'receiver': receiver,
-        'contacts_with_unread_messages': contacts_with_unread_messages,
-        'unread_messages_dict': unread_messages_dict,
-    }
+            for contact in contacts_with_unread_messages_qs:
+                contacts_with_unread_messages.append(contact.id)
+            print("contacts_with_unread_messagesqs: ",
+                contacts_with_unread_messages)
+        except:
+            pass
 
-    logged_in_user_profile = logged_in_user.profile
-    logged_in_user_profile.last_chat_with = user_to_chat_with_username
-    logged_in_user_profile.save()
+        context = {
+            'logged_in_user': logged_in_user,
+            'logged_in_user_id': logged_in_user_id,
+            'user_to_chat_with': user_to_chat_with,
+            'user_to_chat_with_id': user_to_chat_with_id,
+            'user_to_chat_with_username': user_to_chat_with_username,
+            'last_chat_messages': last_chat_messages,
+            # 'account_items_list': chat_contacts,
+            'receiver': receiver,
+            'contacts_with_unread_messages': contacts_with_unread_messages,
+            'unread_messages_dict': unread_messages_dict,
+        }
 
-    return render(request, 'chat/chat_user.html', context)
+        logged_in_user_profile = logged_in_user.profile
+        logged_in_user_profile.last_chat_with = user_to_chat_with_username
+        logged_in_user_profile.save()
+
+        return render(request, 'chat/chat_user.html', context)
 
 
 @csrf_exempt
@@ -2418,6 +2425,49 @@ def chat_add_new(request):
     context.update(get_gamer_profile_info_sidebar(request))
     return render(request, 'chat/chat_add_new.html', context=context)
 
+def send_email_fcn(request):
+    # sender_email = "bottle.noreply@gmail.com"
+    # receiver_email = "raj1156mazumder@gmail.com"
+    sender = request.POST.get('sender')
+    print("Sender: Burnnn", sender)
+    receiver = request.POST.get('receiver')
+    message = f'{request.POST.get("message")[0:29]}...'
+    port = 587  # For starttls
+    smtp_server = "smtp.gmail.com"
+    email_from = "bottle.noreply@gmail.com"
+    email_to =str( User.objects.get(username= receiver).email)
+    password = "nezdewlvazpdzerh"
+    
+    html = f'''
+    <html>
+        <body style="background-color:#333;
+                    color: white; padding: 10px ">
+            <h1 style="text-align: center" >New Message from {sender}</h1>
+            <p>{message}</p>
+        </body>
+    </html>
+    '''
+    email_message = MIMEMultipart()
+    email_message['From'] = email_from
+    email_message['To'] = email_to
+    email_message['Subject'] = f'New Message from {sender} on Bottle'
+    # Attach the html doc defined earlier, as a MIMEText html content type to the MIME message
+    email_message.attach(MIMEText(html, "html"))
+    # Convert it as a string
+    email_string = email_message.as_string()
+
+    # context = ssl.create_default_context()
+    # with smtplib.SMTP(smtp_server, port) as server:
+    #     server.ehlo()  # Can be omitted
+    #     server.starttls(context=context)
+    #     server.ehlo()  # Can be omitted
+    #     server.login(sender_email, password)
+    #     server.sendmail(sender_email, receiver_email, message)
+    context = ssl.create_default_context()
+    if(email_to):
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+            server.login(email_from, password)
+            server.sendmail(email_from, email_to, email_string)
 
 @csrf_exempt
 def add_unread_message_notification(request):
@@ -2426,7 +2476,7 @@ def add_unread_message_notification(request):
 
         receiver = request.POST.get('receiver')
         message = request.POST.get('message')[0:29]
-        print("Message: ", message)
+        print("Die for you" ,request.POST.get('sender'))
         result = receiver
         print("Hello WOrld ", result)
         try:
@@ -2459,6 +2509,13 @@ def add_unread_message_notification(request):
         result = "success"
         update_last_message(
             request, receiver_user=receiver_user, message=message)
+        # send_mail(("Test Subject"), "Notification from HHonest", "bottle.noreply@gmail.com", ["rajmazumder1145@gmail.com"])
+        send_email_fcn(request)
+        
+
+
+
+
         return JsonResponse({'result': result, })
 
 
@@ -2508,7 +2565,7 @@ def remove_unread_message_notification(request):
     if request.POST.get('action') == 'post':
         receiver = request.POST.get('receiver')
         result = receiver
-        print("Bye WOrld ", result)
+        print("Cycle repeateddd ", result)
         try:
 
             logged_in_user_notif_data = Notifications.objects.filter(
@@ -2566,3 +2623,42 @@ def add_chat_contact(request):
                 pass
 
             return JsonResponse({'result': result, })
+
+def add_like_notification(request):
+    postid= request.POST['postid']
+    post= Post.objects.filter(id=postid)
+    if post.exists():
+        user_to_notify= post[0].author
+        notification_obj= Notifications.objects.filter(user=user_to_notify)
+
+        if notification_obj.exists():
+            notification= notification_obj[0]
+            notification.unviewed_likes.add(post[0])
+            notification.save()
+            print(notification)
+        else:
+            notification= Notifications.objects.create(user=user_to_notify)
+            notification.unviewed_likes.add(post[0])
+            notification.save()
+    return JsonResponse({'result': "added like notification", })
+
+def notifications(request, user):
+    
+    unviewed_likes=[]
+    user = User.objects.get(username=user)
+    profile = Profile.objects.filter(user=user)[0]
+    
+    user_notifications= Notifications.objects.filter(user= request.user)
+    if user_notifications.exists():
+        unviewed_likes=user_notifications[0].unviewed_likes
+        unread_messages= user_notifications[0].unread_messages
+    context={"unviewed_likes":unviewed_likes.all(),
+             "unread_messages":unread_messages.all(),
+             'profile_owner': user,
+             'profile': profile,
+             'page':"notifications"}
+    print("notifications", unviewed_likes.all())
+
+    return render(request, 'notifications/notifications.html', context=context)
+
+    

@@ -1,0 +1,28 @@
+.notification-account-item{
+    
+    display: flex;
+    padding: 20px 10px;
+    font-size: 13px;
+}
+.notification-account-item div{
+    margin-right: 10px;
+}
+.notification-account-item .notif-info{
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+}
+.notification-account-item .notif-info .post-body{
+    font-weight: bolder;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+.notification-account-item .notif-info .desc{
+    white-space: nowrap;
+    text-align: left;
+}
+.notification-account-item .button-1{
+    margin: auto 0;
+    margin-left: auto;
+    margin-right: 10px;
+}

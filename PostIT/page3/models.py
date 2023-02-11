@@ -404,6 +404,10 @@ class Notifications(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
     unread_messages = models.ManyToManyField(
         User, default=None, blank=True, related_name='unread_messages')
+    unviewed_likes=models.ManyToManyField(
+        Post, default=None, blank=True, related_name='new_likes')
+    unviewed_vouches= models.ManyToManyField(
+        User, default=None, blank=True, related_name='new_vouches')
 
     def __str__(self) -> str:
-        return str(self.user) + ":" + str(self.unread_messages.all().count()) + " notification(s)"
+        return str(self.user) + ":" + str(self.unread_messages.all().count())+" : "+ str(self.unviewed_likes) + " notification(s)"
