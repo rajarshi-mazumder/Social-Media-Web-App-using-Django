@@ -1,5 +1,4 @@
 @media (max-width: 600px) {
-
     .chat-page-nav {
         display: none !important;
     }
@@ -338,10 +337,18 @@
 
     /* Notifications Start */
     .notification-account-item {
-        width: 100%;
+        width: 90%;
     }
 
     /* Notifications End */
+
+    .profile_exists_popup {
+        width: clamp(200px, 300px, 400px);
+        top: 150px;
+        left: -70px;
+        width: 100vw;
+        height: 150px;
+    }
 }
 
 

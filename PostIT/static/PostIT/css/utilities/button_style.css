@@ -2,7 +2,7 @@
     background-color: var(--primary_color);
 
     /* background-color: aqua; */
-    width: 80px;
+    min-width: 80px;
     border-radius: 50px;
     padding: 7px;
     font-size: small;

@@ -13,8 +13,13 @@
     display: flex;
     flex-direction: column;
     margin-top: 0;
+    width: 100%;
+    cursor: pointer;
 }
-
+.notification-account-item .account-items-container {
+    display: flex;
+    flex-direction: row !important;
+}
 .notification-account-item .notif-info .post-body {
     font-weight: bolder;
     text-overflow: ellipsis;
@@ -24,11 +29,15 @@
 .notification-account-item .notif-info .desc {
     white-space: nowrap;
     text-align: left;
-    
+    margin-left: 10px;
 }
 
-.notification-account-item .button-1 {
+.notification-account-item .close-btn {
     margin: auto 0;
     margin-left: auto;
     margin-right: 10px;
+    padding: 10px;
+    padding-bottom: 5px;
+    background-color: var(--primary_color);
+    border-radius: 50%;
 }

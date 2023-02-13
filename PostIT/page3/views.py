@@ -929,6 +929,7 @@ def vouch_user(request):
             profile.vouched_by.add(request.user)
             print("Vouch count: ", profile.vouched_by.count())
             vouched_for_user = True
+            add_vouch_notification(vouched_for=profile.user, request=request)
 
         # print(post.like_count)
         # test = post.vouches.filter(id=request.user.id)
@@ -1792,7 +1793,8 @@ def search_results(request):
 # Community
 
 # Create Community
-
+@login_required(login_url='/users/login_user')
+@csrf_exempt
 def create_community(request):
     form = CreateCommunityForm()
     message = ""
@@ -2329,7 +2331,7 @@ def chat_with_user(request, user_to_chat_with):
 
         return render(request, 'chat/chat_user.html', context)
 
-
+@login_required(login_url='/users/login_user')
 @csrf_exempt
 def chat_general_page(request):
     logged_in_user_id = request.user.id
@@ -2644,22 +2646,71 @@ def add_like_notification(request):
             notification.save()
     return JsonResponse({'result': "added like notification", })
 
+def remove_like_notification(request):
+    print("Shadowww")
+    post_id=request.POST['post_id']
+    post_author=User.objects.get(username=str( request.POST['post_author']))
+    
+    notif_obj= Notifications.objects.filter(user= post_author)[0]
+    notif_obj.unviewed_likes.remove(post_id)
+    notif_obj.save()
+    return JsonResponse({"success": "success"})
 
+def add_vouch_notification(vouched_for, request):
+    print("Voudhed for:", vouched_for)
+    notif_obj=Notifications.objects.filter(user= vouched_for)
+    if notif_obj.exists():
+        notif_obj[0].unviewed_vouches.add(request.user)
+        notif_obj[0].save()
+    else:
+        notif_obj= Notifications.objects.create(user=vouched_for)
+        notif_obj.unviewed_vouches.add(request.user)
+        notif_obj.save()
+    return JsonResponse({'result': "added vouch notification",})
+
+def remove_vouch_notifications(request):
+    notif_obj=Notifications.objects.filter(user= request.user)
+    if notif_obj.exists():
+        notif_obj[0].unviewed_vouches.set("")
+        notif_obj[0].save()
+        
+    return JsonResponse({"success": "success"})
+
+def remove_uread_message_notification_from_notifications_page(request):
+    message_from=User.objects.get(username= request.POST['message_from'])
+    print("message_from",message_from)
+    notif_object= Notifications.objects.filter(user=request.user)
+    if notif_object.exists():
+        notif_object[0].unread_messages.remove(message_from)
+        notif_object[0].save()
+    return JsonResponse({'result': "removed message notification",})
+
+@login_required(login_url='/users/login_user')
+@csrf_exempt   
 def notifications(request, user):
+    if user!="favicon.png":
+        
+        unviewed_likes = []
+        user = User.objects.get(username=user)
+        profile = Profile.objects.filter(user=user)[0]
 
-    unviewed_likes = []
-    user = User.objects.get(username=user)
-    profile = Profile.objects.filter(user=user)[0]
+        user_notifications = Notifications.objects.filter(user=request.user)
+        if user_notifications.exists():
+            unviewed_likes = user_notifications[0].unviewed_likes
+            unread_messages = user_notifications[0].unread_messages
+            unviewed_vouches = user_notifications[0].unviewed_vouches
+        context = {"unviewed_likes": unviewed_likes.all(),
+                "unread_messages": unread_messages.all(),
+                "unviewed_vouches": unviewed_vouches.all(),
+                'profile_owner': user,
+                'profile': profile,
+                'page': "notifications"}
+        context.update(get_featured_communities(request))
+        context.update(get_user_following_info(request))
+        context.update(get_gamer_profile_info_sidebar(request))
 
-    user_notifications = Notifications.objects.filter(user=request.user)
-    if user_notifications.exists():
-        unviewed_likes = user_notifications[0].unviewed_likes
-        unread_messages = user_notifications[0].unread_messages
-    context = {"unviewed_likes": unviewed_likes.all(),
-               "unread_messages": unread_messages.all(),
-               'profile_owner': user,
-               'profile': profile,
-               'page': "notifications"}
-    print("notifications", unviewed_likes.all())
+        print("notifications", unviewed_likes.all())
 
-    return render(request, 'notifications/notifications.html', context=context)
+        return render(request, 'notifications/notifications.html', context=context)
+    else:
+        return HttpResponse("Nothing")

@@ -122,6 +122,12 @@ urlpatterns = [
          views.remove_unread_message_notification, name='remove-unread-message-notification'),
     path('notifications/<str:user>',
          views.notifications, name='notifications'),
-
+    path('remove-like-notifications',
+         views.remove_like_notification, name='remove-like-notifications'),
+    path('remove-vouch-notifications',
+         views.remove_vouch_notifications, name='remove-vouch-notifications'),
+    path('remove-unread-message-notifications-page',
+         views.remove_uread_message_notification_from_notifications_page, name='remove-unread-message-notifications-page'),
+     
     # Chat views en
 ]

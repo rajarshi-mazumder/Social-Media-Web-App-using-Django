@@ -274,8 +274,8 @@ Page3 - Chat
 
     window.onload = (event) => {
 
-        setTimeout(PageFullyLoadedState, 5000);
-
+        
+        has_page_loaded = true;
         Default_Bottom_Navabar_State();
         console.log("page is fully loaded!!!!!!!!");
         var contact_items = document.querySelectorAll('[id="chat-account-list-item"]');
@@ -303,7 +303,7 @@ Page3 - Chat
 
     function PageFullyLoadedState() {
         console.log("page is fully loaded");
-        has_page_loaded = true;
+        
     }
 
     document.getElementById("submit_btn").addEventListener('click', InsertData);

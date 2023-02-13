@@ -8,15 +8,20 @@ Create Gamer Profile
 {% include 'navigation/navbar-top.html' %}
 {% load crispy_forms_tags %}
 {% if user.is_authenticated %}
+
 <div class="main-body">
     {% include 'navigation/sidebar-left.html' %}
-    <div class="page-contents">
-        <div class="posts-timeline">
+    <div class="page-contents create-gamer-profile-contents">
+        <div class="posts-timeline create-gamer-profile-posts-timeline">
+            <div id="popup" >
+                <div class="popup-blocker"></div>
+                <div class="label">Profile for this game already exists!</div>
+                <button class="button-1 edit-profile-btn">Edit existing profile</button>
+                <button id="close-popup"><i class="fa-solid fa-circle-xmark"></i></button>
+              </div>
             <div class="post">
                 <div id="currentuser" style="display: none;">{{user.username}}</div>
-                <div class="profile_exists_popup popup">
-
-                </div>
+                
                 <form action="" method="POST" enctype="multipart/form-data" id="gamerprofile_form">
                     <div class="gamer_profile_form">
                         <div class="header">
@@ -142,6 +147,7 @@ Login first!
         $('.servers-options-list').hide();
         $('.multi-select-input-box')
             .text(`no servers  \xa0selected`)
+        $( "#popup" ).hide();
     })
 
     $(".post_form").hide();
@@ -157,28 +163,20 @@ Login first!
         var user_name = $('#currentuser').text();
         pref_game = $('.game select').val();
         edit_existing_profile_link = `/edit_gamer_profile/${user_name} `
+        HidePopup();
+        $( "#popup" ).hide();
 
         $.ajax({
             type: 'GET',
             url: `/getgamerank_server/${pref_game}`,
             success: function (response) {
-
-                HidePopup();
-
                 if (response['is_profile_exists'] == true) {
-                    $('.profile_exists_popup').empty();
-
-                    $('.profile_exists_popup').append(`<div class="popup_contents">
-                                <h3>You already have a profile for this game!</h3>
-                                <div class="popup_button_container">
-                                <a href="${edit_existing_profile_link}">
-                                    <button class="primary-button" > Edit exisitng profile </button></a>
-                                <button class="primary-button" id="close_popup" onclick="HidePopup()"> Override existing profile </button>
-                                </div>
-                            </div>`)
-                    ShowPopup();
+                    $( function() {
+                        $( "#popup" ).show();
+                    } );
                 }
-
+                else $( "#popup" ).hide();
+                
                 $('.regions').empty();
                 for (let i = 0; i < response['regions'].length; i++) {
                     $('.regions').append(`<option>${response['regions'][i][0]}</option>`)
@@ -315,6 +313,7 @@ Login first!
         $('.profile_exists_popup').css('display', 'none');
     }
     function ShowPopup() {
+        console.log("YAHALLOOO")
         $('.profile_exists_popup').css('display', 'flex');
     }
 
@@ -400,6 +399,18 @@ Login first!
             $('.gamer_profiles_dropdown-container').css('display', 'none');
         }
         else $('.gamer_profiles_dropdown-container').css('display', 'flex');
+    }
+</script>
+<script>
+    $('#close-popup').click(function(){
+        HidePopup();
+    })
+    $('.popup-blocker').click(function(){
+        HidePopup();
+    })
+    function HidePopup()
+    {
+        $('#popup').hide();
     }
 </script>
 {% endblock content %}

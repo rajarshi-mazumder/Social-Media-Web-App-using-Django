@@ -28,6 +28,8 @@
     --sidebar-left-index: 120;
     --sidebar-right-index: 140;
     --top-navbar-index: 130;
+    --popup:140px;
+    --popup-blocker: 120px;
     /* Z Indices End */
 }
 
