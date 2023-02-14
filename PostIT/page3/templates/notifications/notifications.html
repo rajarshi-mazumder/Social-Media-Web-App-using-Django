@@ -29,7 +29,7 @@ Page3 - User Communities
                     {% for post in unviewed_likes %}
                     {% if not post.is_reply %}
                     <div class="account-list-item notification-account-item" id="post_{{post.id}}">
-                        
+
                         <div class="notif-info" onclick="location.href=`{% url 'upload_reply' post.pk %}`">
                             <div class="post-body">
                                 {% if post.body|length > 100 %}
@@ -46,10 +46,10 @@ Page3 - User Communities
 
 
                         <button class="close-btn" id="like-notif-remove-btn"
-                                onclick= "remove_like_notification('{{post.id}}','{{post.author}}')" >
+                            onclick="remove_like_notification('{{post.id}}','{{post.author}}')">
                             <span class="material-symbols-outlined">
                                 close
-                                </span>
+                            </span>
                         </button>
                     </div>
 
@@ -62,7 +62,8 @@ Page3 - User Communities
 
             {% for user_profile in unviewed_vouches%}
             <div class="account-list-item notification-account-item" id="vouch_{{user_profile.id}}">
-                <div class="account-items-container notif-info" onclick="location.href=`{% url 'user-profile-stats' user %}`">
+                <div class="account-items-container notif-info"
+                    onclick="location.href=`{% url 'user-profile-stats' user %}`">
                     <div class="profile-pic">
                         <a href="{%url 'user-profile-stats' user_profile %}">
                             {% if user_profile.profile.profile_pic.name %}
@@ -86,7 +87,7 @@ Page3 - User Communities
                 <button class="close-btn" onclick="remove_vouch_notifications('{{user_profile.id}}')">
                     <span class="material-symbols-outlined">
                         close
-                        </span>
+                    </span>
                 </button>
 
 
@@ -119,7 +120,7 @@ Page3 - User Communities
                 <button class="close-btn" onclick="remove_unread_message_notification_notifs_page('{{user.username}}')">
                     <span class="material-symbols-outlined">
                         close
-                        </span>
+                    </span>
                 </button>
 
 
@@ -227,48 +228,47 @@ Page3 - User Communities
 </script>
 
 <script>
-    
-    function remove_like_notification (post_id, post_author){
+
+    function remove_like_notification(post_id, post_author) {
         console.log("Cross clicked", post_id, post_author)
         $.ajax({
-            type:'POST',
+            type: 'POST',
             url: '{% url "remove-like-notifications" %}',
-            data:{
+            data: {
                 post_id: post_id,
                 post_author: post_author,
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
             },
-            success: function(){
+            success: function () {
                 console.log("Post notification removed")
                 $(`#post_${post_id}`).remove();
             }
-        })  
+        })
     }
 
-    function remove_vouch_notifications(user_profile_id){
+    function remove_vouch_notifications(user_profile_id) {
         $.ajax({
-            type:'POST',
+            type: 'POST',
             url: '{% url "remove-vouch-notifications" %}',
-            data:{
-                test_data:"test",
+            data: {
+                test_data: "test",
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
             },
-            success: function(){
+            success: function () {
                 console.log("Vouch notification removed")
                 $(`#vouch_${user_profile_id}`).remove();
             }
-          })  
+        })
     }
-    function remove_unread_message_notification_notifs_page(username)
-    {
+    function remove_unread_message_notification_notifs_page(username) {
         $.ajax({
-            type:'POST',
+            type: 'POST',
             url: '{% url "remove-unread-message-notifications-page" %}',
-            data:{
-                message_from:username,
+            data: {
+                message_from: username,
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
             },
-            success: function(){
+            success: function () {
                 console.log("Message notification removed")
                 $(`#message_from_${username}`).remove();
             }

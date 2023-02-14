@@ -16,10 +16,12 @@
     width: 100%;
     cursor: pointer;
 }
+
 .notification-account-item .account-items-container {
     display: flex;
     flex-direction: row !important;
 }
+
 .notification-account-item .notif-info .post-body {
     font-weight: bolder;
     text-overflow: ellipsis;

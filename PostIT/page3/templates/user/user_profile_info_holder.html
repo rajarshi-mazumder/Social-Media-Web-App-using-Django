@@ -277,22 +277,20 @@
         });
     })
 </script>
-
 <script>
-    if ('{{profile.user.username}}' == '{{user.username}}')
-    {
+    if ('{{profile.user.username}}' == '{{user.username}}') {
         $.ajax({
-            type:'POST',
+            type: 'POST',
             url: '{% url "remove-vouch-notifications" %}',
-            data:{
+            data: {
                 post_id: '{{post.id}}',
                 post_author: '{{post.author.id}}',
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
             },
-            success: function(){
+            success: function () {
                 console.log("Vouch notification removed")
             }
-          })  
+        })
     }
     else console.log("Random user's profile")
     console.log("PLAYGROUNDD")

@@ -1,7 +1,8 @@
-.create-gamer-profile-posts-timeline{
+.create-gamer-profile-posts-timeline {
     position: relative;
 }
-#popup{
+
+#popup {
     position: absolute;
     top: 10%;
     left: 30%;
@@ -10,27 +11,32 @@
     border-radius: 10px;
     font-size: 13px;
 }
-#popup button{
+
+#popup button {
     margin-top: 20px;
     padding: 10px;
     z-index: var(--popup);
 }
-#popup .edit-profile-btn{
+
+#popup .edit-profile-btn {
     position: relative;
 }
-#popup #close-popup{
+
+#popup #close-popup {
     position: absolute;
     margin-top: 0;
     top: -10px;
     right: -10px;
     width: 40px;
 }
-#popup #close-popup i{
+
+#popup #close-popup i {
     color: var(--primary_color);
     font-size: 20px;
     opacity: 100;
 }
-#popup .popup-blocker{
+
+#popup .popup-blocker {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -38,8 +44,9 @@
     left: 0;
     z-index: var(--popup-blocker);
 }
+
 @media (max-width:600px) {
-    #popup{
+    #popup {
         top: 12%;
         left: 20%;
         right: 20%;

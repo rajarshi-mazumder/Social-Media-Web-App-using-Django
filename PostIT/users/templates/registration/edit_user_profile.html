@@ -8,14 +8,19 @@ Page3 - Add Profile Page
 <br />
 {% if user.is_authenticated %}
 {% if user.id == page_user.user.id %}
-{{ user }}
-<form action="" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.media }}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
-{% else %}
-<h1>
-    You cannot edit another user's profile >__< Dameee!!! </h1>
-        {% endif %} {% endif %} {% endblock content %}
+<div class="registration-container">
+    <div class="page-title">
+        Add profile details
+    </div>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form.as_p }}
+        <button class="button-4" type="submit">Save</button>
+    </form>
+    {% else %}
+    <h1>
+        You cannot edit another user's profile >__< </h1>
+            {% endif %} {% endif %} {% endblock content %}
+
+</div>

@@ -328,25 +328,22 @@ Page3 - Replies
         }
     }
 </script>
-
-
 <script>
-    
-    if ('{{user}}' == '{{post.author}}')
-        {
-          $.ajax({
-            type:'POST',
+
+    if ('{{user}}' == '{{post.author}}') {
+        $.ajax({
+            type: 'POST',
             url: '{% url "remove-like-notifications" %}',
-            data:{
+            data: {
                 post_id: '{{post.id}}',
                 post_author: '{{post.author.username}}',
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
             },
-            success: function(){
+            success: function () {
                 console.log("Post notification removed")
             }
-          })  
-        }
+        })
+    }
     else
         console.log("Random user's post")
 </script>

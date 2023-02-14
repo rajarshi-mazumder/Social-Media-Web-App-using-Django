@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from django.db.models import Q
 from django.conf import settings
 from django.conf.urls.static import static
+
 # Create your views here.
 # Paginator stuff
 from django.core.paginator import Paginator
@@ -36,6 +37,8 @@ from .utilityFunctions import get_featured_communities, \
 
 from .organizeGameData import organizeGametData
 from .matchmaking_functions import Filter_Profiles
+
+from . resize_image import compress_image
 
 
 def is_ajax(request):
@@ -569,6 +572,7 @@ def add_image_post(request):
                 post_obj.set_Tag(tags_list)
                 post_obj.save()
             for file in files:
+                file = compress_image(file)
                 res = ImageFiles.objects.create(post=instance, image=file)
                 print("RES: ", res.image)
                 instance.images_ids_list.append(res.id)
@@ -1447,6 +1451,8 @@ def edit_gamer_profile(request, user):
     return render(request, 'gamerProfile/edit_gamer_profile.html', context)
 
 
+@login_required(login_url='/users/login_user')
+@csrf_exempt
 def MatchmakingHome(request, user):
     form = GameProfileForm()
     print(user)
@@ -2311,7 +2317,38 @@ def chat_with_user(request, user_to_chat_with):
                   contacts_with_unread_messages)
         except:
             pass
+        # Add contact to list of contacts for logged in user
+        try:
+            chat_contacts_of_logged_in_user = logged_in_user.profile.chat_contacts.all()
+            print("chat_contacts_of_logged_in_user",
+                  chat_contacts_of_logged_in_user)
+            if receiver in chat_contacts_of_logged_in_user:
+                print("receiver exists: ", receiver)
+            else:
 
+                profile_to_edit = logged_in_user.profile
+                profile_to_edit.chat_contacts.add(receiver)
+                profile_to_edit.save()
+            for user in chat_contacts_of_logged_in_user:
+                print(user)
+        except:
+            print("In except blockyy")
+
+        # Add chat contact for receiiver user
+
+        try:
+            chat_contacts_of_receiver_user = receiver.profile.chat_contacts.all()
+            print("chat_contacts_of_receiver_user",
+                  chat_contacts_of_receiver_user)
+            if request.user in chat_contacts_of_receiver_user:
+                print("logged in user exists: ", request.user)
+            else:
+                profile_to_edit = receiver.profile
+                profile_to_edit.chat_contacts.add(logged_in_user)
+                profile_to_edit.save()
+
+        except:
+            pass
         context = {
             'logged_in_user': logged_in_user,
             'logged_in_user_id': logged_in_user_id,
@@ -2330,6 +2367,7 @@ def chat_with_user(request, user_to_chat_with):
         logged_in_user_profile.save()
 
         return render(request, 'chat/chat_user.html', context)
+
 
 @login_required(login_url='/users/login_user')
 @csrf_exempt
@@ -2517,6 +2555,7 @@ def add_unread_message_notification(request):
         result = "success"
         update_last_message(
             request, receiver_user=receiver_user, message=message)
+
         send_email_fcn(request)
 
         return JsonResponse({'result': result, })
@@ -2616,6 +2655,7 @@ def add_chat_contact(request):
             id = int(id)
             print("ID TO DM: ", id)
             user = get_object_or_404(User, id=id)
+            # Addinmg chat contact for logged in user
             try:
                 if request.user.profile.chat_contacts.filter(id=id).exists():
                     pass
@@ -2624,7 +2664,16 @@ def add_chat_contact(request):
                     request.user.profile.save()
             except:
                 pass
-
+            # Adding chat contact for receiver
+            try:
+                print("herre")
+                if user.profile.chat_contacts.filter(id=request.user.id).exists():
+                    pass
+                else:
+                    user.profile.chat_contacts.add(request.user)
+                    user.profile.save()
+            except:
+                pass
             return JsonResponse({'result': result, })
 
 
@@ -2646,71 +2695,67 @@ def add_like_notification(request):
             notification.save()
     return JsonResponse({'result': "added like notification", })
 
+
+@login_required(login_url='/users/login_user')
+@csrf_exempt
+def notifications(request, user):
+
+    unviewed_likes = []
+    user = User.objects.get(username=user)
+    profile = Profile.objects.filter(user=user)[0]
+
+    user_notifications = Notifications.objects.filter(user=request.user)
+    if user_notifications.exists():
+        unviewed_likes = user_notifications[0].unviewed_likes
+        unread_messages = user_notifications[0].unread_messages
+    context = {"unviewed_likes": unviewed_likes.all(),
+               "unread_messages": unread_messages.all(),
+               'profile_owner': user,
+               'profile': profile,
+               'page': "notifications"}
+    print("notifications", unviewed_likes.all())
+
+    return render(request, 'notifications/notifications.html', context=context)
+
+
 def remove_like_notification(request):
     print("Shadowww")
-    post_id=request.POST['post_id']
-    post_author=User.objects.get(username=str( request.POST['post_author']))
-    
-    notif_obj= Notifications.objects.filter(user= post_author)[0]
+    post_id = request.POST['post_id']
+    post_author = User.objects.get(username=str(request.POST['post_author']))
+
+    notif_obj = Notifications.objects.filter(user=post_author)[0]
     notif_obj.unviewed_likes.remove(post_id)
     notif_obj.save()
     return JsonResponse({"success": "success"})
 
+
 def add_vouch_notification(vouched_for, request):
     print("Voudhed for:", vouched_for)
-    notif_obj=Notifications.objects.filter(user= vouched_for)
+    notif_obj = Notifications.objects.filter(user=vouched_for)
     if notif_obj.exists():
         notif_obj[0].unviewed_vouches.add(request.user)
         notif_obj[0].save()
     else:
-        notif_obj= Notifications.objects.create(user=vouched_for)
+        notif_obj = Notifications.objects.create(user=vouched_for)
         notif_obj.unviewed_vouches.add(request.user)
         notif_obj.save()
-    return JsonResponse({'result': "added vouch notification",})
+    return JsonResponse({'result': "added vouch notification", })
+
 
 def remove_vouch_notifications(request):
-    notif_obj=Notifications.objects.filter(user= request.user)
+    notif_obj = Notifications.objects.filter(user=request.user)
     if notif_obj.exists():
         notif_obj[0].unviewed_vouches.set("")
         notif_obj[0].save()
-        
+
     return JsonResponse({"success": "success"})
 
+
 def remove_uread_message_notification_from_notifications_page(request):
-    message_from=User.objects.get(username= request.POST['message_from'])
-    print("message_from",message_from)
-    notif_object= Notifications.objects.filter(user=request.user)
+    message_from = User.objects.get(username=request.POST['message_from'])
+    print("message_from", message_from)
+    notif_object = Notifications.objects.filter(user=request.user)
     if notif_object.exists():
         notif_object[0].unread_messages.remove(message_from)
         notif_object[0].save()
-    return JsonResponse({'result': "removed message notification",})
-
-@login_required(login_url='/users/login_user')
-@csrf_exempt   
-def notifications(request, user):
-    if user!="favicon.png":
-        
-        unviewed_likes = []
-        user = User.objects.get(username=user)
-        profile = Profile.objects.filter(user=user)[0]
-
-        user_notifications = Notifications.objects.filter(user=request.user)
-        if user_notifications.exists():
-            unviewed_likes = user_notifications[0].unviewed_likes
-            unread_messages = user_notifications[0].unread_messages
-            unviewed_vouches = user_notifications[0].unviewed_vouches
-        context = {"unviewed_likes": unviewed_likes.all(),
-                "unread_messages": unread_messages.all(),
-                "unviewed_vouches": unviewed_vouches.all(),
-                'profile_owner': user,
-                'profile': profile,
-                'page': "notifications"}
-        context.update(get_featured_communities(request))
-        context.update(get_user_following_info(request))
-        context.update(get_gamer_profile_info_sidebar(request))
-
-        print("notifications", unviewed_likes.all())
-
-        return render(request, 'notifications/notifications.html', context=context)
-    else:
-        return HttpResponse("Nothing")
+    return JsonResponse({'result': "removed message notification", })

@@ -1,4 +1,5 @@
 @media (max-width: 600px) {
+
     .chat-page-nav {
         display: none !important;
     }
@@ -341,7 +342,6 @@
     }
 
     /* Notifications End */
-
     .profile_exists_popup {
         width: clamp(200px, 300px, 400px);
         top: 150px;

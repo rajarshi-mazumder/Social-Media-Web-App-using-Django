@@ -175,7 +175,7 @@ class Post(models.Model):
         super(Post, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.body + ' | ' + str(self.author) + '| ' + str(self.id) + ' | ' + str(self.is_reply)
+        return str(self.body) + ' | ' + str(self.author) + '| ' + str(self.id) + ' | ' + str(self.is_reply)
 
     def get_absolute_url(self):
         return reverse('post-page', args=(str(self.post_id)))
