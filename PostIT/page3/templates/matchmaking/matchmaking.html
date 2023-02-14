@@ -102,13 +102,12 @@ Create Gamer Profile
         $('.multi-select-input-box').click(Toggle_Select_Dropdown_List)
         $('.servers-options-list').hide();
 
-        $('.game select').click(function () {
+        $('.game select').change(function () {
             var pref_game = $('.game select').val();
             $.ajax({
                 type: 'GET',
                 url: `/getgamerank_server/${pref_game}`,
                 success: function (response) {
-
                     //$('.multi-select-input-box').text(`no servers  \xa0selected`)
                     var elem = "<i class='fa-solid fa-plus'></i>"
                     $('.multi-select-input-box')[0].innerHTML = "no servers selected" + elem
@@ -126,7 +125,7 @@ Create Gamer Profile
                     }
                     $('.regions').val($('.regions option:first').val());
 
-                    $('.regions').click(function () {
+                    $('.regions').change(function () {
                         Get_Servers_For_Matchmaking(response);
                         //$('.multi-select-input-box').text(`no servers  \xa0selected`)
                         var elem = "<i class='fa-solid fa-plus'></i>"
