@@ -44,7 +44,9 @@
     border-radius: 50%;
 }
 
-.nav-right-ul .nav-notifications{
+.nav-right-ul .nav-notifications,
+.nav-bottom-options-ul .nav-notifications
+{
     position: relative;
 }
 .nav-right-ul .nav-notifications .notifications_count{
@@ -57,5 +59,18 @@
     height: 20px;
     color: white;
     padding-top: 3px;
+    border-radius: 50%;
+}
+.nav-bottom-options-ul .nav-notifications .notifications_count{
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 9px;
+    background-color: var(--primary_color);
+    width: 20px;
+    height: 20px;
+    color: white;
+    padding-top: 3px;
+    padding-left: 7px;
     border-radius: 50%;
 }
