@@ -32,7 +32,7 @@ EMAIL_USE_TLS = False
 EMAIL_PORT = 587
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'bottle.noreply@gmail.com'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = 'nezdewlvazpdzerh'
 
 ALLOWED_HOSTS = ["*"]
 
@@ -103,9 +103,9 @@ WSGI_APPLICATION = 'PostIT.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postit_db_2',
+        'NAME': 'postit',
         'USER': 'postgres',
-        'PASSWORD': 'Liomessi10',
+        'PASSWORD': 'Madrid2018',
         'HOST': 'localhost',
         'PORT': '5432',
     }

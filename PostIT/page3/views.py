@@ -88,7 +88,6 @@ def home_timeline(request, post_id=None):
     # image_list = ImageFiles.objects.all()
     image_list = ""
     profiles = Profile.objects.all()
-    notifications= Notifications.objects.filter(user= request.user)
     has_images_to_show = False
     try:
         post = Post.objects.get(id=post_id)
@@ -2712,7 +2711,7 @@ def notifications(request, user):
         unviewed_vouches = user_notifications[0].unviewed_vouches
     context = {"unviewed_likes": unviewed_likes.all(),
                "unread_messages": unread_messages.all(),
-               "unviewed_vouches": unviewed_vouches.all(),
+                "unviewed_vouches": unviewed_vouches.all(),
                'profile_owner': user,
                'profile': profile,
                'page': "notifications"}

@@ -108,6 +108,7 @@ Create Gamer Profile
                 type: 'GET',
                 url: `/getgamerank_server/${pref_game}`,
                 success: function (response) {
+
                     //$('.multi-select-input-box').text(`no servers  \xa0selected`)
                     var elem = "<i class='fa-solid fa-plus'></i>"
                     $('.multi-select-input-box')[0].innerHTML = "no servers selected" + elem
