@@ -88,6 +88,7 @@ def home_timeline(request, post_id=None):
     # image_list = ImageFiles.objects.all()
     image_list = ""
     profiles = Profile.objects.all()
+    notifications= Notifications.objects.filter(user= request.user)
     has_images_to_show = False
     try:
         post = Post.objects.get(id=post_id)
@@ -2708,8 +2709,10 @@ def notifications(request, user):
     if user_notifications.exists():
         unviewed_likes = user_notifications[0].unviewed_likes
         unread_messages = user_notifications[0].unread_messages
+        unviewed_vouches = user_notifications[0].unviewed_vouches
     context = {"unviewed_likes": unviewed_likes.all(),
                "unread_messages": unread_messages.all(),
+               "unviewed_vouches": unviewed_vouches.all(),
                'profile_owner': user,
                'profile': profile,
                'page': "notifications"}
@@ -2759,3 +2762,14 @@ def remove_uread_message_notification_from_notifications_page(request):
         notif_object[0].unread_messages.remove(message_from)
         notif_object[0].save()
     return JsonResponse({'result': "removed message notification", })
+
+def get_notifications_count(request):
+    notifications= Notifications.objects.filter(user= request.user)
+    context={}
+    if notifications.exists:
+        unread_messages_count= notifications[0].unread_messages.count
+        unviewed_likes_count= notifications[0].unviewed_likes.count
+        unviewed_vouches_count= notifications[0].unviewed_vouches.count
+        notifications_count= unread_messages_count()+unviewed_likes_count()+unviewed_vouches_count()
+        context={"notifications_count":notifications_count}
+    return JsonResponse(context)

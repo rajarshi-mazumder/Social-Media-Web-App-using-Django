@@ -112,8 +112,9 @@
             <a href="{% url 'create-community' %}"><i class="fa-solid fa-users-between-lines"></i><br />Create
                 Community</a>
         </li>
-        <li>
-            <a href="{% url 'notifications' user %}"><i class="fa-solid fa-bell"></i><br />Notifications</a>
+        <li class="nav-notifications">
+            <a href="{% url 'notifications' user %}"><i class="fa-solid fa-bell"></i><br />Notifications
+            <div class="notifications_count"></div></a>
         </li>
 
     </ul>
@@ -163,4 +164,18 @@
         blockerPage.style.pointerEvents = "none"
 
     });
+</script>
+
+<script>
+    $(document).ready(function(){
+
+        $.ajax({
+            type: 'GET',
+            url: `/get-notifications-count`,
+            success: function(response){
+                console.log("notifications_count", response['notifications_count'])
+                $('.notifications_count').text( response['notifications_count']);
+            }
+        })
+    })
 </script>
