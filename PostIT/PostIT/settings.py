@@ -32,7 +32,7 @@ EMAIL_USE_TLS = False
 EMAIL_PORT = 587
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'bottle.noreply@gmail.com'
-EMAIL_HOST_PASSWORD = 'nezdewlvazpdzerh'
+EMAIL_HOST_PASSWORD = ''
 
 ALLOWED_HOSTS = ["*"]
 
